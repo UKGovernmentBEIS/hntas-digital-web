@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>2c5be9d1-12f7-428d-9fc9-e4afa191d464</UserSecretsId>
+	<LangVersion>latest</LangVersion>
+	<OutputType>Exe</OutputType>
+	<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Base36" Version="1.0.0" />
+    <PackageReference Include="Humanizer" Version="2.14.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.6" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
+    <PackageReference Include="morelinq" Version="4.2.0" />
+    <PackageReference Include="NodaTime" Version="3.1.11" />
+    <PackageReference Include="Polly" Version="8.3.1" />
+    <PackageReference Include="System.Text.Json" Version="9.0.6" />
+    <PackageReference Include="YamlDotNet" Version="15.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HNTAS.Common\HNTAS.Common.csproj" />
+    <ProjectReference Include="..\HNTAS.Core\HNTAS.Core.csproj" />
+    <ProjectReference Include="..\HNTAS.Infrastructure\HNTAS.Infrastructure.csproj" />
+    <ProjectReference Include="..\HNTAS.Repositories\HNTAS.Repositories.csproj" />
+    <ProjectReference Include="..\HNTAS.Web\HNTAS.Web.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="assets\js\views\" />
+    <Folder Include="assets\js\shared\" />
+    <Folder Include="assets\scss\shared\" />
+    <Folder Include="assets\scss\views\" />
+    <Folder Include="Models\" />
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+</Project>
