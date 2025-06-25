@@ -1,0 +1,23 @@
+ARG BUILD_CONFIGURATION=Release
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+WORKDIR /_solution
+COPY . .
+WORKDIR /_solution/HNTAS.Web.UI
+RUN dotnet restore 
+RUN dotnet build --configuration $BUILD_CONFIGURATION --no-restore
+RUN dotnet publish --configuration $BUILD_CONFIGURATION --no-build --no-restore --output /_publish
+RUN ls -l /_publish
+
+
+FROM node:lts-alpine as node
+WORKDIR /with-node-modules
+COPY --from=build /_publish .
+RUN npm install
+
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+WORKDIR /app
+COPY --from=node /with-node-modules .
+ENV ASPNETCORE_HTTP_PORTS 8080
+EXPOSE 8080
+ENTRYPOINT ["dotnet", "HNTAS.Web.UI.dll"]
