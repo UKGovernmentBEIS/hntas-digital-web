@@ -15,9 +15,9 @@ COPY --from=build /_publish .
 RUN npm install
 
 
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
 WORKDIR /app
 COPY --from=node /with-node-modules .
-ENV ASPNETCORE_HTTP_PORTS 8080
-EXPOSE 8080
+ENV ASPNETCORE_HTTP_PORTS=8000
+EXPOSE 8000
 ENTRYPOINT ["dotnet", "HNTAS.Web.UI.dll"]
