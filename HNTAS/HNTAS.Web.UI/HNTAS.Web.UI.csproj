@@ -23,14 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HNTAS.Common\HNTAS.Common.csproj" />
-    <ProjectReference Include="..\HNTAS.Core\HNTAS.Core.csproj" />
-    <ProjectReference Include="..\HNTAS.Infrastructure\HNTAS.Infrastructure.csproj" />
-    <ProjectReference Include="..\HNTAS.Repositories\HNTAS.Repositories.csproj" />
-    <ProjectReference Include="..\HNTAS.Web\HNTAS.Web.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="assets\js\views\" />
     <Folder Include="assets\js\shared\" />
     <Folder Include="assets\scss\shared\" />
