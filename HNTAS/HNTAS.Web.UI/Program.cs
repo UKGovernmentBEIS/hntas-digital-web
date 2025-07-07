@@ -1,5 +1,8 @@
+using HNTAS.Web.UI.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpClient<AddressLookupService>();
 
 
 //=================================================================================================================================
