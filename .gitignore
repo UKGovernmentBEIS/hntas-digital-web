@@ -404,3 +404,4 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/HNTAS/HNTAS.Web.UI/appsettings.local.json

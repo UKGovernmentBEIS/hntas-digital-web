@@ -60,11 +60,20 @@
                                 Test
                             </a>
                         </li>
+
+                        @if (!User.Identity.IsAuthenticated)
+                        {
+                            <li class="govuk-header__navigation-item">
+                                <a asp-controller="Account" asp-action="SignIn" class="govuk-header__link">Login</a>
+                            </li>
+                        }
+
+                        @if (User.Identity.IsAuthenticated)
+                        {
                         <li class="govuk-header__navigation-item">
-                            <a class="govuk-header__link" href="#">
-                                Login
-                            </a>
+                            <a asp-controller="Account" asp-action="SignOut" class="govuk-header__link">Sign out</a>
                         </li>
+                        }
                     </ul>
                 </nav>
             </div>

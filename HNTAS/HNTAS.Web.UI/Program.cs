@@ -1,9 +1,50 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using GovUk.OneLogin.AspNetCore;
+using System.Security.Cryptography;
+using Microsoft.IdentityModel.Tokens;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// Dynamically load appsettings.{ENVIRONMENT}.json if it exists
+builder.Configuration.AddJsonFile(
+    $"appsettings.{builder.Environment.EnvironmentName}.json",
+    optional: true,
+    reloadOnChange: true);
+
+
+//Configure onelogin settings
+builder.Services.AddAuthentication(defaultScheme: OneLoginDefaults.AuthenticationScheme)
+    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddOneLogin(options =>
+    {
+        options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+
+        options.Environment = OneLoginEnvironments.Integration;
+        options.ClientId = builder.Configuration["OneLogin:ClientId"];
+        options.CallbackPath = "/onelogin-callback";
+        options.SignedOutCallbackPath = "/onelogin-logout-callback";
+        options.Scope.Add("openid");
+        options.Scope.Add("email");
+        options.Scope.Add("phone");
+        // options.Scope.Add("profile"); // If your service needs name, birthdate, etc.
+
+        using (var rsa = RSA.Create())
+        {
+            rsa.ImportFromPem(builder.Configuration["OneLogin:PrivateKey"]);
+            options.ClientAuthenticationCredentials = new SigningCredentials(
+                new RsaSecurityKey(rsa.ExportParameters(true)), // Fix: Ensure RsaSecurityKey is resolved
+                SecurityAlgorithms.RsaSha256);
+        }
+
+        options.VectorsOfTrust = ["Cl"];
+    });
+
+
 builder.Services.AddControllersWithViews();
 
-
-//=================================================================================================================================
 var app = builder.Build();
+
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
