@@ -7,4 +7,9 @@ public class HomeController : Controller
     {
         return View();
     }
+
+    [HttpGet]
+    public IActionResult Guidance() {
+        return View("Guidance");
+    }
 }
