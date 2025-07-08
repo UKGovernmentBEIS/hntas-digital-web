@@ -1,0 +1,93 @@
+﻿@model HNTAS.Web.UI.Models.HeatNetworkEligibilityModel
+
+@{
+    ViewData["Title"] = "Check your eligibility to register a heat network";
+}
+
+<div class="govuk-width-container">
+    <form asp-action="Eligibility" asp-controller="HeatNetwork" method="post" novalidate>
+        <div class="govuk-form-group">
+            <fieldset class="govuk-fieldset">
+                @if (Model.CurrentStep == 1)
+                {
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                        <h1>Are you running a heat network?</h1>
+                    </legend>
+                    <div class="govuk-radios">
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="runningYes" name="IsRunningHeatNetwork" type="radio" value="true" checked="@Model.IsRunningHeatNetwork" />
+                            <label class="govuk-label govuk-radios__label" for="runningYes">Yes</label>
+                        </div>
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="runningNo" name="IsRunningHeatNetwork" type="radio" value="false" checked="@(!Model.IsRunningHeatNetwork)" />
+                            <label class="govuk-label govuk-radios__label" for="runningNo">No</label>
+                        </div>
+                    </div>
+                }
+                else if (Model.CurrentStep == 2)
+                {
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                        <h1>Does the heat network serve more than 10 dwellings?</h1>
+                    </legend>
+                    <div class="govuk-radios">
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="dwellingsYes" name="ServesMoreThan10Dwellings" type="radio" value="true" checked="@Model.ServesMoreThan10Dwellings" />
+                            <label class="govuk-label govuk-radios__label" for="dwellingsYes">Yes</label>
+                        </div>
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="dwellingsNo" name="ServesMoreThan10Dwellings" type="radio" value="false" checked="@(!Model.ServesMoreThan10Dwellings)" />
+                            <label class="govuk-label govuk-radios__label" for="dwellingsNo">No</label>
+                        </div>
+                    </div>
+
+                }
+                else if (Model.CurrentStep == 3)
+                {
+
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                        <h1>Is the network located in England, Wales, or Scotland?</h1>
+                    </legend>
+                    <div class="govuk-radios">
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="ukYes" name="IsInUK" type="radio" value="true" checked="@Model.IsInUK" />
+                            <label class="govuk-label govuk-radios__label" for="ukYes">Yes</label>
+                        </div>
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="ukNo" name="IsInUK" type="radio" value="false" checked="@(!Model.IsInUK)" />
+                            <label class="govuk-label govuk-radios__label" for="ukNo">No</label>
+                        </div>
+                    </div>
+
+                }
+                else if (Model.CurrentStep == 4)
+                {
+
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                        <h1>Are you operating an existing heat network or planning/designing/constructing a new one?</h1>
+                    </legend>
+                    <div class="govuk-radios">
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="existingYes" name="IsExistingOrPlanned" type="radio" value="true" checked="@Model.IsExistingOrPlanned" />
+                            <label class="govuk-label govuk-radios__label" for="existingYes">Yes</label>
+                        </div>
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="existingNo" name="IsExistingOrPlanned" type="radio" value="false" checked="@(!Model.IsExistingOrPlanned)" />
+                            <label class="govuk-label govuk-radios__label" for="existingNo">No</label>
+                        </div>
+                    </div>
+
+                }
+            </fieldset>
+        </div>
+
+
+        <input type="hidden" name="CurrentStep" value="@Model.CurrentStep" />
+
+        <button class="govuk-button" type="submit">Continue</button>
+    </form>
+
+    @if (!string.IsNullOrEmpty(Model.ResultMessage))
+    {
+        <div class="govuk-inset-text">@Model.ResultMessage</div>
+    }
+</div>

@@ -1,0 +1,32 @@
+@{
+    ViewData["Title"] = "Select Address Input Method";
+}
+
+<div class="govuk-form-group">
+    <h1 class="govuk-heading-l">How would you like to enter your address?</h1>
+    <form asp-controller="Address" asp-action="SelectAddressInputMethod" method="get">
+        <div class="govuk-radios">
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="lookup" name="inputMethod" type="radio" value="lookup" checked>
+                <label class="govuk-label govuk-radios__label" for="lookup">
+                    Find address by postcode
+                </label>
+            </div>
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="manual" name="inputMethod" type="radio" value="manual">
+                <label class="govuk-label govuk-radios__label" for="manual">
+                    Enter address manually
+                </label>
+            </div>
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="noPostcode" name="inputMethod" type="radio" value="noPostcode">
+                <label class="govuk-label govuk-radios__label" for="noPostcode">
+                    I don't have a postcode
+                </label>
+            </div>
+        </div><br/>
+        <button type="submit" class="govuk-button" data-module="govuk-button">
+            Continue
+        </button>
+    </form>
+</div>

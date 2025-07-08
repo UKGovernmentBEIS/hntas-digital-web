@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using GovUk.OneLogin.AspNetCore;
 using System.Security.Cryptography;
 using Microsoft.IdentityModel.Tokens;
+using HNTAS.Web.UI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,6 +42,7 @@ builder.Services.AddAuthentication(defaultScheme: OneLoginDefaults.Authenticatio
 
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpClient<AddressLookupService>();
 
 var app = builder.Build();
 
