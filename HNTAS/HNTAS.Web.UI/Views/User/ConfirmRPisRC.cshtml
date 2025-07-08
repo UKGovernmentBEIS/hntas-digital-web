@@ -1,0 +1,28 @@
+﻿@model HNTAS.Web.UI.Models.UserModel
+
+@{
+    ViewData["Title"] = "Are you the regulatory contact? ";
+}
+
+<div class="govuk-width-container">
+    <form asp-controller="User" asp-action="ConfirmRPisRC" method="post" novalidate>
+        <div class="govuk-form-group">
+            <fieldset class="govuk-fieldset">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                    <h1 class="govuk-fieldset__heading">Are you the regulatory contact?</h1>
+                </legend>
+                <div class="govuk-radios">
+                    <div class="govuk-radios__item">
+                        <input class="govuk-radios__input" id="isRC" name="ifRPIsRC" type="radio" value="true" checked="@Model.ifRPisRC" />
+                        <label class="govuk-label govuk-radios__label" for="isRC">Yes</label>
+                    </div>
+                    <div class="govuk-radios__item">
+                        <input class="govuk-radios__input" id="isNotRC" name="ifRPIsRC" type="radio" value="false" checked="@(!Model.ifRPisRC)" />
+                        <label class="govuk-label govuk-radios__label" for="isNotRC">No</label>
+                    </div>
+                </div><br/>
+                <button class="govuk-button" type="submit">Continue</button>
+            </fieldset>
+        </div>
+    </form>
+</div>
