@@ -11,6 +11,7 @@ RUN ls -l /_publish
 
 FROM node:lts-alpine as node
 WORKDIR /with-node-modules
+RUN apk add --no-cache util-linux
 COPY --from=build /_publish .
 RUN npm install
 

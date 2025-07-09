@@ -1,0 +1,54 @@
+@using HNTAS.Web.UI.Models.Address
+@model NoPostcodeAddressModel
+@{
+    ViewData["Title"] = "Enter your what3words url";
+}
+
+@{
+    // List the property names in the order they appear on the form
+    var fieldOrder = new[] { nameof(Model.what3wordsUrl)};
+}
+@* Display the GOV.UK error summary if there are any validation errors *@
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="govuk-error-summary" role="alert" aria-labelledby="error-summary-title" tabindex="-1">
+        <h2 class="govuk-error-summary__title" id="error-summary-title">There is a problem</h2>
+        <div class="govuk-error-summary__body">
+            <ul class="govuk-list govuk-error-summary__list">
+                @foreach (var field in fieldOrder)
+                {
+                    if (ViewData.ModelState.ContainsKey(field) && ViewData.ModelState[field].Errors.Any())
+                    {
+                        <li>
+                            <a href="#@(Html.GenerateIdFromName(field).ToLowerInvariant())">
+                                @ViewData.ModelState[field].Errors.First().ErrorMessage
+                            </a>
+                        </li>
+                    }
+                }
+            </ul>
+        </div>
+    </div>
+}
+<div class="govuk-width-container">
+    <form asp-controller="Address" asp-action="NoPostcodeAddressEntry" method="post" class="govuk-form-group">
+        <h1 class="govuk-heading-l">Enter your address (no postcode)</h1>
+
+        <div class="govuk-form-group @(ViewData.ModelState["what3wordsUrl"]?.Errors.Count > 0 ? "govuk-form-group--error" : "")">
+            <p class="govuk-body">If you do not have a postcode, please go to <strong> https://what3words.com/</strong> and enter your geo coordinates there. It will generate a unique url. Please copy that and paste it here.</p>
+            <label class="govuk-label" for="Address">
+                Enter the url
+            </label>
+            @if (ViewData.ModelState["what3wordsUrl"]?.Errors.Count > 0)
+            {
+                <span asp-validation-for="what3wordsUrl" class="govuk-error-message"></span>
+            }
+            <input class="govuk-input" asp-for="what3wordsUrl" autocomplete="off" />
+            
+        </div><br/>
+
+        <button type="submit" class="govuk-button" data-module="govuk-button">
+            Submit
+        </button>
+    </form>
+</div>
