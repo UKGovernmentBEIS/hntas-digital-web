@@ -6,18 +6,20 @@ namespace HNTAS.Web.UI.Controllers
     public class UserController : Controller
     {
         [HttpGet]
+        [Route("User/Is-user-Regulatory-Contact")]
         public IActionResult ConfirmRPIsRC()
         {
             return View(new UserModel());
         }
 
         [HttpPost]
+        [Route("User/Is-user-Regulatory-Contact")]
         public IActionResult ConfirmRPIsRC(bool ifRPisRC)
         {
             if (ifRPisRC) {
                 return RedirectToAction("ContactDetails", new UserModel());
             }
-            return View("ConfirmRPIsRC", new UserModel(){ ifRPisRC = ifRPisRC });
+            return RedirectToAction("Guidance", "Guidance");
         }
 
         [HttpGet]
