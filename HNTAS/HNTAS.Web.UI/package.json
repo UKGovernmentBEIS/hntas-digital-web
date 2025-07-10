@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "copy:govuk-assets": "cpx \"node_modules/govuk-frontend/dist/govuk/assets/**/*\" \"assets\"",
     "sass": "sass assets/scss/main.scss:wwwroot/assets/css/main.css",
     "minify": "postcss wwwroot/assets/css/main.css -o wwwroot/assets/css/main.min.css",
     "build-css": "npm run sass && npm run minify",
@@ -18,6 +19,7 @@
     "@babel/core": "^7.24.5",
     "@babel/preset-env": "^7.24.5",
     "babel-loader": "^9.1.3",
+    "cpx": "^1.5.0",
     "css-loader": "^7.1.1",
     "cssnano": "^7.0.1",
     "file-loader": "^6.2.0",
