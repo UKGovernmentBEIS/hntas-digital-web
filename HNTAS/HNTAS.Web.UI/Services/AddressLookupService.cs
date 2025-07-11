@@ -7,13 +7,11 @@ namespace HNTAS.Web.UI.Services
     {
         private readonly HttpClient _httpClient;
         private readonly string? _apiKey;
-        private readonly string? _apiSecret;
 
         public AddressLookupService(HttpClient httpClient, IConfiguration config)
         {
             _httpClient = httpClient;
-            _apiKey = config["OrdnanceSurvey:ApiKey"];
-            _apiSecret = config["OrdnanceSurvey:ApiSecret"];
+            _apiKey = Environment.GetEnvironmentVariable("OS_API_KEY");
         }
 
         public async Task<AddressLookUpModel?> PostcodeLookupAsync(string postcode)
