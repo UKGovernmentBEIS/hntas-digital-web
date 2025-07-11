@@ -206,9 +206,7 @@ namespace HNTAS.Web.UI.Controllers
         {
             return new List<SelectListItem>
             {
-                new SelectListItem { Value = OrganisationType.UkCompaniesHouse.ToString(), Text = "UK company registered with Companies House" },
-                new SelectListItem { Value = OrganisationType.OtherUkOrganisation.ToString(), Text = "Other UK organisation" },
-                new SelectListItem { Value = OrganisationType.OverseasOrganisation.ToString(), Text = "Overseas organisation" }
+                new SelectListItem { Value = OrganisationType.UkCompaniesHouse.ToString(), Text = "UK company registered with Companies House" }
             };
         }
     }
