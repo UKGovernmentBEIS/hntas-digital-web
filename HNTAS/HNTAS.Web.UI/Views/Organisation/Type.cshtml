@@ -1,4 +1,5 @@
-﻿@model HNTAS.Web.UI.Models.OrganisationModel
+﻿@using HNTAS.Web.UI.Models
+@model HNTAS.Web.UI.Models.OrganisationModel
 @{
     ViewData["Title"] = "Which type of organisation do you work for?";
 }
@@ -17,7 +18,7 @@
                             foreach (var error in modelState.Errors)
                             {
                                 <li>
-                                    <a href="#org-type-uk-companies-house">@error.ErrorMessage</a>
+                                    <a href="#org-type-@Model.OrganisationTypes.FirstOrDefault()?.Value.ToLower()">@error.ErrorMessage</a>
                                 </li>
                             }
                         }
@@ -27,10 +28,8 @@
         }
 
         <form asp-controller="Organisation" asp-action="Type" method="post" novalidate>
-            @* novalidate prevents browser's default HTML5 validation *@
-            @Html.AntiForgeryToken() @* Essential for preventing Cross-Site Request Forgery (CSRF) *@
+            @Html.AntiForgeryToken()
 
-            @* Form group for the radio buttons. Conditionally apply error class. *@
             <div class="govuk-form-group @(ViewData.ModelState.ContainsKey(nameof(Model.SelectedOrganisationType)) && ViewData.ModelState[nameof(Model.SelectedOrganisationType)].Errors.Any() ? "govuk-form-group--error" : "")">
                 <fieldset class="govuk-fieldset"
                           aria-describedby="organisation-type-hint @(ViewData.ModelState.ContainsKey(nameof(Model.SelectedOrganisationType)) && ViewData.ModelState[nameof(Model.SelectedOrganisationType)].Errors.Any() ? "organisation-type-error" : "")">
@@ -40,11 +39,6 @@
                         </h1>
                     </legend>
 
-                    <div id="organisation-type-hint" class="govuk-hint">
-                        Select the option that best describes your organisation.
-                    </div>
-
-                    @* Display the specific error message for the radio group if validation fails *@
                     @if (ViewData.ModelState.ContainsKey(nameof(Model.SelectedOrganisationType)) && ViewData.ModelState[nameof(Model.SelectedOrganisationType)].Errors.Any())
                     {
                         <p id="organisation-type-error" class="govuk-error-message">
@@ -53,47 +47,39 @@
                     }
 
                     <div class="govuk-radios" data-module="govuk-radios">
-                        @* Radio button for "UK company registered with Companies House" *@
-                        <div class="govuk-radios__item">
-                            <input class="govuk-radios__input" id="org-type-uk-companies-house"
-                                   name="SelectedOrganisationType" @* Name must match model property *@
-                                   type="radio" value="UK company registered with Companies House"
-                                   aria-describedby="org-type-uk-companies-house-hint @(ViewData.ModelState.ContainsKey(nameof(Model.SelectedOrganisationType)) && ViewData.ModelState[nameof(Model.SelectedOrganisationType)].Errors.Any() ? "organisation-type-error" : "")"
-                                   @(Model.SelectedOrganisationType == "UK company registered with Companies House" ? "checked" : "") @* Check if this option was previously selected *@
-                                    />
-                            <label class="govuk-label govuk-radios__label" for="org-type-uk-companies-house">
-                                UK company registered with Companies House
-                            </label>
-                        </div>
-
-                        @* Radio button for "Other UK organisation" *@
-                        <div class="govuk-radios__item">
-                            <input class="govuk-radios__input" id="org-type-other-uk"
-                                   name="SelectedOrganisationType"
-                                   type="radio" value="Other UK organisation"
-                                   aria-describedby="org-type-other-uk-hint @(ViewData.ModelState.ContainsKey(nameof(Model.SelectedOrganisationType)) && ViewData.ModelState[nameof(Model.SelectedOrganisationType)].Errors.Any() ? "organisation-type-error" : "")"
-                                   @(Model.SelectedOrganisationType == "Other UK organisation" ? "checked" : "") />
-                            <label class="govuk-label govuk-radios__label" for="org-type-other-uk">
-                                Other UK organisation
-                            </label>
-                            <div id="org-type-other-uk-hint" class="govuk-hint govuk-radios__hint">
-                                For example, local authorities, charities, mutual societies, sole traders.
+                        @{
+                            // Keep track of how many items we've rendered to know when to add the divider
+                            int itemsRendered = 0;
+                        }
+                        @foreach (var item in Model.OrganisationTypes)
+                        {
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input"
+                                       id="org-type-@item.Value.ToLower()" @* Generate unique ID from value *@
+                                       name="SelectedOrganisationType"
+                                       type="radio"
+                                       value="@item.Value"
+                                       aria-describedby="@if (item.Value == OrganisationType.OtherUkOrganisation.ToString()) { <text>org-type-other-uk-hint</text> } @(ViewData.ModelState.ContainsKey(nameof(Model.SelectedOrganisationType)) && ViewData.ModelState[nameof(Model.SelectedOrganisationType)].Errors.Any() ? " organisation-type-error" : "")"
+                                       @(Model.SelectedOrganisationType?.ToString() == item.Value ? "checked" : "") />
+                                <label class="govuk-label govuk-radios__label" for="org-type-@item.Value.ToLower()">
+                                    @item.Text
+                                </label>
+                                @if (item.Value == OrganisationType.OtherUkOrganisation.ToString())
+                                {
+                                    <div id="org-type-other-uk-hint" class="govuk-hint govuk-radios__hint">
+                                        For example, local authorities, charities, mutual societies, sole traders.
+                                    </div>
+                                }
                             </div>
-                        </div>
 
-                        <div class="govuk-radios__divider">or</div>
+                            itemsRendered++;
 
-                        @* Radio button for "Overseas organisation" *@
-                        <div class="govuk-radios__item">
-                            <input class="govuk-radios__input" id="org-type-overseas"
-                                   name="SelectedOrganisationType"
-                                   type="radio" value="Overseas organisation"
-                                   aria-describedby="@(ViewData.ModelState.ContainsKey(nameof(Model.SelectedOrganisationType)) && ViewData.ModelState[nameof(Model.SelectedOrganisationType)].Errors.Any() ? "organisation-type-error" : "")"
-                                   @(Model.SelectedOrganisationType == "Overseas organisation" ? "checked" : "") />
-                            <label class="govuk-label govuk-radios__label" for="org-type-overseas">
-                                Overseas organisation
-                            </label>
-                        </div>
+                            // Add the 'or' divider dynamically if it's after the second item
+                            if (itemsRendered == 2) // Assuming "Other UK organisation" is the second item
+                            {
+                                <div class="govuk-radios__divider">or</div>
+                            }
+                        }
                     </div>
                 </fieldset>
             </div>

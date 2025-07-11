@@ -2,6 +2,7 @@
 using HNTAS.Web.UI.Models.CompaniesHouse;
 using HNTAS.Web.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 
 namespace HNTAS.Web.UI.Controllers
@@ -20,6 +21,9 @@ namespace HNTAS.Web.UI.Controllers
         public IActionResult Type()
         {
             var model = GetOrganisationModelFromSession() ?? new OrganisationModel();
+            // Always populate OrganisationTypes just before rendering the view
+            model.OrganisationTypes = GetOrganisationTypeOptions();
+
             return View(model);
         }
 
@@ -36,10 +40,18 @@ namespace HNTAS.Web.UI.Controllers
 
             if (ModelState.IsValid)
             {
+                // Retrieve the display text from the OrganisationTypes list
+                // model.SelectedOrganisationType will contain the string like "UkCompaniesHouse"
+                model.SelectedOrganisationTypeText = GetOrganisationTypeOptions()
+                                                      .FirstOrDefault(item => item.Value == model.SelectedOrganisationType)?
+                                                      .Text;
                 // Save the current state of the model to TempData for the next step
                 SaveOrganisationModelToSession(model);
                 return RedirectToAction("CompanyNumber");
             }
+
+            // If validation fails, repopulate OrganisationTypes before returning the view
+            model.OrganisationTypes = GetOrganisationTypeOptions();
 
             return View("Type", model);
         }
@@ -187,6 +199,17 @@ namespace HNTAS.Web.UI.Controllers
                 return JsonConvert.DeserializeObject<OrganisationModel>(json);
             }
             return null;
+        }
+
+        // Helper method to populate the OrganisationTypes list
+        private List<SelectListItem> GetOrganisationTypeOptions()
+        {
+            return new List<SelectListItem>
+            {
+                new SelectListItem { Value = OrganisationType.UkCompaniesHouse.ToString(), Text = "UK company registered with Companies House" },
+                new SelectListItem { Value = OrganisationType.OtherUkOrganisation.ToString(), Text = "Other UK organisation" },
+                new SelectListItem { Value = OrganisationType.OverseasOrganisation.ToString(), Text = "Overseas organisation" }
+            };
         }
     }
 }
