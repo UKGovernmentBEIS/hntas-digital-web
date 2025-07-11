@@ -1,15 +1,61 @@
 ﻿using HNTAS.Web.UI.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection;
 
 namespace HNTAS.Web.UI.Controllers
 {
     public class HeatNetworkController : Controller
     {
         [HttpGet]
-        public IActionResult Eligibility()
+        public IActionResult RunningAHN()
         {
             return View(new HeatNetworkEligibilityModel());
         }
+
+
+        [HttpGet]
+        public IActionResult ServesGt10Dwellings()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult LocatedInUk()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult operatingAHN()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult RunningAHN(HeatNetworkEligibilityModel model)
+        {
+            return View("ServesGt10Dwellings", model);
+        }
+
+        [HttpPost]
+        public IActionResult ServesGt10Dwellings(HeatNetworkEligibilityModel model)
+        {
+            return View("LocatedInUk", model);
+        }
+
+        [HttpPost]
+        public IActionResult LocatedInUk(HeatNetworkEligibilityModel model)
+        {
+            return View("operatingAHN", model);
+        }
+
+        [HttpPost]
+        public IActionResult operatingAHN(HeatNetworkEligibilityModel model)
+        {
+            return View("ServesGt10Dwellings", model);
+        }
+
+
 
         [HttpPost]
         public IActionResult Eligibility(HeatNetworkEligibilityModel model)

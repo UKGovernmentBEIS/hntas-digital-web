@@ -1,0 +1,34 @@
+﻿@model HNTAS.Web.UI.Models.HeatNetworkEligibilityModel
+
+@{
+    ViewData["Title"] = "Check your eligibility to register a heat network";
+}
+
+<div class="govuk-width-container">
+    <form asp-controller="HeatNetwork" asp-action="operatingAHN" method="post" novalidate>
+        <div class="govuk-form-group">
+            <fieldset class="govuk-fieldset">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                    <h1>Are you operating an existing heat network or planning/designing/constructing a new one?</h1>
+                </legend>
+                <div class="govuk-radios">
+                    <div class="govuk-radios__item">
+                        <input class="govuk-radios__input" id="existingYes" name="IsExistingOrPlanned" type="radio" value="true" checked="@Model.IsExistingOrPlanned" />
+                        <label class="govuk-label govuk-radios__label" for="existingYes">Yes</label>
+                    </div>
+                    <div class="govuk-radios__item">
+                        <input class="govuk-radios__input" id="existingNo" name="IsExistingOrPlanned" type="radio" value="false" checked="@(!Model.IsExistingOrPlanned)" />
+                        <label class="govuk-label govuk-radios__label" for="existingNo">No</label>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+
+        <button class="govuk-button" type="submit">Continue</button>
+    </form>
+
+    @if (!string.IsNullOrEmpty(Model.ResultMessage))
+    {
+        <div class="govuk-inset-text">@Model.ResultMessage</div>
+    }
+</div>
