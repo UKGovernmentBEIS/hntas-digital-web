@@ -20,6 +20,9 @@ namespace HNTAS.Web.UI.Controllers
         [Authorize] // Requires the user to be authenticated
         public async Task<IActionResult> SignOut()
         {
+            // Clear your application's session data
+            HttpContext.Session.Clear();
+
             // Sign out from your application's cookie scheme
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 

@@ -1,0 +1,59 @@
+﻿@model HNTAS.Web.UI.Models.CompaniesHouse.CompanyDetailsModel
+@{
+    ViewData["Title"] = "Confirm this is the right organisation";
+}
+
+
+<div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <h1 class="govuk-heading-l">
+                Confirm this is the right organisation
+            </h1>
+
+            @if (Model != null && Model.RegisteredOfficeAddress != null)
+            {
+                <div class="govuk-body govuk-!-margin-bottom-6">
+                       
+
+                    <div class="govuk-body">
+                        @Model.Title<br/>
+                        @Model.RegisteredOfficeAddress.AddressLine1<br />
+                        @if (!string.IsNullOrEmpty(Model.RegisteredOfficeAddress.AddressLine2))
+                        {
+                            @Model.RegisteredOfficeAddress.AddressLine2<br />
+                        }
+                        @Model.RegisteredOfficeAddress.Locality<br />
+
+                        @if (!string.IsNullOrEmpty(Model.RegisteredOfficeAddress.Country) && Model.RegisteredOfficeAddress.Country != Model.RegisteredOfficeAddress.Locality)
+                        {
+                            @Model.RegisteredOfficeAddress.Country<br />
+                        }
+                        @Model.RegisteredOfficeAddress.PostalCode
+                    </div>
+                </div>
+
+                <p class="govuk-body">
+                    <a href="@Url.Action("CompanyNumber", "Organisation")" class="govuk-link">Change</a>
+                </p>
+
+                <br />
+                <br />
+
+                <form asp-controller="Organisation" asp-action="ConfirmAndContinue" method="post" novalidate>
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="govuk-button" data-module="govuk-button">
+                        Confirm and continue
+                    </button>
+                </form>
+            }
+            else
+            {
+                <p class="govuk-body">Company details could not be loaded. Please go back and try again.</p>
+                <p class="govuk-body">
+                    <a href="@Url.Action("CompanyNumber", "Organisation")" class="govuk-link">Go back</a>
+                </p>
+            }
+
+        </div>
+</div>

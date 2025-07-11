@@ -1,0 +1,93 @@
+﻿@using HNTAS.Web.UI.Models
+@model HNTAS.Web.UI.Models.OrganisationModel
+@{
+    ViewData["Title"] = "Which type of organisation do you work for?";
+}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
+                <h2 class="govuk-error-summary__title" id="error-summary-title">
+                    There is a problem
+                </h2>
+                <div class="govuk-error-summary__body">
+                    <ul class="govuk-list govuk-error-summary__list">
+                        @foreach (var modelState in ViewData.ModelState.Values)
+                        {
+                            foreach (var error in modelState.Errors)
+                            {
+                                <li>
+                                    <a href="#org-type-@Model.OrganisationTypes.FirstOrDefault()?.Value.ToLower()">@error.ErrorMessage</a>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+        }
+
+        <form asp-controller="Organisation" asp-action="Type" method="post" novalidate>
+            @Html.AntiForgeryToken()
+
+            <div class="govuk-form-group @(ViewData.ModelState.ContainsKey(nameof(Model.SelectedOrganisationType)) && ViewData.ModelState[nameof(Model.SelectedOrganisationType)].Errors.Any() ? "govuk-form-group--error" : "")">
+                <fieldset class="govuk-fieldset"
+                          aria-describedby="organisation-type-hint @(ViewData.ModelState.ContainsKey(nameof(Model.SelectedOrganisationType)) && ViewData.ModelState[nameof(Model.SelectedOrganisationType)].Errors.Any() ? "organisation-type-error" : "")">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                        <h1 class="govuk-fieldset__heading">
+                            Which type of organisation do you work for?
+                        </h1>
+                    </legend>
+
+                    @if (ViewData.ModelState.ContainsKey(nameof(Model.SelectedOrganisationType)) && ViewData.ModelState[nameof(Model.SelectedOrganisationType)].Errors.Any())
+                    {
+                        <p id="organisation-type-error" class="govuk-error-message">
+                            <span class="govuk-visually-hidden">Error:</span> @Html.ValidationMessageFor(m => m.SelectedOrganisationType)
+                        </p>
+                    }
+
+                    <div class="govuk-radios" data-module="govuk-radios">
+                        @{
+                            // Keep track of how many items we've rendered to know when to add the divider
+                            int itemsRendered = 0;
+                        }
+                        @foreach (var item in Model.OrganisationTypes)
+                        {
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input"
+                                       id="org-type-@item.Value.ToLower()" @* Generate unique ID from value *@
+                                       name="SelectedOrganisationType"
+                                       type="radio"
+                                       value="@item.Value"
+                                       aria-describedby="@if (item.Value == OrganisationType.OtherUkOrganisation.ToString()) { <text>org-type-other-uk-hint</text> } @(ViewData.ModelState.ContainsKey(nameof(Model.SelectedOrganisationType)) && ViewData.ModelState[nameof(Model.SelectedOrganisationType)].Errors.Any() ? " organisation-type-error" : "")"
+                                       @(Model.SelectedOrganisationType?.ToString() == item.Value ? "checked" : "") />
+                                <label class="govuk-label govuk-radios__label" for="org-type-@item.Value.ToLower()">
+                                    @item.Text
+                                </label>
+                                @if (item.Value == OrganisationType.OtherUkOrganisation.ToString())
+                                {
+                                    <div id="org-type-other-uk-hint" class="govuk-hint govuk-radios__hint">
+                                        For example, local authorities, charities, mutual societies, sole traders.
+                                    </div>
+                                }
+                            </div>
+
+                            itemsRendered++;
+
+                            // Add the 'or' divider dynamically if it's after the second item
+                            if (itemsRendered == 2) // Assuming "Other UK organisation" is the second item
+                            {
+                                <div class="govuk-radios__divider">or</div>
+                            }
+                        }
+                    </div>
+                </fieldset>
+            </div>
+
+            <button type="submit" class="govuk-button" data-module="govuk-button">
+                Continue
+            </button>
+        </form>
+
+    </div>
+</div>
