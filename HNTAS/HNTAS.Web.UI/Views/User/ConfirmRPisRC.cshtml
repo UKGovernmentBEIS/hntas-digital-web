@@ -1,28 +1,92 @@
 ﻿@model HNTAS.Web.UI.Models.UserModel
 
 @{
-    ViewData["Title"] = "Are you the regulatory contact? ";
+    ViewData["Title"] = $"Are you {Model.OrganisationName} regulatory contact for heat networks?";
 }
 
-<div class="govuk-width-container">
-    <form asp-controller="User" asp-action="ConfirmRPisRC" method="post" novalidate>
-        <div class="govuk-form-group">
-            <fieldset class="govuk-fieldset">
-                <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                    <h1 class="govuk-fieldset__heading">Are you the regulatory contact?</h1>
-                </legend>
-                <div class="govuk-radios">
-                    <div class="govuk-radios__item">
-                        <input class="govuk-radios__input" id="isRC" name="ifRPIsRC" type="radio" value="true" checked="@Model.ifRPisRC" />
-                        <label class="govuk-label govuk-radios__label" for="isRC">Yes</label>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
+                <h2 class="govuk-error-summary__title" id="error-summary-title">
+                    There is a problem
+                </h2>
+                <div class="govuk-error-summary__body">
+                    <ul class="govuk-list govuk-error-summary__list">
+                        @foreach (var modelState in ViewData.ModelState.Values)
+                        {
+                            foreach (var error in modelState.Errors)
+                            {
+                                <li>
+                                    <a href="#ifRC">@error.ErrorMessage</a>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+        }
+
+        <form asp-controller="User" asp-action="ConfirmRPisRC" method="post" novalidate>
+            @Html.AntiForgeryToken()
+
+            <div class="govuk-form-group @(ViewData.ModelState.ContainsKey(nameof(Model.ifRPisRC)) && ViewData.ModelState[nameof(Model.ifRPisRC)].Errors.Any() ? "govuk-form-group--error" : "")">
+                <fieldset class="govuk-fieldset"
+                          aria-describedby="regulatory-contact-hint @(ViewData.ModelState.ContainsKey(nameof(Model.ifRPisRC)) && ViewData.ModelState[nameof(Model.ifRPisRC)].Errors.Any() ? "regulatory-contact-error" : "")">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                        <h1 class="govuk-fieldset__heading">
+                            Are you @Model.OrganisationName regulatory contact for heat networks?
+                        </h1>
+                    </legend>
+
+                    <p class="govuk-body">This is typically your organisation's most senior member of staff with responsibility for heat networks.</p>
+
+                    <p class="govuk-body">As regulatory contact, you'll:</p>
+                    <ul class="govuk-list govuk-list--bullet">
+                        <li>be HNTAS main point of contact for any regulatory and compliance matters in relation to your organisation’s heat networks</li>
+                        <li>have full access to all features in HNTAS digital heat networks service, for example managing users and submitting heat network information</li>
+                        <li>be initially responsible for inviting other users into the account and setting their permissions, so they can help your organisation fulfil its regulatory duties</li>
+                    </ul>
+
+                    <p class="govuk-body">You can change the regulatory contact in the future, if you need to.</p>
+
+                    <div class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                        <h2 class="govuk-fieldset__heading">Are you the regulatory contact?</h2>
                     </div>
-                    <div class="govuk-radios__item">
-                        <input class="govuk-radios__input" id="isNotRC" name="ifRPIsRC" type="radio" value="false" checked="@(!Model.ifRPisRC)" />
-                        <label class="govuk-label govuk-radios__label" for="isNotRC">No</label>
+
+                    @if (ViewData.ModelState.ContainsKey(nameof(Model.ifRPisRC)) && ViewData.ModelState[nameof(Model.ifRPisRC)].Errors.Any())
+                    {
+                        <p id="regulatory-contact-error" class="govuk-error-message">
+                            <span class="govuk-visually-hidden">Error:</span> @Html.ValidationMessageFor(m => m.ifRPisRC)
+                        </p>
+                    }
+
+                    <div class="govuk-radios" data-module="govuk-radios">
+                        <div class="govuk-radios__item">
+
+                            <input class="govuk-radios__input" id="ifRC" name="ifRPisRC" type="radio" value="true"
+                                   @(Model.ifRPisRC == true ? "checked" : "")>
+                            <label class="govuk-label govuk-radios__label" for="ifRC">
+                                Yes
+                            </label>
+                        </div>
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="isNotRC" name="ifRPisRC" type="radio" value="false"
+                                   @(Model.ifRPisRC == false ? "checked" : "")>
+                            <label class="govuk-label govuk-radios__label" for="isNotRC">
+                                No
+                            </label>
+                        </div>
                     </div>
-                </div><br/>
-                <button class="govuk-button" type="submit">Continue</button>
-            </fieldset>
-        </div>
-    </form>
+                </fieldset>
+            </div>
+
+            <button type="submit" class="govuk-button" data-module="govuk-button">
+                Continue
+            </button>
+        </form>
+
+    </div>
 </div>
