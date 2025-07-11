@@ -1,1 +1,4 @@
-﻿@import "../../node_modules/govuk-frontend/dist/govuk/all";
+﻿
+$govuk-assets-path: '/assets/'; // This points to where compiled assets will be in your wwwroot
+
+@import "../../node_modules/govuk-frontend/dist/govuk/all";
