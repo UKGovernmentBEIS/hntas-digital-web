@@ -1,0 +1,107 @@
+﻿@model HNTAS.Web.UI.Models.OrganisationModel
+@{
+    ViewData["Title"] = "Which type of organisation do you work for?";
+}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
+                <h2 class="govuk-error-summary__title" id="error-summary-title">
+                    There is a problem
+                </h2>
+                <div class="govuk-error-summary__body">
+                    <ul class="govuk-list govuk-error-summary__list">
+                        @foreach (var modelState in ViewData.ModelState.Values)
+                        {
+                            foreach (var error in modelState.Errors)
+                            {
+                                <li>
+                                    <a href="#org-type-uk-companies-house">@error.ErrorMessage</a>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+        }
+
+        <form asp-controller="Organisation" asp-action="Type" method="post" novalidate>
+            @* novalidate prevents browser's default HTML5 validation *@
+            @Html.AntiForgeryToken() @* Essential for preventing Cross-Site Request Forgery (CSRF) *@
+
+            @* Form group for the radio buttons. Conditionally apply error class. *@
+            <div class="govuk-form-group @(ViewData.ModelState.ContainsKey(nameof(Model.SelectedOrganisationType)) && ViewData.ModelState[nameof(Model.SelectedOrganisationType)].Errors.Any() ? "govuk-form-group--error" : "")">
+                <fieldset class="govuk-fieldset"
+                          aria-describedby="organisation-type-hint @(ViewData.ModelState.ContainsKey(nameof(Model.SelectedOrganisationType)) && ViewData.ModelState[nameof(Model.SelectedOrganisationType)].Errors.Any() ? "organisation-type-error" : "")">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                        <h1 class="govuk-fieldset__heading">
+                            Which type of organisation do you work for?
+                        </h1>
+                    </legend>
+
+                    <div id="organisation-type-hint" class="govuk-hint">
+                        Select the option that best describes your organisation.
+                    </div>
+
+                    @* Display the specific error message for the radio group if validation fails *@
+                    @if (ViewData.ModelState.ContainsKey(nameof(Model.SelectedOrganisationType)) && ViewData.ModelState[nameof(Model.SelectedOrganisationType)].Errors.Any())
+                    {
+                        <p id="organisation-type-error" class="govuk-error-message">
+                            <span class="govuk-visually-hidden">Error:</span> @Html.ValidationMessageFor(m => m.SelectedOrganisationType)
+                        </p>
+                    }
+
+                    <div class="govuk-radios" data-module="govuk-radios">
+                        @* Radio button for "UK company registered with Companies House" *@
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="org-type-uk-companies-house"
+                                   name="SelectedOrganisationType" @* Name must match model property *@
+                                   type="radio" value="UK company registered with Companies House"
+                                   aria-describedby="org-type-uk-companies-house-hint @(ViewData.ModelState.ContainsKey(nameof(Model.SelectedOrganisationType)) && ViewData.ModelState[nameof(Model.SelectedOrganisationType)].Errors.Any() ? "organisation-type-error" : "")"
+                                   @(Model.SelectedOrganisationType == "UK company registered with Companies House" ? "checked" : "") @* Check if this option was previously selected *@
+                                    />
+                            <label class="govuk-label govuk-radios__label" for="org-type-uk-companies-house">
+                                UK company registered with Companies House
+                            </label>
+                        </div>
+
+                        @* Radio button for "Other UK organisation" *@
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="org-type-other-uk"
+                                   name="SelectedOrganisationType"
+                                   type="radio" value="Other UK organisation"
+                                   aria-describedby="org-type-other-uk-hint @(ViewData.ModelState.ContainsKey(nameof(Model.SelectedOrganisationType)) && ViewData.ModelState[nameof(Model.SelectedOrganisationType)].Errors.Any() ? "organisation-type-error" : "")"
+                                   @(Model.SelectedOrganisationType == "Other UK organisation" ? "checked" : "") />
+                            <label class="govuk-label govuk-radios__label" for="org-type-other-uk">
+                                Other UK organisation
+                            </label>
+                            <div id="org-type-other-uk-hint" class="govuk-hint govuk-radios__hint">
+                                For example, local authorities, charities, mutual societies, sole traders.
+                            </div>
+                        </div>
+
+                        <div class="govuk-radios__divider">or</div>
+
+                        @* Radio button for "Overseas organisation" *@
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="org-type-overseas"
+                                   name="SelectedOrganisationType"
+                                   type="radio" value="Overseas organisation"
+                                   aria-describedby="@(ViewData.ModelState.ContainsKey(nameof(Model.SelectedOrganisationType)) && ViewData.ModelState[nameof(Model.SelectedOrganisationType)].Errors.Any() ? "organisation-type-error" : "")"
+                                   @(Model.SelectedOrganisationType == "Overseas organisation" ? "checked" : "") />
+                            <label class="govuk-label govuk-radios__label" for="org-type-overseas">
+                                Overseas organisation
+                            </label>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+
+            <button type="submit" class="govuk-button" data-module="govuk-button">
+                Continue
+            </button>
+        </form>
+
+    </div>
+</div>

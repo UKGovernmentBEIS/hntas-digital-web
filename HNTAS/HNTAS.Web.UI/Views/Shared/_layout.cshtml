@@ -52,34 +52,7 @@
                 <a href="#" class="govuk-header__link govuk-header__service-name">
                     Heat network technical assurance scheme
                 </a>
-                <nav aria-label="Menu" class="govuk-header__navigation">
-                    <button type="button" class="govuk-header__menu-button govuk-js-header-toggle" aria-controls="navigation" hidden>
-                        Menu
-                    </button>
-                    <ul id="navigation" class="govuk-header__navigation-list">
-                        <li class="govuk-header__navigation-item govuk-header__navigation-item--active">
-                            <a class="govuk-header__link" href="#">
-                                Navigation item 1
-                            </a>
-                        </li>
-                        <li class="govuk-header__navigation-item">
-                            <a class="govuk-header__link" href="#">
-                                Navigation item 2
-                            </a>
-                        </li>
-                        <li class="govuk-header__navigation-item">
-                            <a class="govuk-header__link" href="#">
-                                Navigation item 3
-                            </a>
-                        </li>
-                        @if (!User.Identity.IsAuthenticated)
-                        {
-                            <li class="govuk-header__navigation-item">
-                                <a asp-controller="Account" asp-action="SignIn" class="govuk-header__link">Login</a>
-                            </li>
-                        }
-                    </ul>
-                </nav>
+           
             </div>
         </div>
     </header>
@@ -100,7 +73,7 @@
                 <div>
                     @{
                         bool showBackButton = ViewBag.ShowBackButton ?? false; // Your condition
-                        string backLinkUrl = "#"; // Your URL
+                        string backLinkUrl = ViewBag.BackLinkUrl; // Your URL
 
                         if (showBackButton)
                         {
@@ -108,14 +81,15 @@
                         }
                     }
                 </div>
-                <div>
+                <div class="@(!showBackButton ? "govuk-!-padding-top-3" : "")">
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <a asp-controller="Account" asp-action="SignOut" class="govuk-link govuk-!-margin-right-0 govuk-!-padding-top-3">Sign out</a>
+                        <a asp-controller="Account" asp-action="SignOut" class="govuk-link govuk-!-margin-right-0">Sign out</a>
                     }
                 </div>
             </div>
         </div>
+
         <main class="govuk-main-wrapper app-main-class" id="main-content">
             @RenderBody()
         </main>
