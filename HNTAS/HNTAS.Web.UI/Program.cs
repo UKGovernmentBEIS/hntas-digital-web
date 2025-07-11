@@ -13,6 +13,9 @@ builder.Configuration.AddJsonFile(
     reloadOnChange: true);
 
 
+// Register CompaniesHouseService with HttpClientFactory
+builder.Services.AddHttpClient<ICompaniesHouseService, CompaniesHouseService>();
+
 //Configure onelogin settings
 builder.Services.AddAuthentication(defaultScheme: OneLoginDefaults.AuthenticationScheme)
     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -40,6 +43,12 @@ builder.Services.AddAuthentication(defaultScheme: OneLoginDefaults.Authenticatio
         options.VectorsOfTrust = ["Cl"];
     });
 
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient<AddressLookupService>();
@@ -74,6 +83,8 @@ catch (Exception ex)
 }
 
 app.UseRouting();
+
+app.UseSession();
 
 app.UseAuthorization();
 
