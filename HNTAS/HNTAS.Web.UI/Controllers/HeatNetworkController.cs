@@ -13,14 +13,12 @@ namespace HNTAS.Web.UI.Controllers
         [HttpGet]
         public IActionResult RunningAHN()
         {
-            showBackButton("Guidance", "Guidance");
             return View(new RunningAHNViewModel());
         }
 
         [HttpPost]
         public IActionResult RunningAHN(RunningAHNViewModel model)
         {
-            showBackButton("RunningAHN", "HeatNetwork");
 
             if (!ModelState.IsValid)
             {
@@ -111,10 +109,7 @@ namespace HNTAS.Web.UI.Controllers
                 return View(model);
             }
 
-            // Eligible: show a message or redirect as needed
-            ViewBag.ResultMessage = "You are eligible to register. Please create an account.";
-            ViewBag.ShowCreateAccountButton = true; 
-            return View(model);
+            return RedirectToAction("Index", "Home");
         }
     }
 }
