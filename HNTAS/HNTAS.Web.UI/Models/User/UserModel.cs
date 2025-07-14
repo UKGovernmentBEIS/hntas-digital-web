@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace HNTAS.Web.UI.Models
+namespace HNTAS.Web.UI.Models.User
 {
     public class UserModel
     {
@@ -9,5 +9,7 @@ namespace HNTAS.Web.UI.Models
 
         // Add this property if you want the organisation name to be dynamic
         public string OrganisationName { get; set; } = string.Empty;
+
+        public ContactDetailsModel ContactDetails { get; set; } = new ContactDetailsModel();
     }
 }
