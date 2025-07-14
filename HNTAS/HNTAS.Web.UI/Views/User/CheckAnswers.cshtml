@@ -1,0 +1,201 @@
+﻿@using HNTAS.Web.UI.Models
+@using HNTAS.Web.UI.Models.User
+@model Tuple<OrganisationModel, UserModel>
+@{
+    ViewData["Title"] = "Check your answers";
+
+    var organisationModel = Model.Item1; // Extract OrganisationModel from the tuple
+
+    var userModel = Model.Item2;
+
+    // Access ContactDetails through userModel
+    string displayContactNumber = "";
+    if (userModel.ContactDetails.PreferredContactType == "Landline")
+    {
+        displayContactNumber = userModel.ContactDetails.LandlineNumber;
+        if (!string.IsNullOrEmpty(userModel.ContactDetails.ContactNumberExtension))
+        {
+            displayContactNumber += $" ext {userModel.ContactDetails.ContactNumberExtension}";
+        }
+    }
+    else if (userModel.ContactDetails.PreferredContactType == "Mobile")
+    {
+        displayContactNumber = userModel.ContactDetails.MobileNumber;
+    }
+}
+
+
+<div class="govuk-width-container">
+    <main class="govuk-main-wrapper" id="main-content" role="main">
+        <h1 class="govuk-heading-l">Check your answers</h1>
+
+        <form asp-controller="User" asp-action="SubmitAnswers" method="post" novalidate>
+            @Html.AntiForgeryToken()
+
+            <h2 class="govuk-heading-m">Organisation details</h2>
+            <dl class="govuk-summary-list">
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Organisation type
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        @organisationModel.SelectedOrganisationTypeText
+                    </dd>
+                    <dd class="govuk-summary-list__actions">
+                        <a class="govuk-link" href="#">
+                            Change<span class="govuk-visually-hidden"> organisation type</span>
+                        </a>
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Company number
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        @organisationModel.CompanyNumber
+                    </dd>
+                    <dd class="govuk-summary-list__actions">
+                        <a class="govuk-link" href="#">
+                            Change<span class="govuk-visually-hidden"> company number</span>
+                        </a>
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Organisation name and address
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        @if (organisationModel.CompanyDetails != null)
+                        {
+                            @organisationModel.CompanyDetails.Title
+
+                            <br />
+                            @organisationModel.CompanyDetails.RegisteredOfficeAddress.AddressLine1
+
+                            <br />
+                            @if (!string.IsNullOrEmpty(organisationModel.CompanyDetails.RegisteredOfficeAddress.AddressLine2))
+                            {
+                                @organisationModel.CompanyDetails.RegisteredOfficeAddress.AddressLine2
+
+                                <br />
+                            }
+                            @organisationModel.CompanyDetails.RegisteredOfficeAddress.Locality
+
+                            <br />
+                            @if (!string.IsNullOrEmpty(organisationModel.CompanyDetails.RegisteredOfficeAddress.Country))
+                            {
+                                @organisationModel.CompanyDetails.RegisteredOfficeAddress.Country
+
+                                <br />
+                            }
+                            @organisationModel.CompanyDetails.RegisteredOfficeAddress.PostalCode
+                        }
+                    </dd>
+                    <dd class="govuk-summary-list__actions">
+                        <a class="govuk-link" href="#">
+                            Change<span class="govuk-visually-hidden"> organisation name and address</span>
+                        </a>
+                    </dd>
+                </div>
+            </dl>
+
+            <h2 class="govuk-heading-m">Your details</h2>
+            <dl class="govuk-summary-list">
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Are you the regulatory contact?
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        @(userModel.ifRPisRC == true ? "Yes" : "No") @* Updated to use userModel.ifRPisRC *@
+                    </dd>
+                    <dd class="govuk-summary-list__actions">
+                        <a class="govuk-link" href="#">
+                            Change<span class="govuk-visually-hidden"> regulatory contact status</span>
+                        </a>
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        First name
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        @userModel.ContactDetails.FirstName @* Updated to use userModel.ContactDetails *@
+                    </dd>
+                    <dd class="govuk-summary-list__actions">
+                        <a class="govuk-link" href="#">
+                            Change<span class="govuk-visually-hidden"> first name</span>
+                        </a>
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Last name
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        @userModel.ContactDetails.LastName @* Updated to use userModel.ContactDetails *@
+                    </dd>
+                    <dd class="govuk-summary-list__actions">
+                        <a class="govuk-link" href="#">
+                            Change<span class="govuk-visually-hidden"> last name</span>
+                        </a>
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Preferred contact number for work
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        @displayContactNumber
+                    </dd>
+                    <dd class="govuk-summary-list__actions">
+                        <a class="govuk-link" href="#">
+                            Change<span class="govuk-visually-hidden"> preferred contact number for work</span>
+                        </a>
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Job title
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        @userModel.ContactDetails.JobTitle @* Updated to use userModel.ContactDetails *@
+                    </dd>
+                    <dd class="govuk-summary-list__actions">
+                        <a class="govuk-link" href="#">
+                            Change<span class="govuk-visually-hidden"> job title</span>
+                        </a>
+                    </dd>
+                </div>
+            </dl>
+
+            <h2 class="govuk-heading-m">Declaration</h2>
+            <div class="govuk-form-group">
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                        <h1 class="govuk-fieldset__heading">
+                            Tick to confirm:
+                        </h1>
+                    </legend>
+                    <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+                        <div class="govuk-checkboxes__item">
+                            <input class="govuk-checkboxes__input" id="confirmDeclaration" name="confirmDeclaration" type="checkbox" value="confirmed">
+                            <label class="govuk-label govuk-checkboxes__label" for="confirmDeclaration">
+                                I confirm that:
+                            </label>
+                            <ul class="govuk-list govuk-list--bullet govuk-!-margin-left-5 govuk-!-margin-top-2 govuk-!-font-size-16">
+                                <li>I have due authority to enable my organisation for the heat network service</li>
+                                <li>I have read and understood the digital form and the guidance for it, currently published on the GOV.UK website</li>
+                                <li>to the best of my knowledge and belief, all the details provided in this digital form are true and complete</li>
+                                <li>I understand that knowingly or recklessly making a false, incomplete or misleading statement in support of this request may lead to service access being revoked</li>
+                            </ul>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+
+            <button type="submit" class="govuk-button" data-module="govuk-button">
+                Accept and send
+            </button>
+        </form>
+    </main>
+</div>

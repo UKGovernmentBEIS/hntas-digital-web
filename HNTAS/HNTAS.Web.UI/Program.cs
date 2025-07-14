@@ -15,6 +15,7 @@ builder.Configuration.AddJsonFile(
 
 // Register CompaniesHouseService with HttpClientFactory
 builder.Services.AddHttpClient<ICompaniesHouseService, CompaniesHouseService>();
+builder.Services.AddSingleton<GovUkNotifyService>();
 
 //Configure onelogin settings
 builder.Services.AddAuthentication(defaultScheme: OneLoginDefaults.AuthenticationScheme)

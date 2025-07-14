@@ -10,7 +10,8 @@ namespace HNTAS.Web.UI.Controllers
         public IActionResult Guidance()
         {
             ViewBag.ShowBackButton = true;
-            ViewBag.BackLinkUrl = Url.Action("Guidance", "Guidance");
+            ViewBag.BackLinkUrl = Url.Action("ConfirmRPIsRC", "User");
+
             return View("Guidance");
         }
     }

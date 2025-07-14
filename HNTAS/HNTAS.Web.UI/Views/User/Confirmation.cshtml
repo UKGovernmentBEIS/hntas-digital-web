@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = $"Confirmation";
+}
+
+
+
+<div class="govuk-width-container">
+    <main class="govuk-main-wrapper govuk-main-wrapper--l" id="main-content" role="main">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                <div class="govuk-panel govuk-panel--confirmation">
+                    Organisation enabled for
+                    the heat network service
+                    Account ID: AC0000001
+                </div>
+                <h2 class="govuk-heading-m">We have:</h2>
+                <ul class="govuk-list govuk-list--bullet">
+                    <li>enabled @ViewBag.CompanyName for the heat network service</li>
+                    <li>made you the regulatory contact for @ViewBag.CompanyName's heat networks</li>
+                    <li>sent an email confirmation, with the account ID, to test@test.com</li>
+                </ul>
+
+                <h2 class="govuk-heading-m">As regulatory contact, you can now:</h2>
+                <ul class="govuk-list govuk-list--bullet">
+                    <li>access the service</li>
+                    <li>add team members to the service</li>
+                    <li>decide what your team members can and cannot do on the service by setting their permission levels</li>
+                </ul>
+
+                <h2 class="govuk-heading-m">Before you can start providing your heat network information</h2>
+                <p class="govuk-body">
+                    You'll need to access the service and provide further information about your organisation. After this, the service will be fully unlocked.
+                </p>
+
+                <a href="#" role="button" draggable="false" class="govuk-button govuk-button--start">
+                    Go to heat networks home
+                    <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" aria-hidden="true" focusable="false">
+                        <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </main>
+</div>
