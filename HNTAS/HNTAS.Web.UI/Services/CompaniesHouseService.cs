@@ -15,7 +15,7 @@ namespace HNTAS.Web.UI.Services
         public CompaniesHouseService(HttpClient httpClient, IConfiguration config)
         {
             _httpClient = httpClient;
-            _apiKey = Environment.GetEnvironmentVariable("OS_API_KEY"); // Corrected indexing issue  
+            _apiKey = Environment.GetEnvironmentVariable("COMPANIES_HOUSE_API_KEY"); // Corrected indexing issue  
 
             // Set base address for HttpClient  
             _httpClient.BaseAddress = new Uri("https://api.company-information.service.gov.uk/");
