@@ -20,7 +20,6 @@ namespace HNTAS.Web.UI.Controllers
         }
 
         [HttpGet]
-        [Route("User/Is-user-Regulatory-Contact")]
         public IActionResult ConfirmRPIsRC()
         {
             var userModel = SessionHelper.GetFromSession<UserModel>(HttpContext, UserCreationSessionKey) ?? new UserModel();
@@ -34,7 +33,6 @@ namespace HNTAS.Web.UI.Controllers
         }
 
         [HttpPost]
-        [Route("User/Is-user-Regulatory-Contact")]
         [ValidateAntiForgeryToken]
         public IActionResult ConfirmRPIsRC(UserModel model)
         {
