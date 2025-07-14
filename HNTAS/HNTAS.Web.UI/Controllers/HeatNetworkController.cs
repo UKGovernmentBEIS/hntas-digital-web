@@ -30,8 +30,8 @@ namespace HNTAS.Web.UI.Controllers
                 ViewBag.ResultMessage = "You do not need to register your heat network to HNTAS.";
                 return View(model);
             }
-            
-            return View("ServesGt10Dwellings", new ServesGt10DwellingsViewModel());
+
+            return RedirectToAction("ServesGt10Dwellings");
         }
 
         [HttpGet]
@@ -56,8 +56,8 @@ namespace HNTAS.Web.UI.Controllers
                 ViewBag.ResultMessage = "You do not need to register your heat network to HNTAS.";
                 return View(model);
             }
-            
-            return View("LocatedInUk", new LocatedInUkViewModel());
+
+            return RedirectToAction("LocatedInUk");
         }
 
         [HttpGet]
@@ -82,8 +82,8 @@ namespace HNTAS.Web.UI.Controllers
                 ViewBag.ResultMessage = "You do not need to register your heat network to HNTAS.";
                 return View(model);
             }
-            
-            return View("OperatingAHN", new OperatingAHNViewModel());
+
+            return RedirectToAction("OperatingAHN");
         }
 
         [HttpGet]

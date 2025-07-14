@@ -9,46 +9,55 @@
         @* Error summary *@
         @if (!ViewData.ModelState.IsValid)
         {
-            <div class="govuk-error-summary" role="alert">
+            <div class="govuk-error-summary" role="alert" data-module="govuk-error-summary">
                 <h2 class="govuk-error-summary__title">There is a problem</h2>
-                <ul class="govuk-list govuk-error-summary__list">
-                    @foreach (var entry in ViewData.ModelState)
-                    {
-                        foreach (var error in entry.Value.Errors)
+                <div class="govuk-error-summary__body">
+                    <ul class="govuk-list govuk-error-summary__list">
+                        @foreach (var entry in ViewData.ModelState)
                         {
-                            <li id="@entry.Key-error" class="govuk-error-message">
-                                <a href="#@entry.Key-error"> @error.ErrorMessage </a>
-                            </li>
+                            @if (entry.Value.Errors.Any())
+                            {
+                                @foreach (var error in entry.Value.Errors)
+                                {
+                                    <li>
+                                        <a href="#existingYes">@error.ErrorMessage</a>
+                                    </li>
+                                }
+                            }
                         }
-                    }
-                </ul>
+                    </ul>
+                </div>
             </div>
         }
-        <div class="govuk-form-group" @(ViewData.ModelState["IsExistingOrPlanned"]?.Errors.Count > 0 ? "govuk-form-group--error" : "")">
-            <fieldset class="govuk-fieldset">
-                <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-                    <h1>Are you operating an existing heat network or planning/designing/constructing a new one?</h1>
+
+        <div class="govuk-form-group @(ViewData.ModelState.ContainsKey("IsExistingOrPlanned") && ViewData.ModelState["IsExistingOrPlanned"].Errors.Any() ? "govuk-form-group--error" : "")">
+            <fieldset class="govuk-fieldset" aria-describedby="is-existing-or-planned-hint @(ViewData.ModelState.ContainsKey("IsExistingOrPlanned") && ViewData.ModelState["IsExistingOrPlanned"].Errors.Any() ? "is-existing-or-planned-error" : "")">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                    <h1 class="govuk-fieldset__heading">Are you operating an existing heat network or planning/designing/constructing a new one?</h1>
                 </legend>
-                @if (ViewData.ModelState["IsExistingOrPlanned"]?.Errors.Count > 0)
+
+                @* Individual field error message *@
+                @if (ViewData.ModelState.ContainsKey("IsExistingOrPlanned") && ViewData.ModelState["IsExistingOrPlanned"].Errors.Any())
                 {
-                    <span class="govuk-error-message">
-                        @ViewData.ModelState["IsExistingOrPlanned"].Errors[0].ErrorMessage
+                    <span id="is-existing-or-planned-error" class="govuk-error-message">
+                        <span class="govuk-visually-hidden">Error:</span> @ViewData.ModelState["IsExistingOrPlanned"].Errors[0].ErrorMessage
                     </span>
                 }
-                <div class="govuk-radios">
+
+                <div class="govuk-radios" data-module="govuk-radios">
                     <div class="govuk-radios__item">
-                        <input class="govuk-radios__input" id="existingYes" name="IsExistingOrPlanned" type="radio" value="true" checked="@Model.IsExistingOrPlanned" />
+                        <input class="govuk-radios__input" id="existingYes" name="IsExistingOrPlanned" type="radio" value="true" @(Model?.IsExistingOrPlanned == true ? "checked" : "")>
                         <label class="govuk-label govuk-radios__label" for="existingYes">Yes</label>
                     </div>
                     <div class="govuk-radios__item">
-                        <input class="govuk-radios__input" id="existingNo" name="IsExistingOrPlanned" type="radio" value="false" checked="@(!Model.IsExistingOrPlanned)" />
+                        <input class="govuk-radios__input" id="existingNo" name="IsExistingOrPlanned" type="radio" value="false" @(Model?.IsExistingOrPlanned == false ? "checked" : "")>
                         <label class="govuk-label govuk-radios__label" for="existingNo">No</label>
                     </div>
                 </div>
             </fieldset>
         </div>
 
-        <button class="govuk-button" type="submit">Continue</button>
+        <button class="govuk-button" data-module="govuk-button" type="submit">Continue</button>
     </form>
 
     @if (!string.IsNullOrEmpty(ViewBag.ResultMessage as string))
