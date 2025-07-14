@@ -25,7 +25,7 @@ builder.Services.AddAuthentication(defaultScheme: OneLoginDefaults.Authenticatio
         options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
 
         options.Environment = OneLoginEnvironments.Integration;
-        options.ClientId = builder.Configuration["OneLogin:ClientId"];
+        options.ClientId = Environment.GetEnvironmentVariable("ONELOGIN_CLIENT_ID");
         options.CallbackPath = "/onelogin-callback";
         options.SignedOutCallbackPath = "/onelogin-logout-callback";
         options.Scope.Add("openid");
@@ -35,7 +35,7 @@ builder.Services.AddAuthentication(defaultScheme: OneLoginDefaults.Authenticatio
 
         using (var rsa = RSA.Create())
         {
-            rsa.ImportFromPem(builder.Configuration["OneLogin:PrivateKey"]);
+            rsa.ImportFromPem(Environment.GetEnvironmentVariable("ONELOGIN_PRIVATE_KEY").AsSpan().ToString().Replace("\\n", "\n"));
             options.ClientAuthenticationCredentials = new SigningCredentials(
                 new RsaSecurityKey(rsa.ExportParameters(true)), // Fix: Ensure RsaSecurityKey is resolved
                 SecurityAlgorithms.RsaSha256);

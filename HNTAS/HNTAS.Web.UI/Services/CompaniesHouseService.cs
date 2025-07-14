@@ -2,6 +2,8 @@
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using Microsoft.Extensions.Configuration; // Ensure this is included
+using System;
 
 namespace HNTAS.Web.UI.Services
 {
@@ -13,9 +15,9 @@ namespace HNTAS.Web.UI.Services
         public CompaniesHouseService(HttpClient httpClient, IConfiguration config)
         {
             _httpClient = httpClient;
-            _apiKey = config["CompaniesHouse:ApiKey"]; // Get API key from configuration
+            _apiKey = Environment.GetEnvironmentVariable("COMPANIES_HOUSE_API_KEY"); // Corrected indexing issue  
 
-            // Set base address for HttpClient
+            // Set base address for HttpClient  
             _httpClient.BaseAddress = new Uri("https://api.company-information.service.gov.uk/");
         }
 
