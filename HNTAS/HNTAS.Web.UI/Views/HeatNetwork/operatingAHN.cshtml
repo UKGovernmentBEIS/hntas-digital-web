@@ -1,11 +1,11 @@
-﻿@model HNTAS.Web.UI.Models.ServesGt10DwellingsViewModel
+﻿@model HNTAS.Web.UI.Models.OperatingAHNViewModel
 
 @{
     ViewData["Title"] = "Check your eligibility to register a heat network";
 }
 
 <div class="govuk-width-container">
-    <form asp-controller="HeatNetwork" asp-action="ServesGt10Dwellings" method="post" novalidate>
+    <form asp-controller="HeatNetwork" asp-action="operatingAHN" method="post" novalidate>
         @* Error summary *@
         @if (!ViewData.ModelState.IsValid)
         {
@@ -24,25 +24,25 @@
                 </ul>
             </div>
         }
-        <div class="govuk-form-group" @(ViewData.ModelState["ServesMoreThan10Dwellings"]?.Errors.Count > 0 ? "govuk-form-group--error" : "")>
+        <div class="govuk-form-group" @(ViewData.ModelState["IsExistingOrPlanned"]?.Errors.Count > 0 ? "govuk-form-group--error" : "")">
             <fieldset class="govuk-fieldset">
                 <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-                    <h1>Does the heat network serve more than 10 dwellings?</h1>
+                    <h1>Are you operating an existing heat network or planning/designing/constructing a new one?</h1>
                 </legend>
-                @if (ViewData.ModelState["ServesMoreThan10Dwellings"]?.Errors.Count > 0)
+                @if (ViewData.ModelState["IsExistingOrPlanned"]?.Errors.Count > 0)
                 {
                     <span class="govuk-error-message">
-                        @ViewData.ModelState["ServesMoreThan10Dwellings"].Errors[0].ErrorMessage
+                        @ViewData.ModelState["IsExistingOrPlanned"].Errors[0].ErrorMessage
                     </span>
                 }
                 <div class="govuk-radios">
                     <div class="govuk-radios__item">
-                        <input class="govuk-radios__input" id="dwellingsYes" name="ServesMoreThan10Dwellings" type="radio" value="true" checked="@Model.ServesMoreThan10Dwellings" />
-                        <label class="govuk-label govuk-radios__label" for="dwellingsYes">Yes</label>
+                        <input class="govuk-radios__input" id="existingYes" name="IsExistingOrPlanned" type="radio" value="true" checked="@Model.IsExistingOrPlanned" />
+                        <label class="govuk-label govuk-radios__label" for="existingYes">Yes</label>
                     </div>
                     <div class="govuk-radios__item">
-                        <input class="govuk-radios__input" id="dwellingsNo" name="ServesMoreThan10Dwellings" type="radio" value="false" checked="@(!Model.ServesMoreThan10Dwellings)" />
-                        <label class="govuk-label govuk-radios__label" for="dwellingsNo">No</label>
+                        <input class="govuk-radios__input" id="existingNo" name="IsExistingOrPlanned" type="radio" value="false" checked="@(!Model.IsExistingOrPlanned)" />
+                        <label class="govuk-label govuk-radios__label" for="existingNo">No</label>
                     </div>
                 </div>
             </fieldset>
@@ -54,5 +54,12 @@
     @if (!string.IsNullOrEmpty(ViewBag.ResultMessage as string))
     {
         <div class="govuk-inset-text">@ViewBag.ResultMessage</div>
+    }
+    @if (ViewBag.ShowCreateAccountButton)
+    {
+        <div class="app-button-wrapper">
+            <a asp-controller="Home" role="button" asp-action="Index" data-module="govuk-button" draggable="false" class="govuk-button">Create account</a>
+        </div>
+        
     }
 </div>

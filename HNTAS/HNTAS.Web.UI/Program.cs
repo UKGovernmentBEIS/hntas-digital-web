@@ -34,7 +34,7 @@ builder.Services.AddAuthentication(defaultScheme: OneLoginDefaults.Authenticatio
 
         using (var rsa = RSA.Create())
         {
-            rsa.ImportFromPem(Environment.GetEnvironmentVariable("ONELOGIN_PRIVATE_KEY"));
+            rsa.ImportFromPem(Environment.GetEnvironmentVariable("ONELOGIN_PRIVATE_KEY").AsSpan().ToString().Replace("\\n", "\n"));
             options.ClientAuthenticationCredentials = new SigningCredentials(
                 new RsaSecurityKey(rsa.ExportParameters(true)), // Fix: Ensure RsaSecurityKey is resolved
                 SecurityAlgorithms.RsaSha256);

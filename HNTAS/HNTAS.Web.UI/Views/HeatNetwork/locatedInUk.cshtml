@@ -1,4 +1,4 @@
-﻿@model HNTAS.Web.UI.Models.HeatNetworkEligibilityModel
+﻿@model HNTAS.Web.UI.Models.LocatedInUkViewModel
 
 @{
     ViewData["Title"] = "Check your eligibility to register a heat network";
@@ -6,11 +6,35 @@
 
 <div class="govuk-width-container">
     <form asp-controller="HeatNetwork" asp-action="LocatedInUk" method="post" novalidate>
-        <div class="govuk-form-group">
+        @* Error summary *@
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="govuk-error-summary" role="alert">
+                <h2 class="govuk-error-summary__title">There is a problem</h2>
+                <ul class="govuk-list govuk-error-summary__list">
+                    @foreach (var entry in ViewData.ModelState)
+                    {
+                        foreach (var error in entry.Value.Errors)
+                        {
+                            <li id="@entry.Key-error" class="govuk-error-message">
+                                <a href="#@entry.Key-error"> @error.ErrorMessage </a>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        }
+        <div class="govuk-form-group" @(ViewData.ModelState["IsInUK"]?.Errors.Count > 0 ? "govuk-form-group--error" : "")>
             <fieldset class="govuk-fieldset">
                 <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
                     <h1>Is the network located in England, Wales, or Scotland?</h1>
                 </legend>
+                @if (ViewData.ModelState["IsInUK"]?.Errors.Count > 0)
+                {
+                    <span class="govuk-error-message">
+                        @ViewData.ModelState["IsInUK"].Errors[0].ErrorMessage
+                    </span>
+                }
                 <div class="govuk-radios">
                     <div class="govuk-radios__item">
                         <input class="govuk-radios__input" id="ukYes" name="IsInUK" type="radio" value="true" checked="@Model.IsInUK" />
@@ -27,8 +51,8 @@
         <button class="govuk-button" type="submit">Continue</button>
     </form>
 
-    @if (!string.IsNullOrEmpty(Model.ResultMessage))
+    @if (!string.IsNullOrEmpty(ViewBag.ResultMessage as string))
     {
-        <div class="govuk-inset-text">@Model.ResultMessage</div>
+        <div class="govuk-inset-text">@ViewBag.ResultMessage</div>
     }
 </div>

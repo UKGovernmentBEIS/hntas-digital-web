@@ -1,11 +1,11 @@
-﻿@model HNTAS.Web.UI.Models.ServesGt10DwellingsViewModel
+﻿@model HNTAS.Web.UI.Models.RunningAHNViewModel
 
 @{
     ViewData["Title"] = "Check your eligibility to register a heat network";
 }
 
 <div class="govuk-width-container">
-    <form asp-controller="HeatNetwork" asp-action="ServesGt10Dwellings" method="post" novalidate>
+    <form asp-controller="HeatNetwork" asp-action="RunningAHN" method="post" novalidate>
         @* Error summary *@
         @if (!ViewData.ModelState.IsValid)
         {
@@ -24,35 +24,37 @@
                 </ul>
             </div>
         }
-        <div class="govuk-form-group" @(ViewData.ModelState["ServesMoreThan10Dwellings"]?.Errors.Count > 0 ? "govuk-form-group--error" : "")>
+
+        <div class="govuk-form-group @(ViewData.ModelState["IsRunningHeatNetwork"]?.Errors.Count > 0 ? "govuk-form-group--error" : "")">
             <fieldset class="govuk-fieldset">
                 <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-                    <h1>Does the heat network serve more than 10 dwellings?</h1>
+                    <h1>Are you running a heat network?</h1>
                 </legend>
-                @if (ViewData.ModelState["ServesMoreThan10Dwellings"]?.Errors.Count > 0)
+                @if (ViewData.ModelState["IsRunningHeatNetwork"]?.Errors.Count > 0)
                 {
                     <span class="govuk-error-message">
-                        @ViewData.ModelState["ServesMoreThan10Dwellings"].Errors[0].ErrorMessage
+                        @ViewData.ModelState["IsRunningHeatNetwork"].Errors[0].ErrorMessage
                     </span>
                 }
                 <div class="govuk-radios">
                     <div class="govuk-radios__item">
-                        <input class="govuk-radios__input" id="dwellingsYes" name="ServesMoreThan10Dwellings" type="radio" value="true" checked="@Model.ServesMoreThan10Dwellings" />
-                        <label class="govuk-label govuk-radios__label" for="dwellingsYes">Yes</label>
+                        <input class="govuk-radios__input" id="runningYes" name="IsRunningHeatNetwork" type="radio" value="true" @(Model.IsRunningHeatNetwork == true ? "checked" : "") />
+                        <label class="govuk-label govuk-radios__label" for="runningYes">Yes</label>
                     </div>
                     <div class="govuk-radios__item">
-                        <input class="govuk-radios__input" id="dwellingsNo" name="ServesMoreThan10Dwellings" type="radio" value="false" checked="@(!Model.ServesMoreThan10Dwellings)" />
-                        <label class="govuk-label govuk-radios__label" for="dwellingsNo">No</label>
+                        <input class="govuk-radios__input" id="runningNo" name="IsRunningHeatNetwork" type="radio" value="false" @(Model.IsRunningHeatNetwork == false ? "checked" : "") />
+                        <label class="govuk-label govuk-radios__label" for="runningNo">No</label>
                     </div>
                 </div>
             </fieldset>
         </div>
 
         <button class="govuk-button" type="submit">Continue</button>
+        
     </form>
-
     @if (!string.IsNullOrEmpty(ViewBag.ResultMessage as string))
     {
         <div class="govuk-inset-text">@ViewBag.ResultMessage</div>
     }
+    
 </div>
