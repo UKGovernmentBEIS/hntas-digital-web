@@ -214,8 +214,8 @@ namespace HNTAS.Web.UI.Controllers
                 {
                     { "orgName", ViewBag.CompanyName },
                     { "orgId", "AC0000001" },
-                    { "fullName", userModel?.ContactDetails.FirstName.ToUpper() + " " + userModel?.ContactDetails.LastName.ToUpper()},
-                    { "address", AddressFormatter.FormatAddress(company.RegisteredOfficeAddress) }
+                    { "fullName", StringFormatter.ToTitleCaseSingleWord(userModel?.ContactDetails.FirstName) + " " + StringFormatter.ToTitleCaseSingleWord(userModel?.ContactDetails.LastName)},
+                    { "address", StringFormatter.FormatAddress(company.RegisteredOfficeAddress) }
                 }
             );
 

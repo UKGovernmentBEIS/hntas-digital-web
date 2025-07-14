@@ -3,8 +3,19 @@ using System.Net;
 
 namespace HNTAS.Web.UI.Helpers
 {
-    public static class AddressFormatter
+    public static class StringFormatter
     {
+
+        public static string ToTitleCaseSingleWord(string? input)
+        {
+            if (string.IsNullOrEmpty(input))
+            {
+                return string.Empty;
+            }
+            // Convert the first character to uppercase and the rest to lowercase.
+            return char.ToUpper(input[0]) + input.Substring(1).ToLower();
+        }
+
         public static string FormatAddress(RegisteredOfficeAddressModel? address)
         {
             if (address == null)
