@@ -72,25 +72,6 @@ namespace HNTAS.Web.UI.Services
                 return false;
             }
         }
-
-        /// <summary>
-        /// Example usage of the GovUkNotifyService.
-        /// Note: This static method is for demonstration and would typically not be used
-        /// when injecting the service via DI in a real ASP.NET Core app.
-        /// </summary>
-        public static async Task ExampleUsage()
-        {
-            Console.WriteLine("ExampleUsage is not directly runnable without IConfiguration. Please use dependency injection.");
-            // For a test, you might do something like this (not for production):
-            // var inMemorySettings = new Dictionary<string, string> {
-            //     {"GovUkNotify:ApiKey", "your-api-key-here"}
-            // };
-            // IConfiguration config = new ConfigurationBuilder()
-            //     .AddInMemoryCollection(inMemorySettings)
-            //     .Build();
-            // var notifyService = new GovUkNotifyService(config);
-            // await notifyService.SendEmailAsync(...);
-        }
     }
 }
 

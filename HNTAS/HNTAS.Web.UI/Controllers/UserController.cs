@@ -206,9 +206,7 @@ namespace HNTAS.Web.UI.Controllers
             var company = SessionHelper.GetFromSession<OrganisationModel>(HttpContext, OrganisationModelSessionKey)?.CompanyDetails;
 
 
-            string address = company?.RegisteredOfficeAddress?.AddressLine1 + ", "
-                + company.RegisteredOfficeAddress?.AddressLine2 + ", " + company.RegisteredOfficeAddress?.Locality + ", " + company.RegisteredOfficeAddress?.Country + ", " + company.RegisteredOfficeAddress?.PostalCode;
-
+         
             await _govUkNotifyService.SendEmailAsync(
                 emailAddress,
                 "297e670f-d6c8-49f2-b0d7-abe77256318a", // Template ID for confirmation email
@@ -216,8 +214,8 @@ namespace HNTAS.Web.UI.Controllers
                 {
                     { "orgName", ViewBag.CompanyName },
                     { "orgId", "AC0000001" },
-                    { "fullName", userModel?.ContactDetails.FirstName + " " + userModel?.ContactDetails.LastName},
-                    { "address", address }
+                    { "fullName", userModel?.ContactDetails.FirstName.ToUpper() + " " + userModel?.ContactDetails.LastName.ToUpper()},
+                    { "address", AddressFormatter.FormatAddress(company.RegisteredOfficeAddress) }
                 }
             );
 
