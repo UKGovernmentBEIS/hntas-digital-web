@@ -2,8 +2,22 @@
 
 @{
     ViewData["Title"] = "Your details";
-}
 
+    // Pre-calculate common ModelState checks for cleaner markup
+    bool hasEmailAddressErrors = ViewData.ModelState.ContainsKey(nameof(Model.EmailAddress)) && ViewData.ModelState[nameof(Model.EmailAddress)].Errors.Any();
+    bool hasFirstNameErrors = ViewData.ModelState.ContainsKey(nameof(Model.FirstName)) && ViewData.ModelState[nameof(Model.FirstName)].Errors.Any();
+    bool hasLastNameErrors = ViewData.ModelState.ContainsKey(nameof(Model.LastName)) && ViewData.ModelState[nameof(Model.LastName)].Errors.Any();
+    bool hasPreferredContactTypeErrors = ViewData.ModelState.ContainsKey(nameof(Model.PreferredContactType)) && ViewData.ModelState[nameof(Model.PreferredContactType)].Errors.Any();
+    bool hasLandlineNumberErrors = ViewData.ModelState.ContainsKey(nameof(Model.LandlineNumber)) && ViewData.ModelState[nameof(Model.LandlineNumber)].Errors.Any();
+    bool hasContactNumberExtensionErrors = ViewData.ModelState.ContainsKey(nameof(Model.ContactNumberExtension)) && ViewData.ModelState[nameof(Model.ContactNumberExtension)].Errors.Any();
+    bool hasMobileNumberErrors = ViewData.ModelState.ContainsKey(nameof(Model.MobileNumber)) && ViewData.ModelState[nameof(Model.MobileNumber)].Errors.Any();
+    bool hasJobTitleErrors = ViewData.ModelState.ContainsKey(nameof(Model.JobTitle)) && ViewData.ModelState[nameof(Model.JobTitle)].Errors.Any();
+
+    // Determine if the entire preferred contact number section should show an error state
+    bool hasAnyContactNumberSectionError = hasPreferredContactTypeErrors ||
+                                          (Model.PreferredContactType == HNTAS.Web.UI.Models.PreferredContactType.Landline && (hasLandlineNumberErrors || hasContactNumberExtensionErrors)) ||
+                                          (Model.PreferredContactType == HNTAS.Web.UI.Models.PreferredContactType.Mobile && hasMobileNumberErrors);
+}
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
@@ -17,23 +31,29 @@
                 </h2>
                 <div class="govuk-error-summary__body">
                     <ul class="govuk-list govuk-error-summary__list">
-                        @foreach (var modelState in ViewData.ModelState.Values)
+                        @foreach (var keyValuePair in ViewData.ModelState)
                         {
-                            foreach (var error in modelState.Errors)
+                            var fieldName = keyValuePair.Key;
+                            var modelStateEntry = keyValuePair.Value;
+
+                            foreach (var error in modelStateEntry.Errors)
                             {
+                                string targetId = fieldName; // Default: link to the input's ID (which is usually the fieldName)
+
+                                // Special cases for linking in the error summary
+                                if (fieldName == nameof(Model.EmailAddress))
+                                {
+                                    targetId = "EmailAddressDisplay"; // Link to the display span for EmailAddress
+                                }
+                                else if (fieldName == nameof(Model.PreferredContactType))
+                                {
+                                    targetId = "PreferredContactType-Landline"; // Link to the first radio button in the group
+                                }
+
                                 <li>
-                                    <a href="#@(error.ErrorMessage.Contains("email") ? "EmailAddressDisplay" :
-                                                                                       error.ErrorMessage.Contains("first name") ? "FirstName" :
-                                                                                       error.ErrorMessage.Contains("last name") ? "LastName" :
-                                                                                       error.ErrorMessage.Contains("contact number type") ? "PreferredContactType-Landline" : // Link to first radio for type error
-                                                                                       error.ErrorMessage.Contains("landline number") ? "LandlineNumber" : // Specific error linking
-                                                                                       error.ErrorMessage.Contains("mobile number") ? "MobileNumber" : // Specific error linking
-                                                                                       error.ErrorMessage.Contains("extension") ? "ContactNumberExtension" :
-                                                                                       error.ErrorMessage.Contains("job title") ? "JobTitle" : "")">
-                            @error.ErrorMessage
-                        </a>
-                    </li>
-                                        }
+                                    <a href="#@targetId">@error.ErrorMessage</a>
+                                </li>
+                            }
                         }
                     </ul>
                 </div>
@@ -46,11 +66,11 @@
             @Html.AntiForgeryToken()
 
             @* Email address - DISPLAY ONLY FIELD *@
-            <div class="govuk-form-group">
+            <div class="govuk-form-group @(hasEmailAddressErrors ? "govuk-form-group--error" : "")">
                 <label class="govuk-label" for="EmailAddressDisplay">
                     Email address
                 </label>
-                @if (ViewData.ModelState.ContainsKey(nameof(Model.EmailAddress)) && ViewData.ModelState[nameof(Model.EmailAddress)].Errors.Any())
+                @if (hasEmailAddressErrors)
                 {
                     <p id="EmailAddress-error" class="govuk-error-message">
                         <span class="govuk-visually-hidden">Error:</span> @Html.ValidationMessageFor(m => m.EmailAddress)
@@ -61,11 +81,11 @@
             </div>
 
             @* First name input *@
-            <div class="govuk-form-group @(ViewData.ModelState.ContainsKey(nameof(Model.FirstName)) && ViewData.ModelState[nameof(Model.FirstName)].Errors.Any() ? "govuk-form-group--error" : "")">
+            <div class="govuk-form-group @(hasFirstNameErrors ? "govuk-form-group--error" : "")">
                 <label class="govuk-label" for="FirstName">
                     First name
                 </label>
-                @if (ViewData.ModelState.ContainsKey(nameof(Model.FirstName)) && ViewData.ModelState[nameof(Model.FirstName)].Errors.Any())
+                @if (hasFirstNameErrors)
                 {
                     <p id="FirstName-error" class="govuk-error-message">
                         <span class="govuk-visually-hidden">Error:</span> @Html.ValidationMessageFor(m => m.FirstName)
@@ -73,15 +93,15 @@
                 }
                 <input class="govuk-input govuk-!-width-two-thirds" id="FirstName" name="FirstName" type="text" autocomplete="given-name" spellcheck="false"
                        asp-for="FirstName"
-                       aria-describedby="@(ViewData.ModelState.ContainsKey(nameof(Model.FirstName)) && ViewData.ModelState[nameof(Model.FirstName)].Errors.Any() ? "FirstName-error" : "")">
+                       aria-describedby="@(hasFirstNameErrors ? "FirstName-error" : "")">
             </div>
 
             @* Last name input *@
-            <div class="govuk-form-group @(ViewData.ModelState.ContainsKey(nameof(Model.LastName)) && ViewData.ModelState[nameof(Model.LastName)].Errors.Any() ? "govuk-form-group--error" : "")">
+            <div class="govuk-form-group @(hasLastNameErrors ? "govuk-form-group--error" : "")">
                 <label class="govuk-label" for="LastName">
                     Last name
                 </label>
-                @if (ViewData.ModelState.ContainsKey(nameof(Model.LastName)) && ViewData.ModelState[nameof(Model.LastName)].Errors.Any())
+                @if (hasLastNameErrors)
                 {
                     <p id="LastName-error" class="govuk-error-message">
                         <span class="govuk-visually-hidden">Error:</span> @Html.ValidationMessageFor(m => m.LastName)
@@ -89,15 +109,12 @@
                 }
                 <input class="govuk-input govuk-!-width-two-thirds" id="LastName" name="LastName" type="text" autocomplete="family-name" spellcheck="false"
                        asp-for="LastName"
-                       aria-describedby="@(ViewData.ModelState.ContainsKey(nameof(Model.LastName)) && ViewData.ModelState[nameof(Model.LastName)].Errors.Any() ? "LastName-error" : "")">
+                       aria-describedby="@(hasLastNameErrors ? "LastName-error" : "")">
             </div>
 
             @* Preferred contact number section with conditional reveals (Landline/Mobile) *@
-            <div class="govuk-form-group @(ViewData.ModelState.ContainsKey(nameof(Model.PreferredContactType)) && ViewData.ModelState[nameof(Model.PreferredContactType)].Errors.Any() ||
-                                                            (Model.PreferredContactType == "Landline" && ViewData.ModelState.ContainsKey(nameof(Model.LandlineNumber)) && ViewData.ModelState[nameof(Model.LandlineNumber)].Errors.Any()) ||
-                                                            (Model.PreferredContactType == "Mobile" && ViewData.ModelState.ContainsKey(nameof(Model.MobileNumber)) && ViewData.ModelState[nameof(Model.MobileNumber)].Errors.Any()) ||
-                                                            (Model.PreferredContactType == "Landline" && ViewData.ModelState.ContainsKey(nameof(Model.ContactNumberExtension)) && ViewData.ModelState[nameof(Model.ContactNumberExtension)].Errors.Any()) ? "govuk-form-group--error" : "")">
-                <fieldset class="govuk-fieldset" aria-describedby="contact-number-hint @(ViewData.ModelState.ContainsKey(nameof(Model.PreferredContactType)) && ViewData.ModelState[nameof(Model.PreferredContactType)].Errors.Any() ? "PreferredContactType-error" : "")">
+            <div class="govuk-form-group @(hasAnyContactNumberSectionError ? "govuk-form-group--error" : "")">
+                <fieldset class="govuk-fieldset" aria-describedby="contact-number-hint @(hasPreferredContactTypeErrors ? "PreferredContactType-error" : "")">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
                         Preferred contact number for work
                     </legend>
@@ -106,7 +123,7 @@
                     </div>
 
                     @* Error for PreferredContactType radio buttons *@
-                    @if (ViewData.ModelState.ContainsKey(nameof(Model.PreferredContactType)) && ViewData.ModelState[nameof(Model.PreferredContactType)].Errors.Any())
+                    @if (hasPreferredContactTypeErrors)
                     {
                         <p id="PreferredContactType-error" class="govuk-error-message">
                             <span class="govuk-visually-hidden">Error:</span> @Html.ValidationMessageFor(m => m.PreferredContactType)
@@ -115,20 +132,20 @@
 
                     <div class="govuk-radios" data-module="govuk-radios">
                         <div class="govuk-radios__item">
-                            <input class="govuk-radios__input" id="PreferredContactType-Landline" name="PreferredContactType" type="radio" value="Landline"
+                            <input class="govuk-radios__input" id="PreferredContactType-Landline" name="PreferredContactType" type="radio" value="@HNTAS.Web.UI.Models.PreferredContactType.Landline"
                                    data-aria-controls="conditional-Landline"
-                                   @(Model.PreferredContactType == "Landline" ? "checked" : "")
-                                   aria-describedby="@(ViewData.ModelState.ContainsKey(nameof(Model.PreferredContactType)) && ViewData.ModelState[nameof(Model.PreferredContactType)].Errors.Any() ? "PreferredContactType-error" : "")">
+                                   @(Model.PreferredContactType == HNTAS.Web.UI.Models.PreferredContactType.Landline ? "checked" : "")
+                                   aria-describedby="@(hasPreferredContactTypeErrors ? "PreferredContactType-error" : "")">
                             <label class="govuk-label govuk-radios__label" for="PreferredContactType-Landline">
                                 Landline
                             </label>
                         </div>
                         <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-Landline">
-                            <div class="govuk-form-group @(ViewData.ModelState.ContainsKey(nameof(Model.LandlineNumber)) && ViewData.ModelState[nameof(Model.LandlineNumber)].Errors.Any() ? "govuk-form-group--error" : "")">
+                            <div class="govuk-form-group @(hasLandlineNumberErrors ? "govuk-form-group--error" : "")">
                                 <label class="govuk-label" for="LandlineNumber">
                                     Landline number
                                 </label>
-                                @if (ViewData.ModelState.ContainsKey(nameof(Model.LandlineNumber)) && ViewData.ModelState[nameof(Model.LandlineNumber)].Errors.Any())
+                                @if (hasLandlineNumberErrors)
                                 {
                                     <p id="LandlineNumber-error" class="govuk-error-message">
                                         <span class="govuk-visually-hidden">Error:</span> @Html.ValidationMessageFor(m => m.LandlineNumber)
@@ -136,14 +153,14 @@
                                 }
                                 <input class="govuk-input govuk-input--width-20" id="LandlineNumber" name="LandlineNumber" type="tel" autocomplete="tel"
                                        asp-for="LandlineNumber"
-                                       aria-describedby="@(ViewData.ModelState.ContainsKey(nameof(Model.LandlineNumber)) && ViewData.ModelState[nameof(Model.LandlineNumber)].Errors.Any() ? "LandlineNumber-error" : "")">
+                                       aria-describedby="@(hasLandlineNumberErrors ? "LandlineNumber-error" : "")">
                             </div>
 
-                            <div class="govuk-form-group @(ViewData.ModelState.ContainsKey(nameof(Model.ContactNumberExtension)) && ViewData.ModelState[nameof(Model.ContactNumberExtension)].Errors.Any() ? "govuk-form-group--error" : "")">
+                            <div class="govuk-form-group @(hasContactNumberExtensionErrors ? "govuk-form-group--error" : "")">
                                 <label class="govuk-label" for="ContactNumberExtension">
                                     Extension (optional)
                                 </label>
-                                @if (ViewData.ModelState.ContainsKey(nameof(Model.ContactNumberExtension)) && ViewData.ModelState[nameof(Model.ContactNumberExtension)].Errors.Any())
+                                @if (hasContactNumberExtensionErrors)
                                 {
                                     <p id="ContactNumberExtension-error" class="govuk-error-message">
                                         <span class="govuk-visually-hidden">Error:</span> @Html.ValidationMessageFor(m => m.ContactNumberExtension)
@@ -151,25 +168,25 @@
                                 }
                                 <input class="govuk-input govuk-input--width-5" id="ContactNumberExtension" name="ContactNumberExtension" type="text"
                                        asp-for="ContactNumberExtension"
-                                       aria-describedby="@(ViewData.ModelState.ContainsKey(nameof(Model.ContactNumberExtension)) && ViewData.ModelState[nameof(Model.ContactNumberExtension)].Errors.Any() ? "ContactNumberExtension-error" : "")">
+                                       aria-describedby="@(hasContactNumberExtensionErrors ? "ContactNumberExtension-error" : "")">
                             </div>
                         </div>
 
                         <div class="govuk-radios__item">
-                            <input class="govuk-radios__input" id="PreferredContactType-Mobile" name="PreferredContactType" type="radio" value="Mobile"
+                            <input class="govuk-radios__input" id="PreferredContactType-Mobile" name="PreferredContactType" type="radio" value="@HNTAS.Web.UI.Models.PreferredContactType.Mobile"
                                    data-aria-controls="conditional-Mobile"
-                                   @(Model.PreferredContactType == "Mobile" ? "checked" : "")
-                                   aria-describedby="@(ViewData.ModelState.ContainsKey(nameof(Model.PreferredContactType)) && ViewData.ModelState[nameof(Model.PreferredContactType)].Errors.Any() ? "PreferredContactType-error" : "")">
+                                   @(Model.PreferredContactType == HNTAS.Web.UI.Models.PreferredContactType.Mobile ? "checked" : "")
+                                   aria-describedby="@(hasPreferredContactTypeErrors ? "PreferredContactType-error" : "")">
                             <label class="govuk-label govuk-radios__label" for="PreferredContactType-Mobile">
                                 Mobile
                             </label>
                         </div>
                         <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-Mobile">
-                            <div class="govuk-form-group @(ViewData.ModelState.ContainsKey(nameof(Model.MobileNumber)) && ViewData.ModelState[nameof(Model.MobileNumber)].Errors.Any() ? "govuk-form-group--error" : "")">
+                            <div class="govuk-form-group @(hasMobileNumberErrors ? "govuk-form-group--error" : "")">
                                 <label class="govuk-label" for="MobileNumber">
                                     Mobile number
                                 </label>
-                                @if (ViewData.ModelState.ContainsKey(nameof(Model.MobileNumber)) && ViewData.ModelState[nameof(Model.MobileNumber)].Errors.Any())
+                                @if (hasMobileNumberErrors)
                                 {
                                     <p id="MobileNumber-error" class="govuk-error-message">
                                         <span class="govuk-visually-hidden">Error:</span> @Html.ValidationMessageFor(m => m.MobileNumber)
@@ -177,7 +194,7 @@
                                 }
                                 <input class="govuk-input govuk-input--width-20" id="MobileNumber" name="MobileNumber" type="tel" autocomplete="tel"
                                        asp-for="MobileNumber"
-                                       aria-describedby="@(ViewData.ModelState.ContainsKey(nameof(Model.MobileNumber)) && ViewData.ModelState[nameof(Model.MobileNumber)].Errors.Any() ? "MobileNumber-error" : "")">
+                                       aria-describedby="@(hasMobileNumberErrors ? "MobileNumber-error" : "")">
                             </div>
                         </div>
                     </div>
@@ -185,11 +202,11 @@
             </div>
 
             @* Job title input *@
-            <div class="govuk-form-group @(ViewData.ModelState.ContainsKey(nameof(Model.JobTitle)) && ViewData.ModelState[nameof(Model.JobTitle)].Errors.Any() ? "govuk-form-group--error" : "")">
+            <div class="govuk-form-group @(hasJobTitleErrors ? "govuk-form-group--error" : "")">
                 <label class="govuk-label" for="JobTitle">
                     Job title
                 </label>
-                @if (ViewData.ModelState.ContainsKey(nameof(Model.JobTitle)) && ViewData.ModelState[nameof(Model.JobTitle)].Errors.Any())
+                @if (hasJobTitleErrors)
                 {
                     <p id="JobTitle-error" class="govuk-error-message">
                         <span class="govuk-visually-hidden">Error:</span> @Html.ValidationMessageFor(m => m.JobTitle)
@@ -197,7 +214,7 @@
                 }
                 <input class="govuk-input govuk-!-width-two-thirds" id="JobTitle" name="JobTitle" type="text" spellcheck="false"
                        asp-for="JobTitle"
-                       aria-describedby="@(ViewData.ModelState.ContainsKey(nameof(Model.JobTitle)) && ViewData.ModelState[nameof(Model.JobTitle)].Errors.Any() ? "JobTitle-error" : "")">
+                       aria-describedby="@(hasJobTitleErrors ? "JobTitle-error" : "")">
             </div>
 
             @* Continue button *@
