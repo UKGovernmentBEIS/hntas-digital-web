@@ -1,4 +1,6 @@
-﻿using HNTAS.Web.UI.Models.Address;
+﻿using HNTAS.Web.UI.Helpers;
+using HNTAS.Web.UI.Models;
+using HNTAS.Web.UI.Models.Address;
 using HNTAS.Web.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.RegularExpressions;
@@ -9,6 +11,8 @@ namespace HNTAS.Web.UI.Controllers
     {
         private readonly AddressLookupService _addressLookUpService;
         private readonly ILogger<AddressController> _logger;
+
+        private const string what3wordsurlModelKey = "what3wordsurl"; // Define a constant for the session key
 
         public AddressController(ILogger<AddressController> logger, AddressLookupService addressLookupService)
         {
@@ -141,21 +145,33 @@ namespace HNTAS.Web.UI.Controllers
         }
         
         [HttpGet]
-        public IActionResult NoPostcodeAddressEntry()
+        public IActionResult InputWhat3WordsUrl()
         {
-            return View("NoPostcodeAddressEntry");
+            ViewBag.ShowBackButton = true;
+            ViewBag.BackLinkUrl = Url.Action("CompanyConfirm", "Organisation"); // which page to return to
+
+            var what3wordsurlModel = SessionHelper.GetFromSession<What3wordsUrlModel>(HttpContext, what3wordsurlModelKey) ?? new What3wordsUrlModel();
+
+            return View("InputWhat3WordsUrl");
         }
 
         [HttpPost]
-        public IActionResult NoPostcodeAddressEntry(NoPostcodeAddressModel model) {
+        public IActionResult InputWhat3WordsUrl(What3wordsUrlModel model) {
+            ViewBag.ShowBackButton = true;
+            ViewBag.BackLinkUrl = Url.Action("CompanyConfirm", "Organisation"); // which page to return to
+
             if (string.IsNullOrWhiteSpace(model.what3wordsUrl)) {
                 ModelState.AddModelError(nameof(model.what3wordsUrl), "Please enter the url.");
             }
             if (!ModelState.IsValid)
             {
                 // Return the view with the model to preserve user input and show errors
-                return View("NoPostcodeAddressEntry", model);
+                return View("InputWhat3WordsUrl", model);
             }
+
+            SessionHelper.SaveToSession(HttpContext, what3wordsurlModelKey, model);
+
+
             return View("SelectAddressInputMethod");
         }
 
