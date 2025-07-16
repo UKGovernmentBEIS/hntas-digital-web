@@ -6,7 +6,7 @@ namespace HNTAS.Web.UI.Controllers
 {
     public class HeatNetworkController : Controller
     {
-        private const string what3wordsurlModelKey = "what3wordsurl"; // Define a constant for the session key
+        private const string what3wordsurlModelKey = "what3wordsurl";
 
         public IActionResult Index()
         {

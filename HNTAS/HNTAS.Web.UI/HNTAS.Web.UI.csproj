@@ -28,6 +28,7 @@
     <Folder Include="assets\js\shared\" />
     <Folder Include="assets\scss\shared\" />
     <Folder Include="assets\scss\views\" />
+    <Folder Include="UnitTests\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
