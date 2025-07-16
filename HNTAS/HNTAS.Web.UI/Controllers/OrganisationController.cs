@@ -1,16 +1,18 @@
-﻿using HNTAS.Web.UI.Helpers;
+﻿using HNTAS.Web.UI.Filters;
+using HNTAS.Web.UI.Helpers;
 using HNTAS.Web.UI.Models;
 using HNTAS.Web.UI.Models.CompaniesHouse;
+using HNTAS.Web.UI.Models.User;
 using HNTAS.Web.UI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Drawing.Drawing2D;
 
 namespace HNTAS.Web.UI.Controllers
 {
+    [Authorize]
     public class OrganisationController : Controller
     {
-        private const string OrganisationModelSessionKey = "OrganisationModelKey";
         private readonly ICompaniesHouseService _companiesHouseService;
 
         public OrganisationController(ICompaniesHouseService companiesHouseService)
@@ -18,10 +20,24 @@ namespace HNTAS.Web.UI.Controllers
             _companiesHouseService = companiesHouseService;
         }
 
+        [HttpGet]
+        public IActionResult Start()
+        {
+            SessionHelper.ClearAllFlowRelatedSessionData(HttpContext);
+            SessionHelper.SetIsCheckAnswerFlow(HttpContext, false);
+            return RedirectToAction("Type");
+        }
+
+        [HttpGet]
         public IActionResult Type()
         {
-            var model = SessionHelper.GetFromSession<OrganisationModel>(HttpContext, OrganisationModelSessionKey) ?? new OrganisationModel();
+            var model = SessionHelper.GetFromSession<OrganisationModel>(HttpContext, SessionHelper.SessionKeys.OrganisationCreation_SessionKey) ?? new OrganisationModel();
             model.OrganisationTypes = GetOrganisationTypeOptions();
+
+            bool isCheckAnswerFlow = SessionHelper.GetIsCheckAnswerFlow(HttpContext);
+            ViewBag.ShowBackButton = isCheckAnswerFlow;
+            ViewBag.BackLinkUrl = isCheckAnswerFlow ? Url.Action("CheckAnswers", "User") : null;
+
             return View(model);
         }
 
@@ -29,6 +45,13 @@ namespace HNTAS.Web.UI.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Type(OrganisationModel model)
         {
+            var orgModel = SessionHelper.GetFromSession<OrganisationModel>(HttpContext, SessionHelper.SessionKeys.OrganisationCreation_SessionKey);
+            if (orgModel != null)
+            {
+                model.CompanyNumber = orgModel.CompanyNumber;
+                model.CompanyDetails = orgModel.CompanyDetails;
+            }
+        
             ModelState.Remove(nameof(model.CompanyNumber));
             ModelState.Remove(nameof(model.CompanyDetails));
 
@@ -36,13 +59,20 @@ namespace HNTAS.Web.UI.Controllers
             {
                 model.SelectedOrganisationTypeText = GetOrganisationTypeOptions()
                     .FirstOrDefault(item => item.Value == model.SelectedOrganisationType)?.Text;
-                if(model.SelectedOrganisationType == OrganisationType.Other.ToString())
+
+                if (model.SelectedOrganisationType == OrganisationType.Other.ToString())
                 {
                     ModelState.AddModelError(nameof(model.SelectedOrganisationType), "Not applicable for this scope");
                     model.OrganisationTypes = GetOrganisationTypeOptions();
                     return View("Type", model);
                 }
-                SessionHelper.SaveToSession(HttpContext, OrganisationModelSessionKey, model);
+
+                SessionHelper.SaveToSession(HttpContext, SessionHelper.SessionKeys.OrganisationCreation_SessionKey, model);
+
+                bool isCheckAnswerFlow = SessionHelper.GetIsCheckAnswerFlow(HttpContext);
+                if (isCheckAnswerFlow)
+                    return RedirectToAction("CheckAnswers", "User");
+
                 return RedirectToAction("CompanyNumber");
             }
 
@@ -50,33 +80,32 @@ namespace HNTAS.Web.UI.Controllers
             return View("Type", model);
         }
 
+        [HttpGet]
+        [EnsureSessionForOrganisationFlowOnGet]
         public IActionResult CompanyNumber()
         {
-            var model = SessionHelper.GetFromSession<OrganisationModel>(HttpContext, OrganisationModelSessionKey);
-            if (model == null)
-            {
-                return RedirectToAction("Type");
-            }
+            var model = SessionHelper.GetFromSession<OrganisationModel>(HttpContext, SessionHelper.SessionKeys.OrganisationCreation_SessionKey);
 
+            bool isCheckAnswerFlow = SessionHelper.GetIsCheckAnswerFlow(HttpContext);
             ViewBag.ShowBackButton = true;
-            ViewBag.BackLinkUrl = Url.Action("Type", "Organisation");
+            ViewBag.BackLinkUrl = isCheckAnswerFlow
+                ? Url.Action("CheckAnswers", "User")
+                : Url.Action("Type", "Organisation");
+
             return View("CompanyNumber", model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [EnsureSessionForOrganisationFlowOnPost]
         public async Task<IActionResult> CompanyNumberAsync(OrganisationModel model)
         {
-            var fullModel = SessionHelper.GetFromSession<OrganisationModel>(HttpContext, OrganisationModelSessionKey);
-            if (fullModel == null)
-            {
-                return RedirectToAction("Type");
-            }
+            var orgModel = SessionHelper.GetFromSession<OrganisationModel>(HttpContext, SessionHelper.SessionKeys.OrganisationCreation_SessionKey);
 
-            fullModel.CompanyNumber = model.CompanyNumber;
+            orgModel.CompanyNumber = model.CompanyNumber;
             ModelState.Clear();
-            TryValidateModel(fullModel);
-            ModelState.Remove(nameof(fullModel.SelectedOrganisationType));
+            TryValidateModel(orgModel);
+            ModelState.Remove(nameof(orgModel.SelectedOrganisationType));
 
             CompanyDetailsModel? companyDetails = null;
 
@@ -84,57 +113,76 @@ namespace HNTAS.Web.UI.Controllers
             {
                 try
                 {
-                    companyDetails = await _companiesHouseService.GetCompanyByNumberAsync(fullModel.CompanyNumber);
+                    companyDetails = await _companiesHouseService.GetCompanyByNumberAsync(orgModel.CompanyNumber);
                     if (companyDetails == null)
-                    {
-                        ModelState.AddModelError(nameof(fullModel.CompanyNumber), "Company number not found. Please check and try again.");
-                    }
+                        ModelState.AddModelError(nameof(orgModel.CompanyNumber), "Company number not found. Please check and try again.");
                 }
                 catch (HttpRequestException)
                 {
-                    ModelState.AddModelError(nameof(fullModel.CompanyNumber), "Could not verify company number at this time. Please try again later.");
+                    ModelState.AddModelError(nameof(orgModel.CompanyNumber), "Could not verify company number at this time. Please try again later.");
                 }
                 catch (Exception)
                 {
-                    ModelState.AddModelError(nameof(fullModel.CompanyNumber), "An unexpected error occurred during company number verification.");
+                    ModelState.AddModelError(nameof(orgModel.CompanyNumber), "An unexpected error occurred during company number verification.");
                 }
             }
 
             if (ModelState.IsValid && companyDetails != null)
             {
-                fullModel.CompanyDetails = companyDetails;
-                SessionHelper.SaveToSession(HttpContext, OrganisationModelSessionKey, fullModel);
+                orgModel.CompanyDetails = companyDetails;
+                SessionHelper.SaveToSession(HttpContext, SessionHelper.SessionKeys.OrganisationCreation_SessionKey, orgModel);
                 return RedirectToAction("CompanyConfirm");
             }
 
+            bool isCheckAnswerFlow = SessionHelper.GetIsCheckAnswerFlow(HttpContext);
             ViewBag.ShowBackButton = true;
-            ViewBag.BackLinkUrl = Url.Action("Type", "Organisation");
-            return View("CompanyNumber", fullModel);
+            ViewBag.BackLinkUrl = isCheckAnswerFlow
+                ? Url.Action("CheckAnswers", "User")
+                : Url.Action("Type", "Organisation");
+
+            return View("CompanyNumber", orgModel);
         }
 
+        [HttpGet]
+        [EnsureSessionForOrganisationFlowOnGet]
         public IActionResult CompanyConfirm()
         {
-            var organisationModel = SessionHelper.GetFromSession<OrganisationModel>(HttpContext, OrganisationModelSessionKey);
+            var organisationModel = SessionHelper.GetFromSession<OrganisationModel>(HttpContext, SessionHelper.SessionKeys.OrganisationCreation_SessionKey);
 
-            if (organisationModel == null || organisationModel.CompanyDetails == null)
-            {
+            if (organisationModel?.CompanyDetails == null)
                 return RedirectToAction("CompanyNumber");
-            }
 
+            bool isCheckAnswerFlow = SessionHelper.GetIsCheckAnswerFlow(HttpContext);
             ViewBag.ShowBackButton = true;
-            ViewBag.BackLinkUrl = Url.Action("CompanyNumber", "Organisation");
+            ViewBag.BackLinkUrl = isCheckAnswerFlow
+                ? Url.Action("CheckAnswers", "User")
+                : Url.Action("CompanyNumber", "Organisation");
+
             return View("CompanyConfirm", organisationModel.CompanyDetails);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [EnsureSessionForOrganisationFlowOnPost]
         public IActionResult ConfirmAndContinue()
         {
-            var organisationModel = SessionHelper.GetFromSession<OrganisationModel>(HttpContext, OrganisationModelSessionKey);
+            var organisationModel = SessionHelper.GetFromSession<OrganisationModel>(HttpContext, SessionHelper.SessionKeys.OrganisationCreation_SessionKey);
 
-            if (organisationModel == null || organisationModel.CompanyDetails == null)
-            {
+            if (organisationModel?.CompanyDetails == null)
                 return RedirectToAction("CompanyNumber");
+
+            bool isCheckAnswerFlow = SessionHelper.GetIsCheckAnswerFlow(HttpContext);
+            if (isCheckAnswerFlow)
+                return RedirectToAction("CheckAnswers", "User");
+
+            //Set empty contact details to ensure they pass the EnsureSessionForOrganisationFlowOnPost action filter validation 
+            //on user controller actions
+            var existingUserModel = SessionHelper.GetFromSession<UserModel>(HttpContext, SessionHelper.SessionKeys.UserCreation_SessionKey);
+
+            if(existingUserModel == null)
+            {
+                existingUserModel = new UserModel();
+                SessionHelper.SaveToSession(HttpContext, SessionHelper.SessionKeys.UserCreation_SessionKey, existingUserModel);
             }
 
             return RedirectToAction("ConfirmRPIsRC", "User");

@@ -3,6 +3,21 @@
 @{
     ViewData["Title"] = "Which type of organisation do you work for?";
 }
+
+
+@if (TempData["ErrorMessage"] != null)
+{
+    // this is to handle any error messages passed from the EnsureSessionForOrganisationFlowOnPostAttribute regarding session timeouts
+    <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
+        <h2 class="govuk-error-summary__title" id="error-summary-title">
+            There is a problem
+        </h2>
+        <div class="govuk-error-summary__body">
+            <p>@TempData["ErrorMessage"]</p>
+        </div>
+    </div>
+}
+
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         @if (!ViewData.ModelState.IsValid)
@@ -74,6 +89,7 @@
 
                             itemsRendered++;
 
+                            //Mvp 2 scope for additional organisation types
                             // Add the 'or' divider dynamically if it's after the second item
                            @*  if (itemsRendered == 2) // Assuming "Other UK organisation" is the second item
                             {
