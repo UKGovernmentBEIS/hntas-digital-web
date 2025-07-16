@@ -57,7 +57,7 @@ namespace HNTAS.Web.UI.Controllers
                 return View("EnterWhat3wordsUrl", model);
             }
 
-            SessionHelper.SaveToSession(HttpContext, what3wordsurlModelKey, model);
+            SessionHelper.SaveToSession<What3wordsUrlModel>(HttpContext, what3wordsurlModelKey, model);
 
             return View("EnterWhat3wordsUrl", model);  // next page to be added in another story
         }
