@@ -16,7 +16,7 @@ namespace HNTAS.Web.UI.Controllers
 
             var what3wordsurlModel = SessionHelper.GetFromSession<What3wordsUrlModel>(HttpContext, what3wordsurlModelKey) ?? new What3wordsUrlModel();
 
-            return View("EnterWhat3wordsUrl");
+            return View("EnterWhat3wordsUrl", what3wordsurlModel);
         }
 
         [HttpPost]
