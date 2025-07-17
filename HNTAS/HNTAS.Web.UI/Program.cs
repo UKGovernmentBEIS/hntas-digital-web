@@ -15,6 +15,7 @@ builder.Configuration.AddJsonFile(
 
 // Register CompaniesHouseService with HttpClientFactory
 builder.Services.AddHttpClient<ICompaniesHouseService, CompaniesHouseService>();
+builder.Services.AddSingleton<GovUkNotifyService>();
 
 //Configure onelogin settings
 builder.Services.AddAuthentication(defaultScheme: OneLoginDefaults.AuthenticationScheme)
@@ -90,7 +91,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=HeatNetwork}/{action=runningAHN}/{id?}");
 
 
 

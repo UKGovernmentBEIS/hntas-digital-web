@@ -4,6 +4,7 @@ using HNTAS.Web.UI.Models.CompaniesHouse;
 using HNTAS.Web.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Drawing.Drawing2D;
 
 namespace HNTAS.Web.UI.Controllers
 {
@@ -35,6 +36,12 @@ namespace HNTAS.Web.UI.Controllers
             {
                 model.SelectedOrganisationTypeText = GetOrganisationTypeOptions()
                     .FirstOrDefault(item => item.Value == model.SelectedOrganisationType)?.Text;
+                if(model.SelectedOrganisationType == OrganisationType.Other.ToString())
+                {
+                    ModelState.AddModelError(nameof(model.SelectedOrganisationType), "Not applicable for this scope");
+                    model.OrganisationTypes = GetOrganisationTypeOptions();
+                    return View("Type", model);
+                }
                 SessionHelper.SaveToSession(HttpContext, OrganisationModelSessionKey, model);
                 return RedirectToAction("CompanyNumber");
             }
@@ -137,7 +144,8 @@ namespace HNTAS.Web.UI.Controllers
         {
             return new List<SelectListItem>
             {
-                new SelectListItem { Value = OrganisationType.UkCompaniesHouse.ToString(), Text = "UK company registered with Companies House" }
+                new SelectListItem { Value = OrganisationType.UkCompaniesHouse.ToString(), Text = "UK company registered with Companies House" },
+                new SelectListItem { Value = OrganisationType.Other.ToString(), Text = "Other" }
             };
         }
     }

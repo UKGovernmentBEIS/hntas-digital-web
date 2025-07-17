@@ -8,10 +8,6 @@ namespace HNTAS.Web.UI.Controllers
     {
         private const string what3wordsurlModelKey = "what3wordsurl";
 
-        public IActionResult Index()
-        {
-            return View();
-        }
 
         [HttpGet]
         public IActionResult EnterWhat3wordsUrl()

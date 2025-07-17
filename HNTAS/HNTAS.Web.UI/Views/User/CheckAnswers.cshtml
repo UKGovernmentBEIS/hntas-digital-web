@@ -1,0 +1,291 @@
+﻿@using HNTAS.Web.UI.Models 
+@using HNTAS.Web.UI.Models.User 
+@model CheckAnswersModel 
+
+@{
+    ViewData["Title"] = "Check your answers";
+
+    var organisationModel = Model.Organisation; 
+    var userModel = Model.User;             
+
+    string displayContactNumber = "Not provided";
+
+    if (userModel?.ContactDetails != null)
+    {
+        if (userModel.ContactDetails.PreferredContactType == PreferredContactType.Landline)
+        {
+            displayContactNumber = userModel.ContactDetails.LandlineNumber;
+            if (!string.IsNullOrEmpty(userModel.ContactDetails.ContactNumberExtension))
+            {
+                displayContactNumber += $" ext {userModel.ContactDetails.ContactNumberExtension}";
+            }
+        }
+        else if (userModel.ContactDetails.PreferredContactType == PreferredContactType.Mobile)
+        {
+            displayContactNumber = userModel.ContactDetails.MobileNumber;
+        }
+
+        if (string.IsNullOrEmpty(displayContactNumber))
+        {
+            displayContactNumber = "Not provided";
+        }
+    }
+
+    // Determine if the declaration checkbox has errors for conditional styling
+    // Now directly check the ViewModel's property
+    bool hasDeclarationErrors = ViewData.ModelState.ContainsKey(nameof(Model.ConfirmedDeclaration)) &&
+                                ViewData.ModelState[nameof(Model.ConfirmedDeclaration)].Errors.Any();
+}
+
+<div class="govuk-width-container">
+    <main class="govuk-main-wrapper" id="main-content" role="main">
+        <h1 class="govuk-heading-l">Check your answers</h1>
+
+        @* Error Summary - only displayed if ModelState is invalid *@
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
+                <h2 class="govuk-error-summary__title" id="error-summary-title">
+                    There is a problem
+                </h2>
+                <div class="govuk-error-summary__body">
+                    <ul class="govuk-list govuk-error-summary__list">
+                        @foreach (var keyValuePair in ViewData.ModelState)
+                        {
+                            var fieldName = keyValuePair.Key;
+                            var modelStateEntry = keyValuePair.Value;
+
+                            foreach (var error in modelStateEntry.Errors)
+                            {
+                                string targetId = fieldName;
+
+                                // Special case for linking to the checkbox, ensure it matches the input's ID
+                                if (fieldName == nameof(Model.ConfirmedDeclaration)) // Now nameof(Model.ConfirmedDeclaration)
+                                {
+                                    targetId = "confirmDeclaration"; // Use the actual ID of the input element
+                                }
+                                // Add other special cases for other fields if needed, similar to ContactDetails page
+
+                                <li>
+                                    <a href="#@targetId">@error.ErrorMessage</a>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+        }
+
+        @* The form's asp-action and asp-controller remain the same, but it will post a CheckAnswersViewModel *@
+        <form asp-controller="User" asp-action="SubmitAnswers" method="post" novalidate>
+            @Html.AntiForgeryToken()
+
+            <h2 class="govuk-heading-m">Organisation details</h2>
+            <dl class="govuk-summary-list">
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Organisation type
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        @organisationModel?.SelectedOrganisationTypeText
+                    </dd>
+                    <dd class="govuk-summary-list__actions">
+                        <a class="govuk-link" href="@Url.Action("SelectOrganisationType", "Organisation")">
+                            @* UPDATE THIS LINK *@
+                            Change<span class="govuk-visually-hidden"> organisation type</span>
+                        </a>
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Company number
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        @organisationModel?.CompanyNumber
+                    </dd>
+                    <dd class="govuk-summary-list__actions">
+                        <a class="govuk-link" href="@Url.Action("EnterCompanyNumber", "Organisation")">
+                            @* UPDATE THIS LINK *@
+                            Change<span class="govuk-visually-hidden"> company number</span>
+                        </a>
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Organisation name and address
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        @if (organisationModel?.CompanyDetails != null)
+                        {
+                            @organisationModel.CompanyDetails.Title
+
+                            <br />
+                            @organisationModel.CompanyDetails.RegisteredOfficeAddress.AddressLine1
+
+                            <br />
+                            @if (!string.IsNullOrEmpty(organisationModel.CompanyDetails.RegisteredOfficeAddress.AddressLine2))
+                            {
+                                @organisationModel.CompanyDetails.RegisteredOfficeAddress.AddressLine2
+
+                                <br />
+                            }
+                            @organisationModel.CompanyDetails.RegisteredOfficeAddress.Locality
+
+                            <br />
+                            @if (!string.IsNullOrEmpty(organisationModel.CompanyDetails.RegisteredOfficeAddress.Country))
+                            {
+                                @organisationModel.CompanyDetails.RegisteredOfficeAddress.Country
+
+                                <br />
+                            }
+                            @organisationModel.CompanyDetails.RegisteredOfficeAddress.PostalCode
+                        }
+                        else
+                        {
+                            <span>Not provided</span>
+                        }
+                    </dd>
+                    <dd class="govuk-summary-list__actions">
+                        <a class="govuk-link" href="@Url.Action("ConfirmOrganisationAddress", "Organisation")">
+                            @* UPDATE THIS LINK *@
+                            Change<span class="govuk-visually-hidden"> organisation name and address</span>
+                        </a>
+                    </dd>
+                </div>
+            </dl>
+
+            <h2 class="govuk-heading-m">Your details</h2>
+            <dl class="govuk-summary-list">
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Are you the regulatory contact?
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        @(userModel?.ifRPisRC == true ? "Yes" : "No")
+                    </dd>
+                    <dd class="govuk-summary-list__actions">
+                        <a class="govuk-link" href="@Url.Action("ConfirmRPIsRC", "User")">
+                            @* UPDATE THIS LINK *@
+                            Change<span class="govuk-visually-hidden"> regulatory contact status</span>
+                        </a>
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        First name
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        @userModel?.ContactDetails?.FirstName
+                    </dd>
+                    <dd class="govuk-summary-list__actions">
+                        <a class="govuk-link" href="@Url.Action("SaveContactDetails", "User")">
+                            @* UPDATE THIS LINK *@
+                            Change<span class="govuk-visually-hidden"> first name</span>
+                        </a>
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Last name
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        @userModel?.ContactDetails?.LastName
+                    </dd>
+                    <dd class="govuk-summary-list__actions">
+                        <a class="govuk-link" href="@Url.Action("SaveContactDetails", "User")">
+                            @* UPDATE THIS LINK *@
+                            Change<span class="govuk-visually-hidden"> last name</span>
+                        </a>
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Email address
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        @userModel?.ContactDetails?.EmailAddress
+                    </dd>
+                    <dd class="govuk-summary-list__actions">
+                        <a class="govuk-link" href="@Url.Action("SaveContactDetails", "User")">
+                            @* UPDATE THIS LINK *@
+                            Change<span class="govuk-visually-hidden"> email address</span>
+                        </a>
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Preferred contact number for work
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        @displayContactNumber
+                    </dd>
+                    <dd class="govuk-summary-list__actions">
+                        <a class="govuk-link" href="@Url.Action("SaveContactDetails", "User")">
+                            @* UPDATE THIS LINK *@
+                            Change<span class="govuk-visually-hidden"> preferred contact number for work</span>
+                        </a>
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Job title
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        @userModel?.ContactDetails?.JobTitle
+                    </dd>
+                    <dd class="govuk-summary-list__actions">
+                        <a class="govuk-link" href="@Url.Action("SaveContactDetails", "User")">
+                            @* UPDATE THIS LINK *@
+                            Change<span class="govuk-visually-hidden"> job title</span>
+                        </a>
+                    </dd>
+                </div>
+            </dl>
+
+            <h2 class="govuk-heading-m">Declaration</h2>
+            @* Apply error class to form-group if there are errors for this field *@
+            <div class="govuk-form-group @(hasDeclarationErrors ? "govuk-form-group--error" : "")">
+                <fieldset class="govuk-fieldset" aria-describedby="@(hasDeclarationErrors ? "confirmDeclaration-error" : "")">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                        <h1 class="govuk-fieldset__heading">
+                            Tick to confirm:
+                        </h1>
+                    </legend>
+
+                    @* Display the error message if ModelState has an error for ConfirmedDeclaration *@
+                    @if (hasDeclarationErrors)
+                    {
+                        <p id="confirmDeclaration-error" class="govuk-error-message">
+                            <span class="govuk-visually-hidden">Error:</span> @Html.ValidationMessageFor(m => m.ConfirmedDeclaration) @* UPDATED: Now m.ConfirmedDeclaration *@
+                        </p>
+                    }
+
+                    <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+                        <div class="govuk-checkboxes__item">
+                            @* Use asp-for for cleaner binding syntax directly to the ViewModel property *@
+                            <input class="govuk-checkboxes__input"
+                                   id="confirmDeclaration"
+                                   asp-for="ConfirmedDeclaration" @* UPDATED: Use asp-for for direct binding *@
+                                   type="checkbox"
+                                   value="true"
+                                   @(Model.ConfirmedDeclaration ? "checked" : "")> @* UPDATED: Check Model.ConfirmedDeclaration *@
+                            <label class="govuk-label govuk-checkboxes__label" for="confirmDeclaration">
+                                I confirm that:
+                            </label>
+                            <ul class="govuk-list govuk-list--bullet govuk-!-margin-left-5 govuk-!-margin-top-2 govuk-!-font-size-16">
+                                <li>I have due authority to enable my organisation for the heat network service</li>
+                                <li>I have read and understood the digital form and the guidance for it, currently published on the GOV.UK website</li>
+                                <li>to the best of my knowledge and belief, all the details provided in this digital form are true and complete</li>
+                                <li>I understand that knowingly or recklessly making a false, incomplete or misleading statement in support of this request may lead to service access being revoked</li>
+                            </ul>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+
+            <button type="submit" class="govuk-button" data-module="govuk-button">
+                Accept and send
+            </button>
+        </form>
+    </main>
+</div>

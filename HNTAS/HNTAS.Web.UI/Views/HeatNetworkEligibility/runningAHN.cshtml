@@ -3,6 +3,9 @@
 @{
     ViewData["Title"] = "Check your eligibility to register a heat network";
 }
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        @* Added grid column *@
 
 <div class="govuk-width-container">
     <form asp-controller="HeatNetworkEligibility" asp-action="RunningAHN" method="post" novalidate>
@@ -25,36 +28,43 @@
             </div>
         }
 
-        <div class="govuk-form-group @(ViewData.ModelState["IsRunningHeatNetwork"]?.Errors.Count > 0 ? "govuk-form-group--error" : "")">
-            <fieldset class="govuk-fieldset">
-                <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-                    <h1>Are you running a heat network?</h1>
-                </legend>
-                @if (ViewData.ModelState["IsRunningHeatNetwork"]?.Errors.Count > 0)
-                {
-                    <span class="govuk-error-message">
-                        @ViewData.ModelState["IsRunningHeatNetwork"].Errors[0].ErrorMessage
-                    </span>
-                }
-                <div class="govuk-radios">
-                    <div class="govuk-radios__item">
-                        <input class="govuk-radios__input" id="runningYes" name="IsRunningHeatNetwork" type="radio" value="true" @(Model.IsRunningHeatNetwork == true ? "checked" : "") />
-                        <label class="govuk-label govuk-radios__label" for="runningYes">Yes</label>
+            <div class="govuk-form-group @(ViewData.ModelState["IsRunningHeatNetwork"]?.Errors.Count > 0 ? "govuk-form-group--error" : "")">
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                        @* Changed legend size to l *@
+                        <h1 class="govuk-fieldset__heading">
+                            @* Changed h1 to govuk-fieldset__heading *@
+                            Are you running a heat network?
+                        </h1>
+                    </legend>
+                    @if (ViewData.ModelState["IsRunningHeatNetwork"]?.Errors.Count > 0)
+                    {
+                        <p id="IsRunningHeatNetwork-error" class="govuk-error-message">
+                            @* Added p tag for error message with id *@
+                            <span class="govuk-visually-hidden">Error:</span> @* Added visually hidden span *@
+                            @ViewData.ModelState["IsRunningHeatNetwork"].Errors[0].ErrorMessage
+                        </p>
+                    }
+                    <div class="govuk-radios" data-module="govuk-radios">
+                        @* Added data-module *@
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="runningYes" name="IsRunningHeatNetwork" type="radio" value="true" @(Model.IsRunningHeatNetwork == true ? "checked" : "") />
+                            <label class="govuk-label govuk-radios__label" for="runningYes">Yes</label>
+                        </div>
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="runningNo" name="IsRunningHeatNetwork" type="radio" value="false" @(Model.IsRunningHeatNetwork == false ? "checked" : "") />
+                            <label class="govuk-label govuk-radios__label" for="runningNo">No</label>
+                        </div>
                     </div>
-                    <div class="govuk-radios__item">
-                        <input class="govuk-radios__input" id="runningNo" name="IsRunningHeatNetwork" type="radio" value="false" @(Model.IsRunningHeatNetwork == false ? "checked" : "") />
-                        <label class="govuk-label govuk-radios__label" for="runningNo">No</label>
-                    </div>
-                </div>
-            </fieldset>
-        </div>
+                </fieldset>
+            </div>
 
-        <button class="govuk-button" type="submit">Continue</button>
-        
-    </form>
-    @if (!string.IsNullOrEmpty(ViewBag.ResultMessage as string))
-    {
-        <div class="govuk-inset-text">@ViewBag.ResultMessage</div>
-    }
-    
+            <button class="govuk-button" data-module="govuk-button" type="submit">Continue</button> @* Added data-module *@
+
+        </form>
+        @if (!string.IsNullOrEmpty(ViewBag.ResultMessage as string))
+        {
+            <div class="govuk-inset-text">@ViewBag.ResultMessage</div>
+        }
+    </div>
 </div>

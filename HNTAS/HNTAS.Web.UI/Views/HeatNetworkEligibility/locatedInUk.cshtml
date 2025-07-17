@@ -3,52 +3,59 @@
 @{
     ViewData["Title"] = "Check your eligibility to register a heat network";
 }
-
 <div class="govuk-width-container">
     <form asp-controller="HeatNetworkEligibility" asp-action="LocatedInUk" method="post" novalidate>
         @* Error summary *@
         @if (!ViewData.ModelState.IsValid)
         {
-            <div class="govuk-error-summary" role="alert">
+            <div class="govuk-error-summary" role="alert" data-module="govuk-error-summary">
                 <h2 class="govuk-error-summary__title">There is a problem</h2>
-                <ul class="govuk-list govuk-error-summary__list">
-                    @foreach (var entry in ViewData.ModelState)
-                    {
-                        foreach (var error in entry.Value.Errors)
+                <div class="govuk-error-summary__body">
+                    <ul class="govuk-list govuk-error-summary__list">
+                        @foreach (var entry in ViewData.ModelState)
                         {
-                            <li id="@entry.Key-error" class="govuk-error-message">
-                                <a href="#@entry.Key-error"> @error.ErrorMessage </a>
-                            </li>
+                            @if (entry.Value.Errors.Any())
+                            {
+                                @foreach (var error in entry.Value.Errors)
+                                {
+                                    <li>
+                                        <a href="#@entry.Key">@error.ErrorMessage</a>
+                                    </li>
+                                }
+                            }
                         }
-                    }
-                </ul>
+                    </ul>
+                </div>
             </div>
         }
-        <div class="govuk-form-group" @(ViewData.ModelState["IsInUK"]?.Errors.Count > 0 ? "govuk-form-group--error" : "")>
-            <fieldset class="govuk-fieldset">
-                <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-                    <h1>Is the network located in England, Wales, or Scotland?</h1>
+
+        <div class="govuk-form-group @(ViewData.ModelState.ContainsKey("IsInUK") && ViewData.ModelState["IsInUK"].Errors.Any() ? "govuk-form-group--error" : "")">
+            <fieldset class="govuk-fieldset" aria-describedby="is-in-uk-hint @(ViewData.ModelState.ContainsKey("IsInUK") && ViewData.ModelState["IsInUK"].Errors.Any() ? "is-in-uk-error" : "")">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                    <h1 class="govuk-fieldset__heading">Is the network located in England, Wales, or Scotland?</h1>
                 </legend>
-                @if (ViewData.ModelState["IsInUK"]?.Errors.Count > 0)
+
+                @if (ViewData.ModelState.ContainsKey("IsInUK") && ViewData.ModelState["IsInUK"].Errors.Any())
                 {
-                    <span class="govuk-error-message">
-                        @ViewData.ModelState["IsInUK"].Errors[0].ErrorMessage
+                    <span id="is-in-uk-error" class="govuk-error-message">
+                        <span class="govuk-visually-hidden">Error:</span> @ViewData.ModelState["IsInUK"].Errors[0].ErrorMessage
                     </span>
                 }
-                <div class="govuk-radios">
+
+                <div class="govuk-radios" data-module="govuk-radios">
                     <div class="govuk-radios__item">
-                        <input class="govuk-radios__input" id="ukYes" name="IsInUK" type="radio" value="true" checked="@Model.IsInUK" />
+                        <input class="govuk-radios__input" id="ukYes" name="IsInUK" type="radio" value="true" @(Model?.IsInUK == true ? "checked" : "")>
                         <label class="govuk-label govuk-radios__label" for="ukYes">Yes</label>
                     </div>
                     <div class="govuk-radios__item">
-                        <input class="govuk-radios__input" id="ukNo" name="IsInUK" type="radio" value="false" checked="@(!Model.IsInUK)" />
+                        <input class="govuk-radios__input" id="ukNo" name="IsInUK" type="radio" value="false" @(Model?.IsInUK == false ? "checked" : "")>
                         <label class="govuk-label govuk-radios__label" for="ukNo">No</label>
                     </div>
                 </div>
             </fieldset>
         </div>
 
-        <button class="govuk-button" type="submit">Continue</button>
+        <button class="govuk-button" data-module="govuk-button" type="submit">Continue</button>
     </form>
 
     @if (!string.IsNullOrEmpty(ViewBag.ResultMessage as string))
