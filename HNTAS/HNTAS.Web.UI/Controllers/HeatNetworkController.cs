@@ -16,7 +16,7 @@ namespace HNTAS.Web.UI.Controllers
         [HttpGet]
         public IActionResult EnterWhat3wordsUrl()
         {
-            Utility.ShowBackButton(this, "CompanyConfirm", "Organisation");
+            this.ShowBackButton("EnterWhat3wordsUrl", "HeatNetwork"); // back page will be added after us-128, pointing to itself for now
 
             var what3wordsurlModel = SessionHelper.GetFromSession<What3wordsUrlModel>(HttpContext, what3wordsurlModelKey) ?? new What3wordsUrlModel();
 
@@ -24,9 +24,10 @@ namespace HNTAS.Web.UI.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult EnterWhat3wordsUrl(What3wordsUrlModel model)
         {
-            Utility.ShowBackButton(this, "CompanyConfirm", "Organisation");
+            this.ShowBackButton("EnterWhat3wordsUrl", "HeatNetwork"); // back page will be added after us-128, pointing to itself for now
 
             if (string.IsNullOrWhiteSpace(model.what3wordsUrl))
             {
@@ -59,7 +60,7 @@ namespace HNTAS.Web.UI.Controllers
 
             SessionHelper.SaveToSession<What3wordsUrlModel>(HttpContext, what3wordsurlModelKey, model);
 
-            return View("EnterWhat3wordsUrl", model);  // next page to be added in another story
+            return View("EnterWhat3wordsUrl", model);  // next page to be added in us-118
         }
     }
 }
