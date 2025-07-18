@@ -91,7 +91,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=HeatNetwork}/{action=runningAHN}/{id?}");
+    pattern: "{controller=HeatNetworkEligibility}/{action=runningAHN}/{id?}");
 
 
 

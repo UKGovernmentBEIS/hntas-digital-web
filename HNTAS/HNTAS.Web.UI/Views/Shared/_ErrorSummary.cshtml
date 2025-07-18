@@ -1,0 +1,23 @@
+@model string[] // List of field names to display in order
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="govuk-error-summary" role="alert" aria-labelledby="error-summary-title" tabindex="-1">
+        <h2 class="govuk-error-summary__title" id="error-summary-title">There is a problem</h2>
+        <div class="govuk-error-summary__body">
+            <ul class="govuk-list govuk-error-summary__list">
+                @foreach (var field in Model)
+                {
+                    if (ViewData.ModelState.ContainsKey(field) && ViewData.ModelState[field].Errors.Any())
+                    {
+                        <li>
+                            <a href="#@(Html.GenerateIdFromName(field).ToLowerInvariant())">
+                                @ViewData.ModelState[field].Errors.First().ErrorMessage
+                            </a>
+                        </li>
+                    }
+                }
+            </ul>
+        </div>
+    </div>
+}
