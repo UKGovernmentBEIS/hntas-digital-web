@@ -4,7 +4,7 @@
     ViewData["Title"] = "Check your eligibility to register a heat network";
 }
 <div class="govuk-width-container">
-    <form asp-controller="HeatNetwork" asp-action="LocatedInUk" method="post" novalidate>
+    <form asp-controller="HeatNetworkEligibility" asp-action="LocatedInUk" method="post" novalidate>
         @* Error summary *@
         @if (!ViewData.ModelState.IsValid)
         {

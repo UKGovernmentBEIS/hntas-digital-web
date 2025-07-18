@@ -7,29 +7,26 @@
     <div class="govuk-grid-column-two-thirds">
         @* Added grid column *@
 
-        <form asp-controller="HeatNetwork" asp-action="RunningAHN" method="post" novalidate>
-            @* Error summary *@
-            @if (!ViewData.ModelState.IsValid)
-            {
-                <div class="govuk-error-summary" role="alert" data-module="govuk-error-summary">
-                    @* Added data-module *@
-                    <h2 class="govuk-error-summary__title">There is a problem</h2>
-                    <div class="govuk-error-summary__body">
-                        @* Added error summary body *@
-                        <ul class="govuk-list govuk-error-summary__list">
-                            @foreach (var entry in ViewData.ModelState)
-                            {
-                                foreach (var error in entry.Value.Errors)
-                                {
-                                    <li>
-                                        <a href="#@entry.Key-error"> @error.ErrorMessage </a> @* Removed class from li and added href to a *@
-                                    </li>
-                                }
-                            }
-                        </ul>
-                    </div>
-                </div>
-            }
+<div class="govuk-width-container">
+    <form asp-controller="HeatNetworkEligibility" asp-action="RunningAHN" method="post" novalidate>
+        @* Error summary *@
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="govuk-error-summary" role="alert">
+                <h2 class="govuk-error-summary__title">There is a problem</h2>
+                <ul class="govuk-list govuk-error-summary__list">
+                    @foreach (var entry in ViewData.ModelState)
+                    {
+                        foreach (var error in entry.Value.Errors)
+                        {
+                            <li id="@entry.Key-error" class="govuk-error-message">
+                                <a href="#@entry.Key-error"> @error.ErrorMessage </a>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        }
 
             <div class="govuk-form-group @(ViewData.ModelState["IsRunningHeatNetwork"]?.Errors.Count > 0 ? "govuk-form-group--error" : "")">
                 <fieldset class="govuk-fieldset">

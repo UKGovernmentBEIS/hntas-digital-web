@@ -1,4 +1,6 @@
-﻿using HNTAS.Web.UI.Models.Address;
+﻿using HNTAS.Web.UI.Helpers;
+using HNTAS.Web.UI.Models;
+using HNTAS.Web.UI.Models.Address;
 using HNTAS.Web.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.RegularExpressions;
@@ -9,6 +11,8 @@ namespace HNTAS.Web.UI.Controllers
     {
         private readonly AddressLookupService _addressLookUpService;
         private readonly ILogger<AddressController> _logger;
+
+        private const string what3wordsurlModelKey = "what3wordsurl";
 
         public AddressController(ILogger<AddressController> logger, AddressLookupService addressLookupService)
         {
@@ -137,25 +141,6 @@ namespace HNTAS.Web.UI.Controllers
                 .Where(part => !string.IsNullOrWhiteSpace(part));
             model.Fulladdress = string.Join(", ", addressParts);
 
-            return View("SelectAddressInputMethod");
-        }
-        
-        [HttpGet]
-        public IActionResult NoPostcodeAddressEntry()
-        {
-            return View("NoPostcodeAddressEntry");
-        }
-
-        [HttpPost]
-        public IActionResult NoPostcodeAddressEntry(NoPostcodeAddressModel model) {
-            if (string.IsNullOrWhiteSpace(model.what3wordsUrl)) {
-                ModelState.AddModelError(nameof(model.what3wordsUrl), "Please enter the url.");
-            }
-            if (!ModelState.IsValid)
-            {
-                // Return the view with the model to preserve user input and show errors
-                return View("NoPostcodeAddressEntry", model);
-            }
             return View("SelectAddressInputMethod");
         }
 
