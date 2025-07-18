@@ -1,10 +1,27 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
 using GovUk.OneLogin.AspNetCore;
-using System.Security.Cryptography;
-using Microsoft.IdentityModel.Tokens;
+using HNTAS.Web.UI.Routing;
 using HNTAS.Web.UI.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Cryptography;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+// Configure RouteOptions for lowercase URLs
+builder.Services.Configure<RouteOptions>(options =>
+{
+    options.LowercaseUrls = true;
+    options.LowercaseQueryStrings = true; // Optional: for query string parameters too
+});
+
+// Register the parameter transformer globally for controllers/actions
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Conventions.Add(new SlugifiedRouteConvention());
+    options.Conventions.Add(new RouteTokenTransformerConvention(new SlugifyParameterTransformer()));
+});
 
 // Dynamically load appsettings.{ENVIRONMENT}.json if it exists
 builder.Configuration.AddJsonFile(
@@ -51,7 +68,7 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-builder.Services.AddControllersWithViews();
+
 builder.Services.AddHttpClient<AddressLookupService>();
 
 var app = builder.Build();
@@ -89,10 +106,11 @@ app.UseSession();
 
 app.UseAuthorization();
 
+app.MapGet("/", () => Results.Redirect("/heat-network-eligibility/running-ahn"));
+
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=HeatNetworkEligibility}/{action=runningAHN}/{id?}");
-
-
+    pattern: "[controller]/[action]/{id?}",
+    defaults: new { controller = "HeatNetworkEligibility", action = "RunningAHN" });
 
 app.Run();
