@@ -2,38 +2,16 @@
 
 @{
     ViewData["Title"] = "Enter your what3words url";
-}
-
-@{
-    // List the property names in the order they appear on the form
     var fieldOrder = new[] { nameof(Model.what3wordsUrl) };
 }
-@* Display the GOV.UK error summary if there are any validation errors *@
-@if (!ViewData.ModelState.IsValid)
-{
-    <div class="govuk-error-summary" role="alert" aria-labelledby="error-summary-title" tabindex="-1">
-        <h2 class="govuk-error-summary__title" id="error-summary-title">There is a problem</h2>
-        <div class="govuk-error-summary__body">
-            <ul class="govuk-list govuk-error-summary__list">
-                @foreach (var field in fieldOrder)
-                {
-                    if (ViewData.ModelState.ContainsKey(field) && ViewData.ModelState[field].Errors.Any())
-                    {
-                        <li>
-                            <a href="#@(Html.GenerateIdFromName(field).ToLowerInvariant())">
-                                @ViewData.ModelState[field].Errors.First().ErrorMessage
-                            </a>
-                        </li>
-                    }
-                }
-            </ul>
-        </div>
-    </div>
-}
+
+
 <div class="govuk-width-container">
     <form asp-controller="HeatNetwork" asp-action="EnterWhat3wordsUrl" method="post" class="govuk-form-group">
         @Html.AntiForgeryToken()
         <h1 class="govuk-heading-l">Enter your address (no postcode)</h1>
+
+        @await Html.PartialAsync("_ErrorSummary", fieldOrder)
 
         <div class="govuk-form-group @(ViewData.ModelState["what3wordsUrl"]?.Errors.Count > 0 ? "govuk-form-group--error" : "")">
             <p class="govuk-body">To provide the exact location of your heat network, please go to <strong> https://what3words.com/</strong> and enter your geo coordinates there. It will generate a unique url. Please copy that and paste it here.</p>

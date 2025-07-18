@@ -1,28 +1,37 @@
 ﻿using HNTAS.Web.UI.Helpers;
 using HNTAS.Web.UI.Models;
+using HNTAS.Web.UI.Models.Address;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HNTAS.Web.UI.Controllers
 {
     public class HeatNetworkEligibilityController : Controller
     {
+        private const string runningAHNModelKey = "runningAHN";
+        private const string servesGt10DwellingsModelKey = "servesGt10Dwellings";
+        private const string locatedInUkModelKey = "locatedInUk";
+        private const string operatingAHNModelKey = "operatingAHN";
+
+
 
         [HttpGet]
         public IActionResult RunningAHN()
         {
-            Utility.ShowBackButton(this, "Guidance", "Guidance");
-            return View(new RunningAHNViewModel());
+            var runningAHNViewModel = SessionHelper.GetFromSession<RunningAHNViewModel>(HttpContext, runningAHNModelKey) ?? new RunningAHNViewModel();
+            return View(runningAHNViewModel);
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult RunningAHN(RunningAHNViewModel model)
         {
-            Utility.ShowBackButton(this, "Guidance", "Guidance");
 
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
+
+            SessionHelper.SaveToSession<RunningAHNViewModel>(HttpContext, runningAHNModelKey, model);
 
             if (model.IsRunningHeatNetwork == false)
             {
@@ -30,25 +39,29 @@ namespace HNTAS.Web.UI.Controllers
                 return View(model);
             }
             
-            return View("ServesGt10Dwellings", new ServesGt10DwellingsViewModel());
+            return RedirectToAction("ServesGt10Dwellings");
         }
 
         [HttpGet]
         public IActionResult ServesGt10Dwellings()
         {
-            Utility.ShowBackButton(this, "RunningAHN", "HeatNetworkEligibility");
-            return View(new ServesGt10DwellingsViewModel());
+            this.ShowBackButton("RunningAHN", "HeatNetworkEligibility");
+            var servesGt10DwellingsViewModel = SessionHelper.GetFromSession<ServesGt10DwellingsViewModel>(HttpContext, servesGt10DwellingsModelKey) ?? new ServesGt10DwellingsViewModel();
+            return View(servesGt10DwellingsViewModel);
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult ServesGt10Dwellings(ServesGt10DwellingsViewModel model)
         {
-            Utility.ShowBackButton(this, "RunningAHN", "HeatNetworkEligibility");
+            this.ShowBackButton("RunningAHN", "HeatNetworkEligibility");
 
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
+
+            SessionHelper.SaveToSession<ServesGt10DwellingsViewModel>(HttpContext, servesGt10DwellingsModelKey, model);
 
             if (model.ServesMoreThan10Dwellings == false)
             {
@@ -56,25 +69,29 @@ namespace HNTAS.Web.UI.Controllers
                 return View(model);
             }
             
-            return View("LocatedInUk", new LocatedInUkViewModel());
+            return RedirectToAction("LocatedInUk");
         }
 
         [HttpGet]
         public IActionResult LocatedInUk()
         {
-            Utility.ShowBackButton(this, "ServesGt10Dwellings", "HeatNetworkEligibility");
-            return View(new LocatedInUkViewModel());
+            this.ShowBackButton("ServesGt10Dwellings", "HeatNetworkEligibility");
+            var locatedInUkViewModel = SessionHelper.GetFromSession<LocatedInUkViewModel>(HttpContext, locatedInUkModelKey) ?? new LocatedInUkViewModel();
+            return View(locatedInUkViewModel);
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult LocatedInUk(LocatedInUkViewModel model)
         {
-            Utility.ShowBackButton(this, "ServesGt10Dwellings", "HeatNetworkEligibility");
+            this.ShowBackButton("ServesGt10Dwellings", "HeatNetworkEligibility");
 
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
+
+            SessionHelper.SaveToSession<LocatedInUkViewModel>(HttpContext, locatedInUkModelKey, model);
 
             if (model.IsInUK == false)
             {
@@ -82,25 +99,29 @@ namespace HNTAS.Web.UI.Controllers
                 return View(model);
             }
             
-            return View("OperatingAHN", new OperatingAHNViewModel());
+            return RedirectToAction("OperatingAHN");
         }
 
         [HttpGet]
         public IActionResult OperatingAHN()
         {
-            Utility.ShowBackButton(this, "LocatedInUk", "HeatNetworkEligibility");
-            return View(new OperatingAHNViewModel());
+            this.ShowBackButton("LocatedInUk", "HeatNetworkEligibility");
+            var operatingAHNViewModel = SessionHelper.GetFromSession<OperatingAHNViewModel>(HttpContext, operatingAHNModelKey) ?? new OperatingAHNViewModel();
+            return View(operatingAHNViewModel);
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult OperatingAHN(OperatingAHNViewModel model)
         {
-            Utility.ShowBackButton(this, "LocatedInUk", "HeatNetworkEligibility");
+            this.ShowBackButton("LocatedInUk", "HeatNetworkEligibility");
 
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
+
+            SessionHelper.SaveToSession<OperatingAHNViewModel>(HttpContext, operatingAHNModelKey, model);
 
             if (model.IsExistingOrPlanned == false)
             {

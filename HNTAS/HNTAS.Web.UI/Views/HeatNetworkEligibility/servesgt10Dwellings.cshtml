@@ -2,32 +2,17 @@
 
 @{
     ViewData["Title"] = "Check your eligibility to register a heat network";
+    var fieldOrder = new[] { nameof(Model.ServesMoreThan10Dwellings) };
 }
 
 <div class="govuk-width-container">
     <form asp-controller="HeatNetworkEligibility" asp-action="ServesGt10Dwellings" method="post" novalidate>
-        @* Error summary *@
-        @if (!ViewData.ModelState.IsValid)
-        {
-            <div class="govuk-error-summary" role="alert">
-                <h2 class="govuk-error-summary__title">There is a problem</h2>
-                <ul class="govuk-list govuk-error-summary__list">
-                    @foreach (var entry in ViewData.ModelState)
-                    {
-                        foreach (var error in entry.Value.Errors)
-                        {
-                            <li id="@entry.Key-error" class="govuk-error-message">
-                                <a href="#@entry.Key-error"> @error.ErrorMessage </a>
-                            </li>
-                        }
-                    }
-                </ul>
-            </div>
-        }
+        @Html.AntiForgeryToken()
+        @await Html.PartialAsync("_ErrorSummary", fieldOrder)
         <div class="govuk-form-group" @(ViewData.ModelState["ServesMoreThan10Dwellings"]?.Errors.Count > 0 ? "govuk-form-group--error" : "")>
             <fieldset class="govuk-fieldset">
-                <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-                    <h1>Does the heat network serve more than 10 dwellings?</h1>
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                    <h1 class="govuk-fieldset__heading">Does the heat network serve more than 10 dwellings?</h1>
                 </legend>
                 @if (ViewData.ModelState["ServesMoreThan10Dwellings"]?.Errors.Count > 0)
                 {

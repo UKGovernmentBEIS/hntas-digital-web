@@ -2,33 +2,13 @@
 
 @{
     ViewData["Title"] = "Check your eligibility to register a heat network";
+    var fieldOrder = new[] { nameof(Model.IsExistingOrPlanned) };
 }
 
 <div class="govuk-width-container">
     <form asp-controller="HeatNetworkEligibility" asp-action="operatingAHN" method="post" novalidate>
-        @* Error summary *@
-        @if (!ViewData.ModelState.IsValid)
-        {
-            <div class="govuk-error-summary" role="alert" data-module="govuk-error-summary">
-                <h2 class="govuk-error-summary__title">There is a problem</h2>
-                <div class="govuk-error-summary__body">
-                    <ul class="govuk-list govuk-error-summary__list">
-                        @foreach (var entry in ViewData.ModelState)
-                        {
-                            @if (entry.Value.Errors.Any())
-                            {
-                                @foreach (var error in entry.Value.Errors)
-                                {
-                                    <li>
-                                        <a href="#existingYes">@error.ErrorMessage</a>
-                                    </li>
-                                }
-                            }
-                        }
-                    </ul>
-                </div>
-            </div>
-        }
+        @Html.AntiForgeryToken()
+        @await Html.PartialAsync("_ErrorSummary", fieldOrder)
 
         <div class="govuk-form-group @(ViewData.ModelState.ContainsKey("IsExistingOrPlanned") && ViewData.ModelState["IsExistingOrPlanned"].Errors.Any() ? "govuk-form-group--error" : "")">
             <fieldset class="govuk-fieldset" aria-describedby="is-existing-or-planned-hint @(ViewData.ModelState.ContainsKey("IsExistingOrPlanned") && ViewData.ModelState["IsExistingOrPlanned"].Errors.Any() ? "is-existing-or-planned-error" : "")">
@@ -63,5 +43,12 @@
     @if (!string.IsNullOrEmpty(ViewBag.ResultMessage as string))
     {
         <div class="govuk-inset-text">@ViewBag.ResultMessage</div>
+    }
+    @if (ViewBag.ShowCreateAccountButton != null && ViewBag.ShowCreateAccountButton)
+    {
+        <div class="app-button-wrapper">
+            <a asp-controller="Home" role="button" asp-action="Index" data-module="govuk-button" draggable="false" class="govuk-button govuk-button--secondary">Create account</a>
+        </div>
+
     }
 </div>
