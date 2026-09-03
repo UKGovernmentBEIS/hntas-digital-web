@@ -130,6 +130,7 @@ docs/models/Organisation.md
 docs/models/OrganisationRequest.md
 docs/models/OrganisationResponse.md
 docs/models/OrganisationType.md
+docs/models/PagedResultOfHeatNetworkResponse.md
 docs/models/ProblemDetails.md
 docs/models/RecoveredInput.md
 docs/models/RegisteredAddress.md
@@ -169,6 +170,7 @@ docs/scripts/git_push.ps1
 docs/scripts/git_push.sh
 src/HNTAS.Api.Client.Test/Api/DependencyInjectionTests.cs
 src/HNTAS.Api.Client.Test/HNTAS.Api.Client.Test.csproj
+src/HNTAS.Api.Client.Test/Model/PagedResultOfHeatNetworkResponseTests.cs
 src/HNTAS.Api.Client.Test/README.md
 src/HNTAS.Api.Client/Api/ArmsApi.cs
 src/HNTAS.Api.Client/Api/ArmsDashboardApi.cs
@@ -320,6 +322,7 @@ src/HNTAS.Api.Client/Model/Organisation.cs
 src/HNTAS.Api.Client/Model/OrganisationRequest.cs
 src/HNTAS.Api.Client/Model/OrganisationResponse.cs
 src/HNTAS.Api.Client/Model/OrganisationType.cs
+src/HNTAS.Api.Client/Model/PagedResultOfHeatNetworkResponse.cs
 src/HNTAS.Api.Client/Model/ProblemDetails.cs
 src/HNTAS.Api.Client/Model/RecoveredInput.cs
 src/HNTAS.Api.Client/Model/RegisteredAddress.cs

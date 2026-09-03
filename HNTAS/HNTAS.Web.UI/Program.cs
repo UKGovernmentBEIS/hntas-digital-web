@@ -149,6 +149,7 @@ builder.Services.AddSingleton(new JsonSerializerOptions
         new SoaMilestoneJsonConverter(),
         new SoaAssessorExistingNetworkJsonConverter(),
         new SoaStatusWithCountExistingNetworkJsonConverter(),
+        new PagedResultOfHeatNetworkResponseJsonConverter()
     }
 });
 builder.Services.AddSingleton<JsonSerializerOptionsProvider>();
@@ -483,7 +484,7 @@ app.Use(async (context, next) =>
         "https://*.powerbi.com",
         "https://*.analysis.windows.net",
         "https://login.microsoftonline.com",
-        "https://www.google-analytics.com"
+        "https://*.google-analytics.com"
     ]);
 
     if (builder.Environment.EnvironmentName == "Local")
@@ -494,7 +495,7 @@ app.Use(async (context, next) =>
     var csp =
            "default-src 'self'; " +
            "font-src 'self'; " +
-           "img-src 'self' data: https://*.powerbi.com https://www.googletagmanager.com; " + 
+           "img-src 'self' data: https://*.powerbi.com https://www.googletagmanager.com https://*.google-analytics.com; " + 
            "object-src 'none'; " +
            "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.googletagmanager.com; " + 
            "style-src 'self' 'unsafe-inline'; " +

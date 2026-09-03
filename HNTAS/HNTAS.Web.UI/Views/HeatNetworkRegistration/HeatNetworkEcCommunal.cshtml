@@ -17,10 +17,8 @@
             new Question
             {
                 QId = elementId,
-                QText = "Energy centre",
-                QDescText = @"
-                <p class='govuk-body'>The energy centre is a plant room that contains heat generation equipment and/or equipment connecting to an energy source. It may be in the building or located nearby.</p>                
-                <h2 class='govuk-heading govuk-heading-m'>Does this heat network have its own energy centre?</h2>",
+                QText = "Does this heat network have its own energy centre?",
+                QDescText = null,
                 QHintText = null,
                 Options = new List<Option>
                 {
@@ -37,6 +35,10 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <span class="govuk-caption-l">Add a heat network</span>
+            <h1 class="govuk-heading-l">
+                Energy centre
+            </h1>
+            <p class="govuk-body">The energy centre is a plant room that contains heat generation equipment and/or equipment connecting to an energy source. It may be in the building or located nearby.</p>
             @await Html.PartialAsync("_QuestionWithRadiobuttons", pageData)
         </div>
     </div>

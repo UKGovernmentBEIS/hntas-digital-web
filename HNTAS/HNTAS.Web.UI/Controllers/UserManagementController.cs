@@ -178,17 +178,20 @@ namespace HNTAS.Web.UI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> HeatNetworksAsync()
+        public async Task<IActionResult> HeatNetworksAsync(
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 6,
+            [FromQuery] string sortBy = "Name",
+            [FromQuery] string sortDirection = "asc")
         {
             ClearNetworkDetailsSession();
 
-            this.ShowBackButton("UserAccount", "Dashboard");
             var userId = _sessionHelper.GetFromSession<string>(HttpContext, SessionKeys.UserModel_Id_SessionKey);
             var user = await _userService.GetUserDetails(userId);
             var userWithHnRoles = await _userService.GetUserById(userId);
-            var hnRoleMappings = userWithHnRoles.HnRoleMappings;
+            var hnRoleMappings = userWithHnRoles?.HnRoleMappings ?? new List<HnRoleMapping>();
 
-            ViewBag.UserRole = user?.Roles[0].ToString();
+            ViewBag.UserRole = user?.Roles?.FirstOrDefault().ToString();
             ViewBag.HasDeclaredImpartiality = _sessionHelper.GetFromSession<DeclationOfImpartialityModel>(HttpContext, SessionKeys.DeclarationOfImpartialityModelKey)?.HasDeclaredImpartiality;
 
             if (user == null)
@@ -198,36 +201,53 @@ namespace HNTAS.Web.UI.Controllers
                 return View(new HeatNetworksViewModel());
             }
 
+            // Call the paginated service method
+            var paginatedResponse = await _heatNetworkService.GetHeatNetworkByUserIdPaginatedAsync(
+                userId: userId,
+                registrationSource: RegistrationSource2.HNTAS,
+                pageNumber: pageNumber,
+                pageSize: pageSize,
+                sortBy: sortBy,
+                sortDirection: sortDirection);
+
             var heatNetworks = new List<HeatNetworkModel>();
-            var networks = await _heatNetworkService.GetHeatNetworkByUserId(userId, RegistrationSource2.HNTAS);
 
-            heatNetworks = (await Task.WhenAll(networks.Select(async network =>
+            if (paginatedResponse?.Items != null && paginatedResponse.Items.Any())
             {
-                var org = await _organisationService.GetOrganisationById(network.OrgId);
-
-                return new HeatNetworkModel
+                heatNetworks = (await Task.WhenAll(paginatedResponse.Items.Select(async network =>
                 {
-                    HnId = network.HnId,
-                    Name = network.Name,
-                    OrganisationName = org?.Name,
-                    HnDescription = network.AdditionalDescription,
-                    Role = hnRoleMappings
-                        .FirstOrDefault(x => x.HnId == network.HnId)?.Role.ToString() ?? "Not specified"
-                };
-            }))).ToList();
+                    var org = await _organisationService.GetOrganisationById(network.OrgId);
 
-
+                    return new HeatNetworkModel
+                    {
+                        HnId = network.HnId,
+                        Name = network.Name,
+                        OrganisationName = org?.Name,
+                        HnDescription = network.AdditionalDescription,
+                        Role = hnRoleMappings
+                            .FirstOrDefault(x => x.HnId == network.HnId)?.Role.ToString() ?? "Not specified"
+                    };
+                }))).ToList();
+            }
 
             var model = new HeatNetworksViewModel
             {
                 HeatNetworks = heatNetworks,
                 IsResponsiblePerson = user.Roles?.Contains(UserRole.ResponsiblePerson) ?? false,
                 IsHntasCoordinator = user.Roles?.Contains(UserRole.NetworkManager) ?? false,
+
+                // Pagination metadata for Razor View
+                PageNumber = paginatedResponse?.PageNumber ?? pageNumber,
+                PageSize = paginatedResponse?.PageSize ?? pageSize,
+                TotalCount = paginatedResponse?.TotalCount ?? 0,
+                TotalPages = paginatedResponse?.TotalPages ?? 0,
+                SortBy = sortBy,
+                SortDirection = sortDirection
             };
 
             var isRegistrationEnabledString = Environment.GetEnvironmentVariable("IS_REGISTRATION_ENABLED");
             ViewBag.IsRegistrationEnabled = !string.IsNullOrEmpty(isRegistrationEnabledString) &&
-                                             isRegistrationEnabledString.ToLower() == "true";
+                                             isRegistrationEnabledString.Equals("true", StringComparison.OrdinalIgnoreCase);
 
             return View(model);
         }

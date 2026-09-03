@@ -15,14 +15,25 @@
     }.Where(line => !string.IsNullOrWhiteSpace(line));
 }
 
+@section BeforeMain {
+
+    <nav class="govuk-breadcrumbs" aria-label="Breadcrumb">
+        <ol class="govuk-breadcrumbs__list">
+            <li class="govuk-breadcrumbs__list-item">
+                <a class="govuk-breadcrumbs__link" href="@Url.Action("UserAccount", "Dashboard")">Dashboard</a>
+            </li>
+            <li class="govuk-breadcrumbs__list-item">
+                Organisation details
+            </li>
+        </ol>
+    </nav>
+}
+
 <div class="govuk-width-container">
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
             
-            <span class="govuk-hint">@Model.OrganisationName</span>
             <h1 class="govuk-heading-l">Organisation details</h1>
-
-            <h2 class="govuk-heading-m">Heat networks</h2>
 
             <dl class="govuk-summary-list govuk-!-margin-bottom-7">
                 <div class="govuk-summary-list__row">
@@ -55,9 +66,9 @@
                 </div>
             </dl>
 
-            <a href="@Url.Action("EditOrganisationDetails", "Dashboard")" class="govuk-button" data-module="govuk-button">
+@*             <a href="@Url.Action("EditOrganisationDetails", "Dashboard")" class="govuk-button" data-module="govuk-button">
                 Edit organisation details
-            </a>
+            </a> *@
             
         </div>
     </div>

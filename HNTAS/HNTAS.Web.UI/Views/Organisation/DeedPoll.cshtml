@@ -2,6 +2,7 @@
 @model DeedPollViewModel
 @{
     ViewData["Title"] = "Agree to HNTAS terms and conditions";
+    var isDeedPollAcceptedId = Html.LowercaseIdFor(m => m.IsDeedPollAccepted);
 }
 
 <div class="govuk-width-container">
@@ -60,6 +61,7 @@
                             <div class="govuk-checkboxes__item">
 
                                 <input class="govuk-checkboxes__input"
+                                       id="@isDeedPollAcceptedId"
                                        asp-for="IsDeedPollAccepted"
                                        type="checkbox">
 

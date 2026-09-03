@@ -969,6 +969,98 @@ paths:
           description: Internal Server Error
       tags:
       - HeatNetworks
+  /api/HeatNetworks/heat-network-by-userId-paginated:
+    get:
+      parameters:
+      - explode: true
+        in: query
+        name: userId
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: registrationSource
+        required: false
+        schema:
+          $ref: "#/components/schemas/RegistrationSource2"
+        style: form
+      - explode: true
+        in: query
+        name: pageNumber
+        required: false
+        schema:
+          default: 1
+          format: int32
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: pageSize
+        required: false
+        schema:
+          default: 10
+          format: int32
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: sortBy
+        required: false
+        schema:
+          default: Name
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: sortDirection
+        required: false
+        schema:
+          default: asc
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/PagedResultOfHeatNetworkResponse"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PagedResultOfHeatNetworkResponse"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/PagedResultOfHeatNetworkResponse"
+          description: OK
+        "400":
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Bad Request
+        "404":
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      tags:
+      - HeatNetworks
   /api/HeatNetworks/existing-network-by-userId:
     get:
       requestBody:
@@ -8749,6 +8841,725 @@ components:
           type: string
         orgAddress:
           $ref: "#/components/schemas/Address"
+      type: object
+    PagedResultOfHeatNetworkResponse:
+      example:
+        pageNumber: 0
+        hasNextPage: true
+        totalPages: 5
+        pageSize: 6
+        hasPreviousPage: true
+        totalCount: 1
+        items:
+        - soa:
+            createdAt: 2000-01-23T04:56:07.000+00:00
+            updatedBy: updatedBy
+            createdBy: createdBy
+            journeyData:
+              certifierDocs:
+              - phase: phase
+                fileName: fileName
+                s3Key: s3Key
+                stage: stage
+                uploadedAt: 2000-01-23T04:56:07.000+00:00
+                uploadedBy: uploadedBy
+              - phase: phase
+                fileName: fileName
+                s3Key: s3Key
+                stage: stage
+                uploadedAt: 2000-01-23T04:56:07.000+00:00
+                uploadedBy: uploadedBy
+              heatNetworkElements:
+              - documents:
+                - phase: phase
+                  fileName: fileName
+                  s3Key: s3Key
+                  stage: stage
+                  uploadedAt: 2000-01-23T04:56:07.000+00:00
+                  uploadedBy: uploadedBy
+                - phase: phase
+                  fileName: fileName
+                  s3Key: s3Key
+                  stage: stage
+                  uploadedAt: 2000-01-23T04:56:07.000+00:00
+                  uploadedBy: uploadedBy
+                name: name
+                count: 1
+                locations:
+                - locations
+                - locations
+              - documents:
+                - phase: phase
+                  fileName: fileName
+                  s3Key: s3Key
+                  stage: stage
+                  uploadedAt: 2000-01-23T04:56:07.000+00:00
+                  uploadedBy: uploadedBy
+                - phase: phase
+                  fileName: fileName
+                  s3Key: s3Key
+                  stage: stage
+                  uploadedAt: 2000-01-23T04:56:07.000+00:00
+                  uploadedBy: uploadedBy
+                name: name
+                count: 1
+                locations:
+                - locations
+                - locations
+              assessmentDocs:
+              - phase: phase
+                fileName: fileName
+                s3Key: s3Key
+                stage: stage
+                uploadedAt: 2000-01-23T04:56:07.000+00:00
+                uploadedBy: uploadedBy
+              - phase: phase
+                fileName: fileName
+                s3Key: s3Key
+                stage: stage
+                uploadedAt: 2000-01-23T04:56:07.000+00:00
+                uploadedBy: uploadedBy
+              networkType:
+                otherNetworkDescription: otherNetworkDescription
+                type: type
+              assessorDocs:
+              - phase: phase
+                fileName: fileName
+                s3Key: s3Key
+                stage: stage
+                uploadedAt: 2000-01-23T04:56:07.000+00:00
+                uploadedBy: uploadedBy
+              - phase: phase
+                fileName: fileName
+                s3Key: s3Key
+                stage: stage
+                uploadedAt: 2000-01-23T04:56:07.000+00:00
+                uploadedBy: uploadedBy
+              connectionTypes:
+              - connectionTypes
+              - connectionTypes
+            status: NotStarted
+            updatedAt: 2000-01-23T04:56:07.000+00:00
+          uHnId: uHnId
+          networkElements:
+            elementSoaStatus: null
+            createdAt: 2000-01-23T04:56:07.000+00:00
+            networkElementStatus: InProgress
+            updatedBy: updatedBy
+            createdBy: createdBy
+            elementsGroup:
+            - soaMilestones:
+              - soaStatuses:
+                - soaStatus: null
+                  count: 2
+                - soaStatus: null
+                  count: 2
+                soaStatusUpdatedAt: 2000-01-23T04:56:07.000+00:00
+                assessorUpdatedBy: assessorUpdatedBy
+                milestoneId: Milestone2
+                soaStatusUpdatedBy: soaStatusUpdatedBy
+                assessorUpdatedAt: 2000-01-23T04:56:07.000+00:00
+                assessors:
+                - firstName: firstName
+                  lastName: lastName
+                  assessment: assessment
+                  email: email
+                  status: null
+                - firstName: firstName
+                  lastName: lastName
+                  assessment: assessment
+                  email: email
+                  status: null
+              - soaStatuses:
+                - soaStatus: null
+                  count: 2
+                - soaStatus: null
+                  count: 2
+                soaStatusUpdatedAt: 2000-01-23T04:56:07.000+00:00
+                assessorUpdatedBy: assessorUpdatedBy
+                milestoneId: Milestone2
+                soaStatusUpdatedBy: soaStatusUpdatedBy
+                assessorUpdatedAt: 2000-01-23T04:56:07.000+00:00
+                assessors:
+                - firstName: firstName
+                  lastName: lastName
+                  assessment: assessment
+                  email: email
+                  status: null
+                - firstName: firstName
+                  lastName: lastName
+                  assessment: assessment
+                  email: email
+                  status: null
+              elementDisplayType: EnergyCentre
+              soaStages:
+              - soaStatuses:
+                - soaStatus: null
+                  count: 3
+                - soaStatus: null
+                  count: 3
+                soaStatusUpdatedAt: 2000-01-23T04:56:07.000+00:00
+                assessorUpdatedBy: assessorUpdatedBy
+                soaStatusUpdatedBy: soaStatusUpdatedBy
+                assessorUpdatedAt: 2000-01-23T04:56:07.000+00:00
+                assessors:
+                - firstName: firstName
+                  lastName: lastName
+                  assessment: assessment
+                  email: email
+                  status: Active
+                - firstName: firstName
+                  lastName: lastName
+                  assessment: assessment
+                  email: email
+                  status: Active
+                stageId: Stage1
+              - soaStatuses:
+                - soaStatus: null
+                  count: 3
+                - soaStatus: null
+                  count: 3
+                soaStatusUpdatedAt: 2000-01-23T04:56:07.000+00:00
+                assessorUpdatedBy: assessorUpdatedBy
+                soaStatusUpdatedBy: soaStatusUpdatedBy
+                assessorUpdatedAt: 2000-01-23T04:56:07.000+00:00
+                assessors:
+                - firstName: firstName
+                  lastName: lastName
+                  assessment: assessment
+                  email: email
+                  status: Active
+                - firstName: firstName
+                  lastName: lastName
+                  assessment: assessment
+                  email: email
+                  status: Active
+                stageId: Stage1
+              count: 9
+              elementType: EC
+            - soaMilestones:
+              - soaStatuses:
+                - soaStatus: null
+                  count: 2
+                - soaStatus: null
+                  count: 2
+                soaStatusUpdatedAt: 2000-01-23T04:56:07.000+00:00
+                assessorUpdatedBy: assessorUpdatedBy
+                milestoneId: Milestone2
+                soaStatusUpdatedBy: soaStatusUpdatedBy
+                assessorUpdatedAt: 2000-01-23T04:56:07.000+00:00
+                assessors:
+                - firstName: firstName
+                  lastName: lastName
+                  assessment: assessment
+                  email: email
+                  status: null
+                - firstName: firstName
+                  lastName: lastName
+                  assessment: assessment
+                  email: email
+                  status: null
+              - soaStatuses:
+                - soaStatus: null
+                  count: 2
+                - soaStatus: null
+                  count: 2
+                soaStatusUpdatedAt: 2000-01-23T04:56:07.000+00:00
+                assessorUpdatedBy: assessorUpdatedBy
+                milestoneId: Milestone2
+                soaStatusUpdatedBy: soaStatusUpdatedBy
+                assessorUpdatedAt: 2000-01-23T04:56:07.000+00:00
+                assessors:
+                - firstName: firstName
+                  lastName: lastName
+                  assessment: assessment
+                  email: email
+                  status: null
+                - firstName: firstName
+                  lastName: lastName
+                  assessment: assessment
+                  email: email
+                  status: null
+              elementDisplayType: EnergyCentre
+              soaStages:
+              - soaStatuses:
+                - soaStatus: null
+                  count: 3
+                - soaStatus: null
+                  count: 3
+                soaStatusUpdatedAt: 2000-01-23T04:56:07.000+00:00
+                assessorUpdatedBy: assessorUpdatedBy
+                soaStatusUpdatedBy: soaStatusUpdatedBy
+                assessorUpdatedAt: 2000-01-23T04:56:07.000+00:00
+                assessors:
+                - firstName: firstName
+                  lastName: lastName
+                  assessment: assessment
+                  email: email
+                  status: Active
+                - firstName: firstName
+                  lastName: lastName
+                  assessment: assessment
+                  email: email
+                  status: Active
+                stageId: Stage1
+              - soaStatuses:
+                - soaStatus: null
+                  count: 3
+                - soaStatus: null
+                  count: 3
+                soaStatusUpdatedAt: 2000-01-23T04:56:07.000+00:00
+                assessorUpdatedBy: assessorUpdatedBy
+                soaStatusUpdatedBy: soaStatusUpdatedBy
+                assessorUpdatedAt: 2000-01-23T04:56:07.000+00:00
+                assessors:
+                - firstName: firstName
+                  lastName: lastName
+                  assessment: assessment
+                  email: email
+                  status: Active
+                - firstName: firstName
+                  lastName: lastName
+                  assessment: assessment
+                  email: email
+                  status: Active
+                stageId: Stage1
+              count: 9
+              elementType: EC
+            updatedAt: 2000-01-23T04:56:07.000+00:00
+          ofgemImportedDate: 2000-01-23T04:56:07.000+00:00
+          meteringAndMonitoringStrategy:
+            createdAt: 2000-01-23T04:56:07.000+00:00
+            updatedBy: updatedBy
+            documents:
+            - fileName: fileName
+              s3Key: s3Key
+              uploadedAt: 2000-01-23T04:56:07.000+00:00
+              uploadedBy: uploadedBy
+            - fileName: fileName
+              s3Key: s3Key
+              uploadedAt: 2000-01-23T04:56:07.000+00:00
+              uploadedBy: uploadedBy
+            createdBy: createdBy
+            status: null
+            updatedAt: 2000-01-23T04:56:07.000+00:00
+          orgId: orgId
+          createdAt: 2000-01-23T04:56:07.000+00:00
+          ofgemUserEmailId: ofgemUserEmailId
+          additionalDescription: additionalDescription
+          assessmentPlan:
+            createdAt: 2000-01-23T04:56:07.000+00:00
+            updatedBy: updatedBy
+            documents:
+            - ""
+            - ""
+            createdBy: createdBy
+            status: null
+            updatedAt: 2000-01-23T04:56:07.000+00:00
+          id: id
+          phase: phase
+          ecDetails:
+            latitude: 0.8008281904610115
+            longitude: 6.027456183070403
+          address:
+            country: country
+            town: town
+            county: county
+            postcode: postcode
+            addressLine1: addressLine1
+            addressLine2: addressLine2
+          heatNetworkConnections:
+            isDomesticConsumer: true
+            noOfNonDomesticConsumer: 2
+            isNonDomesticConsumer: true
+            isCommunalBuilding: true
+            isOtherDistrictNetwork: true
+            noOfOtherDistrictNetwork: 7
+            noOfDomesticConsumer: 5
+            noOfCommunalBuilding: 5
+          hasAddressAndPostcode: true
+          hasOwnEnergyCentre: true
+          hnId: hnId
+          createdBy: createdBy
+          suppliesSixOrMoreUnits: true
+          name: name
+          registrationSource: HNTAS
+          pathway: pathway
+          designConstructionLog:
+            createdAt: 2000-01-23T04:56:07.000+00:00
+            updatedBy: updatedBy
+            documents:
+            - ""
+            - ""
+            createdBy: createdBy
+            status: null
+            updatedAt: 2000-01-23T04:56:07.000+00:00
+          heatNetworkType: Unset
+        - soa:
+            createdAt: 2000-01-23T04:56:07.000+00:00
+            updatedBy: updatedBy
+            createdBy: createdBy
+            journeyData:
+              certifierDocs:
+              - phase: phase
+                fileName: fileName
+                s3Key: s3Key
+                stage: stage
+                uploadedAt: 2000-01-23T04:56:07.000+00:00
+                uploadedBy: uploadedBy
+              - phase: phase
+                fileName: fileName
+                s3Key: s3Key
+                stage: stage
+                uploadedAt: 2000-01-23T04:56:07.000+00:00
+                uploadedBy: uploadedBy
+              heatNetworkElements:
+              - documents:
+                - phase: phase
+                  fileName: fileName
+                  s3Key: s3Key
+                  stage: stage
+                  uploadedAt: 2000-01-23T04:56:07.000+00:00
+                  uploadedBy: uploadedBy
+                - phase: phase
+                  fileName: fileName
+                  s3Key: s3Key
+                  stage: stage
+                  uploadedAt: 2000-01-23T04:56:07.000+00:00
+                  uploadedBy: uploadedBy
+                name: name
+                count: 1
+                locations:
+                - locations
+                - locations
+              - documents:
+                - phase: phase
+                  fileName: fileName
+                  s3Key: s3Key
+                  stage: stage
+                  uploadedAt: 2000-01-23T04:56:07.000+00:00
+                  uploadedBy: uploadedBy
+                - phase: phase
+                  fileName: fileName
+                  s3Key: s3Key
+                  stage: stage
+                  uploadedAt: 2000-01-23T04:56:07.000+00:00
+                  uploadedBy: uploadedBy
+                name: name
+                count: 1
+                locations:
+                - locations
+                - locations
+              assessmentDocs:
+              - phase: phase
+                fileName: fileName
+                s3Key: s3Key
+                stage: stage
+                uploadedAt: 2000-01-23T04:56:07.000+00:00
+                uploadedBy: uploadedBy
+              - phase: phase
+                fileName: fileName
+                s3Key: s3Key
+                stage: stage
+                uploadedAt: 2000-01-23T04:56:07.000+00:00
+                uploadedBy: uploadedBy
+              networkType:
+                otherNetworkDescription: otherNetworkDescription
+                type: type
+              assessorDocs:
+              - phase: phase
+                fileName: fileName
+                s3Key: s3Key
+                stage: stage
+                uploadedAt: 2000-01-23T04:56:07.000+00:00
+                uploadedBy: uploadedBy
+              - phase: phase
+                fileName: fileName
+                s3Key: s3Key
+                stage: stage
+                uploadedAt: 2000-01-23T04:56:07.000+00:00
+                uploadedBy: uploadedBy
+              connectionTypes:
+              - connectionTypes
+              - connectionTypes
+            status: NotStarted
+            updatedAt: 2000-01-23T04:56:07.000+00:00
+          uHnId: uHnId
+          networkElements:
+            elementSoaStatus: null
+            createdAt: 2000-01-23T04:56:07.000+00:00
+            networkElementStatus: InProgress
+            updatedBy: updatedBy
+            createdBy: createdBy
+            elementsGroup:
+            - soaMilestones:
+              - soaStatuses:
+                - soaStatus: null
+                  count: 2
+                - soaStatus: null
+                  count: 2
+                soaStatusUpdatedAt: 2000-01-23T04:56:07.000+00:00
+                assessorUpdatedBy: assessorUpdatedBy
+                milestoneId: Milestone2
+                soaStatusUpdatedBy: soaStatusUpdatedBy
+                assessorUpdatedAt: 2000-01-23T04:56:07.000+00:00
+                assessors:
+                - firstName: firstName
+                  lastName: lastName
+                  assessment: assessment
+                  email: email
+                  status: null
+                - firstName: firstName
+                  lastName: lastName
+                  assessment: assessment
+                  email: email
+                  status: null
+              - soaStatuses:
+                - soaStatus: null
+                  count: 2
+                - soaStatus: null
+                  count: 2
+                soaStatusUpdatedAt: 2000-01-23T04:56:07.000+00:00
+                assessorUpdatedBy: assessorUpdatedBy
+                milestoneId: Milestone2
+                soaStatusUpdatedBy: soaStatusUpdatedBy
+                assessorUpdatedAt: 2000-01-23T04:56:07.000+00:00
+                assessors:
+                - firstName: firstName
+                  lastName: lastName
+                  assessment: assessment
+                  email: email
+                  status: null
+                - firstName: firstName
+                  lastName: lastName
+                  assessment: assessment
+                  email: email
+                  status: null
+              elementDisplayType: EnergyCentre
+              soaStages:
+              - soaStatuses:
+                - soaStatus: null
+                  count: 3
+                - soaStatus: null
+                  count: 3
+                soaStatusUpdatedAt: 2000-01-23T04:56:07.000+00:00
+                assessorUpdatedBy: assessorUpdatedBy
+                soaStatusUpdatedBy: soaStatusUpdatedBy
+                assessorUpdatedAt: 2000-01-23T04:56:07.000+00:00
+                assessors:
+                - firstName: firstName
+                  lastName: lastName
+                  assessment: assessment
+                  email: email
+                  status: Active
+                - firstName: firstName
+                  lastName: lastName
+                  assessment: assessment
+                  email: email
+                  status: Active
+                stageId: Stage1
+              - soaStatuses:
+                - soaStatus: null
+                  count: 3
+                - soaStatus: null
+                  count: 3
+                soaStatusUpdatedAt: 2000-01-23T04:56:07.000+00:00
+                assessorUpdatedBy: assessorUpdatedBy
+                soaStatusUpdatedBy: soaStatusUpdatedBy
+                assessorUpdatedAt: 2000-01-23T04:56:07.000+00:00
+                assessors:
+                - firstName: firstName
+                  lastName: lastName
+                  assessment: assessment
+                  email: email
+                  status: Active
+                - firstName: firstName
+                  lastName: lastName
+                  assessment: assessment
+                  email: email
+                  status: Active
+                stageId: Stage1
+              count: 9
+              elementType: EC
+            - soaMilestones:
+              - soaStatuses:
+                - soaStatus: null
+                  count: 2
+                - soaStatus: null
+                  count: 2
+                soaStatusUpdatedAt: 2000-01-23T04:56:07.000+00:00
+                assessorUpdatedBy: assessorUpdatedBy
+                milestoneId: Milestone2
+                soaStatusUpdatedBy: soaStatusUpdatedBy
+                assessorUpdatedAt: 2000-01-23T04:56:07.000+00:00
+                assessors:
+                - firstName: firstName
+                  lastName: lastName
+                  assessment: assessment
+                  email: email
+                  status: null
+                - firstName: firstName
+                  lastName: lastName
+                  assessment: assessment
+                  email: email
+                  status: null
+              - soaStatuses:
+                - soaStatus: null
+                  count: 2
+                - soaStatus: null
+                  count: 2
+                soaStatusUpdatedAt: 2000-01-23T04:56:07.000+00:00
+                assessorUpdatedBy: assessorUpdatedBy
+                milestoneId: Milestone2
+                soaStatusUpdatedBy: soaStatusUpdatedBy
+                assessorUpdatedAt: 2000-01-23T04:56:07.000+00:00
+                assessors:
+                - firstName: firstName
+                  lastName: lastName
+                  assessment: assessment
+                  email: email
+                  status: null
+                - firstName: firstName
+                  lastName: lastName
+                  assessment: assessment
+                  email: email
+                  status: null
+              elementDisplayType: EnergyCentre
+              soaStages:
+              - soaStatuses:
+                - soaStatus: null
+                  count: 3
+                - soaStatus: null
+                  count: 3
+                soaStatusUpdatedAt: 2000-01-23T04:56:07.000+00:00
+                assessorUpdatedBy: assessorUpdatedBy
+                soaStatusUpdatedBy: soaStatusUpdatedBy
+                assessorUpdatedAt: 2000-01-23T04:56:07.000+00:00
+                assessors:
+                - firstName: firstName
+                  lastName: lastName
+                  assessment: assessment
+                  email: email
+                  status: Active
+                - firstName: firstName
+                  lastName: lastName
+                  assessment: assessment
+                  email: email
+                  status: Active
+                stageId: Stage1
+              - soaStatuses:
+                - soaStatus: null
+                  count: 3
+                - soaStatus: null
+                  count: 3
+                soaStatusUpdatedAt: 2000-01-23T04:56:07.000+00:00
+                assessorUpdatedBy: assessorUpdatedBy
+                soaStatusUpdatedBy: soaStatusUpdatedBy
+                assessorUpdatedAt: 2000-01-23T04:56:07.000+00:00
+                assessors:
+                - firstName: firstName
+                  lastName: lastName
+                  assessment: assessment
+                  email: email
+                  status: Active
+                - firstName: firstName
+                  lastName: lastName
+                  assessment: assessment
+                  email: email
+                  status: Active
+                stageId: Stage1
+              count: 9
+              elementType: EC
+            updatedAt: 2000-01-23T04:56:07.000+00:00
+          ofgemImportedDate: 2000-01-23T04:56:07.000+00:00
+          meteringAndMonitoringStrategy:
+            createdAt: 2000-01-23T04:56:07.000+00:00
+            updatedBy: updatedBy
+            documents:
+            - fileName: fileName
+              s3Key: s3Key
+              uploadedAt: 2000-01-23T04:56:07.000+00:00
+              uploadedBy: uploadedBy
+            - fileName: fileName
+              s3Key: s3Key
+              uploadedAt: 2000-01-23T04:56:07.000+00:00
+              uploadedBy: uploadedBy
+            createdBy: createdBy
+            status: null
+            updatedAt: 2000-01-23T04:56:07.000+00:00
+          orgId: orgId
+          createdAt: 2000-01-23T04:56:07.000+00:00
+          ofgemUserEmailId: ofgemUserEmailId
+          additionalDescription: additionalDescription
+          assessmentPlan:
+            createdAt: 2000-01-23T04:56:07.000+00:00
+            updatedBy: updatedBy
+            documents:
+            - ""
+            - ""
+            createdBy: createdBy
+            status: null
+            updatedAt: 2000-01-23T04:56:07.000+00:00
+          id: id
+          phase: phase
+          ecDetails:
+            latitude: 0.8008281904610115
+            longitude: 6.027456183070403
+          address:
+            country: country
+            town: town
+            county: county
+            postcode: postcode
+            addressLine1: addressLine1
+            addressLine2: addressLine2
+          heatNetworkConnections:
+            isDomesticConsumer: true
+            noOfNonDomesticConsumer: 2
+            isNonDomesticConsumer: true
+            isCommunalBuilding: true
+            isOtherDistrictNetwork: true
+            noOfOtherDistrictNetwork: 7
+            noOfDomesticConsumer: 5
+            noOfCommunalBuilding: 5
+          hasAddressAndPostcode: true
+          hasOwnEnergyCentre: true
+          hnId: hnId
+          createdBy: createdBy
+          suppliesSixOrMoreUnits: true
+          name: name
+          registrationSource: HNTAS
+          pathway: pathway
+          designConstructionLog:
+            createdAt: 2000-01-23T04:56:07.000+00:00
+            updatedBy: updatedBy
+            documents:
+            - ""
+            - ""
+            createdBy: createdBy
+            status: null
+            updatedAt: 2000-01-23T04:56:07.000+00:00
+          heatNetworkType: Unset
+      properties:
+        items:
+          items:
+            $ref: "#/components/schemas/HeatNetworkResponse"
+          type: array
+        pageNumber:
+          format: int32
+          type: integer
+        pageSize:
+          format: int32
+          type: integer
+        totalCount:
+          format: int32
+          type: integer
+        totalPages:
+          format: int32
+          type: integer
+        hasPreviousPage:
+          type: boolean
+        hasNextPage:
+          type: boolean
       type: object
     ProblemDetails:
       example:

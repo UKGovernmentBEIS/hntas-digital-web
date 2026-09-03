@@ -16,17 +16,10 @@
             new Question
             {
                 QId = elementId,
-                QText = $"Network phase",
+                QText = $"Which phase best describes your network overall?",
                 QHintText = null,
-                QDescText = @"
-                <p class='govuk-body'>Different parts of your network may be at different phases of development.</p>
-                <p class='govuk-body'>Choose the earliest phase that applies to your network. For example, if your energy centre is in construction but your distribution network is still being designed, then choose Design.</p>
-                <legend class='govuk-fieldset__legend govuk-fieldset__legend--m'>
-                    <h1 class='govuk-fieldset__heading'>
-                        Which phase best describes your network overall?
-                    </h1>
-                </legend>
-",
+                QDescText = null,
+                HeadingLevel = QuestionHeadingLevel.H2,
                 Options = new List<Option>
                 {
                     new Option { OptId = $"{elementId}", OptValue = "Feasibility", OptText = "Feasibility", OptHintText = "Concept design" },
@@ -43,6 +36,11 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <span class="govuk-caption-l">Add a heat network</span>
+            <h1 class="govuk-heading-l">
+                Network phase
+            </h1>
+           <p class='govuk-body'>Different parts of your network may be at different phases of development.</p>
+            <p class='govuk-body'>Choose the earliest phase that applies to your network. For example, if your energy centre is in construction but your distribution network is still being designed, then choose Design.</p>
             @await Html.PartialAsync("_QuestionWithRadiobuttons", pageData)
         </div>
     </div>

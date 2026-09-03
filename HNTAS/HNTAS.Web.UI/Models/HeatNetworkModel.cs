@@ -37,14 +37,14 @@ namespace HNTAS.Web.UI.Models
 
     public class ECDetailsModel
     {
-        [Required(ErrorMessage = "Please enter the latitude and longitude.")]
+        [Required(ErrorMessage = "Enter the latitude and longitude")]
         public string LatitudeLongitude { get; set; }
         public AddressByLatLongModel ECAddressByLatLong { get; set; } = new AddressByLatLongModel();
     }
 
     public class HeatNetworkPhaseModel
     {
-        [Required(ErrorMessage = "Please select the heat network phase.")]
+        [Required(ErrorMessage = "Select the phase your heat network is in")]
         public string HeatNetworkPhase { get; set; }
     }   
 
