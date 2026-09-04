@@ -167,7 +167,7 @@ namespace HNTAS.Api.Client.Client
             _jsonOptions.Converters.Add(new OrganisationResponseJsonConverter());
             _jsonOptions.Converters.Add(new OrganisationTypeJsonConverter());
             _jsonOptions.Converters.Add(new OrganisationTypeNullableJsonConverter());
-            _jsonOptions.Converters.Add(new PagedResultOfHeatNetworkResponseJsonConverter());
+            _jsonOptions.Converters.Add(new PagedResultOfUserNetworkDetailsResponseJsonConverter());
             _jsonOptions.Converters.Add(new ProblemDetailsJsonConverter());
             _jsonOptions.Converters.Add(new RecoveredInputJsonConverter());
             _jsonOptions.Converters.Add(new RegisteredAddressJsonConverter());
@@ -204,6 +204,7 @@ namespace HNTAS.Api.Client.Client
             _jsonOptions.Converters.Add(new UploadedDocumentResponseJsonConverter());
             _jsonOptions.Converters.Add(new UserJsonConverter());
             _jsonOptions.Converters.Add(new UserDetailsResponseJsonConverter());
+            _jsonOptions.Converters.Add(new UserNetworkDetailsResponseJsonConverter());
             _jsonOptions.Converters.Add(new UserResponseJsonConverter());
             _jsonOptions.Converters.Add(new UserRoleJsonConverter());
             _jsonOptions.Converters.Add(new UserRoleNullableJsonConverter());

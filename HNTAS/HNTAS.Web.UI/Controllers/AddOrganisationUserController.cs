@@ -186,11 +186,11 @@ namespace HNTAS.Web.UI.Controllers
 
             TempData["UserName"] = $"{state.Data.ContributorContactDetailsModel?.FirstName} {state.Data.ContributorContactDetailsModel?.LastName}";
             TempData["OrganisationName"] = _sessionHelper.GetFromSession<string>(HttpContext, SessionKeys.OrganisationName);
-            TempData["AssignedRole"] = model?.SelectedRoleName == ContributorRole.NetworkManager.ToString() ? "NetworkManager" : "ResponsiblePerson";
+            TempData["AssignedRole"] = model?.SelectedRoleName == ContributorRole.NetworkManager.ToString() ? ContributorRole.NetworkManager.ToString() : ContributorRole.ResponsibleParty.ToString();
 
             var selectedContributorRole = model.SelectedRoleName == ContributorRole.NetworkManager.ToString()
                 ? ContributorRole.NetworkManager
-                : ContributorRole.ResponsiblePerson;
+                : ContributorRole.ResponsibleParty;
 
             var orgId = _sessionHelper.GetFromSession<string>(HttpContext, SessionKeys.OrganisationId);
 

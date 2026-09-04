@@ -161,7 +161,7 @@ No authorization required
 
 <a id="apiheatnetworksheatnetworkbyuseridpaginatedget"></a>
 # **ApiHeatNetworksHeatNetworkByUserIdPaginatedGet**
-> PagedResultOfHeatNetworkResponse ApiHeatNetworksHeatNetworkByUserIdPaginatedGet (string userId = null, RegistrationSource2 registrationSource = null, int pageNumber = null, int pageSize = null, string sortBy = null, string sortDirection = null)
+> PagedResultOfUserNetworkDetailsResponse ApiHeatNetworksHeatNetworkByUserIdPaginatedGet (string userId = null, RegistrationSource2 registrationSource = null, int pageNumber = null, int pageSize = null, string sortBy = null, string sortDirection = null)
 
 
 
@@ -179,7 +179,7 @@ No authorization required
 
 ### Return type
 
-[**PagedResultOfHeatNetworkResponse**](PagedResultOfHeatNetworkResponse.md)
+[**PagedResultOfUserNetworkDetailsResponse**](PagedResultOfUserNetworkDetailsResponse.md)
 
 ### Authorization
 

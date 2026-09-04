@@ -63,7 +63,7 @@ namespace HNTAS.Web.UI.Services.Core
         }
 
 
-        public async Task<PagedResultOfHeatNetworkResponse> GetHeatNetworkByUserIdPaginatedAsync(
+        public async Task<PagedResultOfUserNetworkDetailsResponse> GetHeatNetworkByUserIdPaginatedAsync(
             string userId,
             RegistrationSource2 registrationSource = RegistrationSource2.HNTAS,
             int pageNumber = 1,
@@ -91,7 +91,7 @@ namespace HNTAS.Web.UI.Services.Core
                 }
 
                 _logger.LogWarning("Failed to retrieve heat networks for user ID: {UserId}. Status code: {StatusCode}", userId, response.StatusCode);
-                return new PagedResultOfHeatNetworkResponse();
+                return new PagedResultOfUserNetworkDetailsResponse();
             }
             catch (ApiException ex)
             {

@@ -6,7 +6,7 @@
 @{
     ViewData["Title"] = "User Account";
     var disabled = Model.HasHeatNetworks ? "" : "dashboard-card--disabled";
-    var userIsRP = Model.UserRole == UserRole.ResponsiblePerson.ToString();
+    var userIsRP = Model.UserRole == UserRole.ResponsibleParty.ToString();
     var userIsActingRP = Model.UserRole == UserRole.NetworkManager.ToString();
     var userIsAssessor = Model.UserRole == HNTAS.Api.Client.Model.UserRole.Assessor.ToString();
     var userIsCertifier = Model.UserRole == HNTAS.Api.Client.Model.UserRole.Certifier.ToString();
@@ -17,7 +17,7 @@
 
 <div class="govuk-width-container">
 
-    @if (Model.UserRole == UserRole.ResponsiblePerson.ToString() || Model.UserRole == UserRole.NetworkManager.ToString())
+    @if (Model.UserRole == UserRole.ResponsibleParty.ToString() || Model.UserRole == UserRole.NetworkManager.ToString())
     {
         <span class="govuk-caption-l">Dashboard</span>
         <h1 class="govuk-heading-l">@Model.OrganisationName</h1>

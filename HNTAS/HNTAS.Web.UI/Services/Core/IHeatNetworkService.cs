@@ -14,7 +14,7 @@ namespace HNTAS.Web.UI.Services.Core
         Task<ExistingNetworkResponse> GetExistingNetworkByUserId(ExistingNetworkRequest request);
         Task<HeatNetworkResponse> RegisterOfgemNetwork(HeatNetwork heatNetwork);
 
-        Task<PagedResultOfHeatNetworkResponse> GetHeatNetworkByUserIdPaginatedAsync(
+        Task<PagedResultOfUserNetworkDetailsResponse> GetHeatNetworkByUserIdPaginatedAsync(
             string userId,
             RegistrationSource2 registrationSource = RegistrationSource2.HNTAS,
             int pageNumber = 1,

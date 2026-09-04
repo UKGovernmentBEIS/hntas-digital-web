@@ -123,7 +123,7 @@ namespace HNTAS.Web.UI.Controllers
             state.Data.RoleAssignmentModel.AvailableRoles = [
                 new SelectItemOption
                 {
-                    Value = ContributorRole.ResponsiblePerson.ToString(),
+                    Value = ContributorRole.ResponsibleParty.ToString(),
                     Text = $"Assign as RP ({rpUser.FullName})"
                 },
             ]; ;
@@ -145,7 +145,7 @@ namespace HNTAS.Web.UI.Controllers
                 model.AvailableRoles = [
                     new SelectItemOption
                     {
-                        Value = ContributorRole.ResponsiblePerson.ToString(),
+                        Value = ContributorRole.ResponsibleParty.ToString(),
                         Text = $"Assign as RP ({rpUser.FullName})"
                     },
                 ];
@@ -217,11 +217,11 @@ namespace HNTAS.Web.UI.Controllers
                     //get rp user id 
                     var rpuser = await _organisationUserService.GetResponsiblePartyDetails(_sessionHelper.GetFromSession<string>(HttpContext, SessionKeys.OrganisationId));
 
-                    var roleToReplace = selectedUser.Roles.Contains(UserRole.ResponsiblePerson) ? ContributorRole.ResponsiblePerson : ContributorRole.NetworkManager;
+                    var roleToReplace = selectedUser.Roles.Contains(UserRole.ResponsibleParty) ? ContributorRole.ResponsibleParty : ContributorRole.NetworkManager;
 
                     var selectedContributorRole = state.Data.RoleAssignmentModel?.SelectedRoleName == ContributorRole.NetworkManager.ToString()
                         ? ContributorRole.NetworkManager
-                        : ContributorRole.ResponsiblePerson;
+                        : ContributorRole.ResponsibleParty;
 
                     TempData["UserName"] = $"{selectedUser?.FirstName} {selectedUser?.LastName}";
                     TempData["OrganisationName"] = _sessionHelper.GetFromSession<string>(HttpContext, SessionKeys.OrganisationName);
