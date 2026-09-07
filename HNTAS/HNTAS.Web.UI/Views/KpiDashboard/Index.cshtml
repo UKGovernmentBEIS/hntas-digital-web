@@ -1,6 +1,27 @@
 ﻿@using static HNTAS.Web.UI.Controllers.KpiDashboardController
 @model NetworkListViewModel
 
+@section BeforeMain {
+    <nav class="govuk-breadcrumbs" aria-label="Breadcrumb">
+        <ol class="govuk-breadcrumbs__list">
+            <li class="govuk-breadcrumbs__list-item">
+                @if (!ViewBag.isSuperUser)
+                {
+                    <a class="govuk-breadcrumbs__link" href="@Url.Action("UserAccount", "Dashboard")">Dashboard</a>
+                }
+                else
+                {
+                    <a class="govuk-breadcrumbs__link" href="@Url.Action("Index", "AdminDashboard")">Dashboard</a>
+                }
+               
+            </li>
+            <li class="govuk-breadcrumbs__list-item">
+                KPI dashboard
+            </li>
+        </ol>
+    </nav>
+}
+
 <div class="govuk-grid-row">
     @* Left Column: Filters *@
     <div class="govuk-grid-column-one-third">

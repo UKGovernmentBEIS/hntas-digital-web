@@ -22,15 +22,7 @@ namespace HNTAS.Web.UI.Controllers
         {
             var isSuperUser = _sessionHelper.GetFromSession<bool?>(HttpContext, SessionKeys.IsSuperUserKey);
 
-            if (isSuperUser.HasValue && isSuperUser.Value)
-            {
-                this.ShowBackButton("Index", "AdminDashboard");
-            }
-            else
-            {
-                this.ShowBackButton("UserAccount", "Dashboard");
-            }
-
+            ViewBag.isSuperUser = isSuperUser ?? false;
 
             ModelState.Clear();
 

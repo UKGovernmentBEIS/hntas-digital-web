@@ -31,9 +31,9 @@ namespace HNTAS.Api.Client.Model
     public enum UserRole
     {
         /// <summary>
-        /// Enum ResponsiblePerson for value: ResponsiblePerson
+        /// Enum ResponsibleParty for value: ResponsibleParty
         /// </summary>
-        ResponsiblePerson = 1,
+        ResponsibleParty = 1,
 
         /// <summary>
         /// Enum NetworkManager for value: NetworkManager
@@ -73,8 +73,8 @@ namespace HNTAS.Api.Client.Model
         /// <returns></returns>
         public static UserRole FromString(string value)
         {
-            if (value.Equals("ResponsiblePerson"))
-                return UserRole.ResponsiblePerson;
+            if (value.Equals("ResponsibleParty"))
+                return UserRole.ResponsibleParty;
 
             if (value.Equals("NetworkManager"))
                 return UserRole.NetworkManager;
@@ -101,8 +101,8 @@ namespace HNTAS.Api.Client.Model
         /// <returns></returns>
         public static UserRole? FromStringOrDefault(string value)
         {
-            if (value.Equals("ResponsiblePerson"))
-                return UserRole.ResponsiblePerson;
+            if (value.Equals("ResponsibleParty"))
+                return UserRole.ResponsibleParty;
 
             if (value.Equals("NetworkManager"))
                 return UserRole.NetworkManager;
@@ -130,8 +130,8 @@ namespace HNTAS.Api.Client.Model
         /// <exception cref="NotImplementedException"></exception>
         public static string ToJsonValue(UserRole value)
         {
-            if (value == UserRole.ResponsiblePerson)
-                return "ResponsiblePerson";
+            if (value == UserRole.ResponsibleParty)
+                return "ResponsibleParty";
 
             if (value == UserRole.NetworkManager)
                 return "NetworkManager";

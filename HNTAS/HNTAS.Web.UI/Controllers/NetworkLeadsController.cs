@@ -5,8 +5,6 @@ using HNTAS.Web.UI.Models.User;
 using HNTAS.Web.UI.Services;
 using HNTAS.Web.UI.Services.Core;
 using Microsoft.AspNetCore.Mvc;
-using Mono.TextTemplating;
-using System.Threading.Tasks;
 
 namespace HNTAS.Web.UI.Controllers
 {

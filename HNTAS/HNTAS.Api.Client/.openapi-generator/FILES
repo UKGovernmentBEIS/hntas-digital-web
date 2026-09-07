@@ -130,6 +130,7 @@ docs/models/Organisation.md
 docs/models/OrganisationRequest.md
 docs/models/OrganisationResponse.md
 docs/models/OrganisationType.md
+docs/models/PagedResultOfUserNetworkDetailsResponse.md
 docs/models/ProblemDetails.md
 docs/models/RecoveredInput.md
 docs/models/RegisteredAddress.md
@@ -161,6 +162,7 @@ docs/models/UploadedDocument.md
 docs/models/UploadedDocumentResponse.md
 docs/models/User.md
 docs/models/UserDetailsResponse.md
+docs/models/UserNetworkDetailsResponse.md
 docs/models/UserResponse.md
 docs/models/UserRole.md
 docs/models/UserRoleDetailResponse.md
@@ -320,6 +322,7 @@ src/HNTAS.Api.Client/Model/Organisation.cs
 src/HNTAS.Api.Client/Model/OrganisationRequest.cs
 src/HNTAS.Api.Client/Model/OrganisationResponse.cs
 src/HNTAS.Api.Client/Model/OrganisationType.cs
+src/HNTAS.Api.Client/Model/PagedResultOfUserNetworkDetailsResponse.cs
 src/HNTAS.Api.Client/Model/ProblemDetails.cs
 src/HNTAS.Api.Client/Model/RecoveredInput.cs
 src/HNTAS.Api.Client/Model/RegisteredAddress.cs
@@ -351,6 +354,7 @@ src/HNTAS.Api.Client/Model/UploadedDocument.cs
 src/HNTAS.Api.Client/Model/UploadedDocumentResponse.cs
 src/HNTAS.Api.Client/Model/User.cs
 src/HNTAS.Api.Client/Model/UserDetailsResponse.cs
+src/HNTAS.Api.Client/Model/UserNetworkDetailsResponse.cs
 src/HNTAS.Api.Client/Model/UserResponse.cs
 src/HNTAS.Api.Client/Model/UserRole.cs
 src/HNTAS.Api.Client/Model/UserRoleDetailResponse.cs

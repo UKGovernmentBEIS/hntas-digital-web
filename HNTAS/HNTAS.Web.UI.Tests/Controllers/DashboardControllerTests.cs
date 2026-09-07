@@ -108,7 +108,7 @@ namespace HNTAS.Web.UI.Tests.Controllers
                     Organisation = null,
                     HeatNetworks = new List<HeatNetworkUserResponse>(),
                     EmailId = "test@example.com",
-                    Roles = new List<UserRole>() { UserRole.ResponsiblePerson }
+                    Roles = new List<UserRole>() { UserRole.ResponsibleParty }
                 });
 
             // Act
@@ -217,7 +217,7 @@ namespace HNTAS.Web.UI.Tests.Controllers
                 LastName = "Smith",
                 JobTitle = "Developer",
                 PreferredContactType = NullableOfPreferredContactType.PreferNotToSay,
-                Roles = new List<UserRole> { UserRole.ResponsiblePerson },
+                Roles = new List<UserRole> { UserRole.ResponsibleParty },
                 Organisation = new OrganisationResponse
                 {
                     OrgId = "org1",
