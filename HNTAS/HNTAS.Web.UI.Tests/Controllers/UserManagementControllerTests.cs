@@ -7,6 +7,7 @@ using HNTAS.Web.UI.Workflows;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Logging;
 using Moq;
 
@@ -38,62 +39,74 @@ namespace HNTAS.Web.UI.Tests.Controllers
             var mockHeatNetworkService = new Mock<IHeatNetworkService>();
             var mockOrganisationService = new Mock<IOrganisationService>();
 
-            // session returns the user id
+            // 1. Session Mocks
             mockSessionHelper
                 .Setup(s => s.GetFromSession<string>(It.IsAny<HttpContext>(), SessionKeys.UserModel_Id_SessionKey))
                 .Returns(userId);
 
-            // no declaration in session
             mockSessionHelper
                 .Setup(s => s.GetFromSession<DeclationOfImpartialityModel>(It.IsAny<HttpContext>(), SessionKeys.DeclarationOfImpartialityModelKey))
                 .Returns((DeclationOfImpartialityModel?)null);
 
-            // build a UserDetailsResponse with one heat network and regulatory contact role
-            var userDetails = new UserDetailsResponse
-            {
-                Id = userId,
-                Roles = new List<UserRole> { UserRole.ResponsiblePerson },
-                HeatNetworks = new List<HeatNetworkUserResponse>
-                {
-                    new HeatNetworkUserResponse { HnId = "hn-1", Name = "Network 1" }
-                },
-                Organisation = new OrganisationResponse { Name = "Org Ltd" }
-            };
-
-            mockHeatNetworkService.Setup(h => h.GetHeatNetworkByUserId(It.IsAny<string>(), It.IsAny<RegistrationSource2>())).Returns(Task.FromResult(new List<HeatNetworkResponse>()
-            {
-                new HeatNetworkResponse
-                {
-                    HnId = "hn-1",
-                    Name = "Network 1",
-                    AdditionalDescription = "Description of Network 1"
-                }
-            }));
-
-            mockUserService
-                .Setup(u => u.GetUserDetails(userId))
-                .ReturnsAsync(userDetails);
+            // 2. Mock UserService endpoints called in Task.WhenAll
             mockUserService.Setup(u => u.GetUserById(userId)).ReturnsAsync(new UserResponse
             {
                 Id = userId,
-                Roles = new List<UserRole> { UserRole.ResponsiblePerson },
+                Roles = new List<UserRole> { UserRole.ResponsibleParty },
                 HnRoleMappings = new List<HnRoleMapping>
                 {
-                    new HnRoleMapping { HnId = "hn-1", Role = ContributorRole.ResponsiblePerson }
+                    new HnRoleMapping { HnId = "hn-1", Role = ContributorRole.ResponsibleParty }
                 }
             });
 
+            mockUserService.Setup(u => u.GetContributorRolesAsync()).ReturnsAsync(new List<EnumItemResponse>
+            {
+                new EnumItemResponse { Name = "ResponsibleParty", Description = "Responsible Party Description" }
+            });
+
+            // 3. Mock HeatNetworkService paginated response
+            var paginatedResponse = new PagedResultOfUserNetworkDetailsResponse
+            {
+                Items = new List<UserNetworkDetailsResponse>
+            {
+            new UserNetworkDetailsResponse
+            {
+                HnId = "hn-1",
+                Name = "Network 1",
+                OrganisationName = "Org Ltd",
+                AdditionalDescription = "Description of Network 1"
+            }
+            },
+                PageNumber = 1,
+                PageSize = 6,
+                TotalCount = 1,
+                TotalPages = 1
+            };
+
+            mockHeatNetworkService
+                .Setup(h => h.GetHeatNetworkByUserIdPaginatedAsync(
+                    userId,
+                    RegistrationSource2.HNTAS,
+                    1,
+                    6,
+                    "Name",
+                    "asc"))
+                .ReturnsAsync(paginatedResponse);
+
+            // 4. Controller Setup
             var controller = new UserManagementController(
                 mockUserService.Object,
                 mockLogger.Object,
                 mockSessionHelper.Object,
                 mockWorkflowManager.Object,
                 mockHeatNetworkService.Object,
-                mockOrganisationService.Object);
-
-            controller.ControllerContext = new ControllerContext
+                mockOrganisationService.Object)
             {
-                HttpContext = new DefaultHttpContext()
+                ControllerContext = new ControllerContext
+                {
+                    HttpContext = new DefaultHttpContext()
+                },
+                TempData = new TempDataDictionary(new DefaultHttpContext(), Mock.Of<ITempDataProvider>())
             };
 
             controller.Url = SetUpBackLink("UserAccount", "Dashboard").Object;
@@ -109,10 +122,11 @@ namespace HNTAS.Web.UI.Tests.Controllers
             Assert.Single(model.HeatNetworks);
             Assert.Equal("hn-1", model.HeatNetworks[0].HnId);
             Assert.Equal("Network 1", model.HeatNetworks[0].Name);
+            Assert.Equal("Responsible Party Description", model.HeatNetworks[0].Role);
             Assert.True(model.IsResponsiblePerson);
 
-            // controller ViewBag should have the user role string set
-            Assert.Equal(UserRole.ResponsiblePerson.ToString(), controller.ViewBag.UserRole);
+            // Verify ViewBag allocations
+            Assert.Equal(UserRole.ResponsibleParty.ToString(), controller.ViewBag.UserRole);
         }
     }
 }

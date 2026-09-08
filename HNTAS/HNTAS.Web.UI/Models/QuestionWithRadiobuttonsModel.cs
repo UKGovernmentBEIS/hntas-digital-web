@@ -24,7 +24,16 @@ namespace HNTAS.Web.UI.Models
         [Required]
         public List<Option> Options { get; set; }
         public string? SeletedOption { get; set; }
+
+        public QuestionHeadingLevel HeadingLevel { get; set; } = QuestionHeadingLevel.H1;
     }
+
+    public enum QuestionHeadingLevel
+    {
+        H1,
+        H2
+    }
+
 
     public class QuestionWithRadiobuttonsModel
     {

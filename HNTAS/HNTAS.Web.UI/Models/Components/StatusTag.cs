@@ -11,7 +11,7 @@ namespace HNTAS.Web.UI.Models.Components
 
     public class InvitationStatusTag : StatusTag
     {        
-        public InvitationStatusTag([AllowedValues("invited", "active", "pending", "inactive")]  string text)
+        public InvitationStatusTag([AllowedValues("invited", "active", "pending", "inactive", "rejected")]  string text)
         {
             Text = text;
             switch (text.ToLower())
@@ -26,6 +26,7 @@ namespace HNTAS.Web.UI.Models.Components
                     CssClass = "govuk-tag--yellow";
                     break;
                 case "inactive":
+                case "rejected":
                     CssClass = "govuk-tag--red";
                     break;
                 default:

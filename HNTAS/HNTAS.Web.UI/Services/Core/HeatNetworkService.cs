@@ -1,4 +1,5 @@
 ﻿using HNTAS.Api.Client.Api;
+using HNTAS.Api.Client.Client;
 using HNTAS.Api.Client.Model;
 
 namespace HNTAS.Web.UI.Services.Core
@@ -57,6 +58,49 @@ namespace HNTAS.Web.UI.Services.Core
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error retrieving heat networks for user ID: {UserId}.", userId);
+                throw;
+            }
+        }
+
+
+        public async Task<PagedResultOfUserNetworkDetailsResponse> GetHeatNetworkByUserIdPaginatedAsync(
+            string userId,
+            RegistrationSource2 registrationSource = RegistrationSource2.HNTAS,
+            int pageNumber = 1,
+            int pageSize = 10,
+            string sortBy = "Name",
+            string sortDirection = "asc",
+            CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                var response = await _heatNetworksApi.ApiHeatNetworksHeatNetworkByUserIdPaginatedGetAsync(
+                    userId: new Option<string>(userId),
+                    registrationSource: new Option<RegistrationSource2>(registrationSource),
+                    pageNumber: new Option<int>(pageNumber),
+                    pageSize: new Option<int>(pageSize),
+                    sortBy: new Option<string>(sortBy),
+                    sortDirection: new Option<string>(sortDirection),
+                    cancellationToken: cancellationToken);
+
+                if (response.IsOk)
+                {
+                    var pagedResult = response.Ok();
+                    _logger.LogInformation("Retrieved {Count} heat networks for user ID: {UserId}.", pagedResult.Items?.Count ?? 0, userId);
+                    return pagedResult;
+                }
+
+                _logger.LogWarning("Failed to retrieve heat networks for user ID: {UserId}. Status code: {StatusCode}", userId, response.StatusCode);
+                return new PagedResultOfUserNetworkDetailsResponse();
+            }
+            catch (ApiException ex)
+            {
+                _logger.LogError(ex, "API call failed while retrieving heat networks for user ID: {UserId}.", userId);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected error retrieving heat networks for user ID: {UserId}.", userId);
                 throw;
             }
         }

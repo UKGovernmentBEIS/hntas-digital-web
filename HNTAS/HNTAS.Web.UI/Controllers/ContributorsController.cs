@@ -6,8 +6,6 @@ using HNTAS.Web.UI.Models.Contributors;
 using HNTAS.Web.UI.Services;
 using HNTAS.Web.UI.Services.Core;
 using Microsoft.AspNetCore.Mvc;
-using Mono.TextTemplating;
-using System.Threading.Tasks;
 
 namespace HNTAS.Web.UI.Controllers
 {
@@ -38,15 +36,19 @@ namespace HNTAS.Web.UI.Controllers
             var userId = _sessionHelper.GetFromSession<string>(HttpContext, SessionKeys.UserModel_Id_SessionKey);
             var managedUsers = await _userService.GetManagedUsers(userId);
             List<DDHAndContributorsListModel> listOfContributors = new List<DDHAndContributorsListModel>();
+            var userRoles = await _userService.GetUserRolesAsync();
+
             foreach (var user in managedUsers)
             {
+                var primaryRoleName = user.Roles?.FirstOrDefault();
+
                 foreach (var heatNetwork in user.HeatNetworks)
                 {
                     listOfContributors.Add(new DDHAndContributorsListModel
                     {
                         Name = user.Name,
                         HeatNetwork = heatNetwork.HnId,
-                        Role = user.Roles[0],
+                        Role = userRoles.FirstOrDefault(ur => ur.Name == primaryRoleName)?.Description,
                         Status = new InvitationStatusTag(user.Status)
                     });
                 }

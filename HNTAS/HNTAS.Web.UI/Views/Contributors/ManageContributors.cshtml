@@ -19,13 +19,18 @@
         </ol>
     </nav>
 }
-<div class="govuk-width-container">
+
     <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
         <span class="govuk-caption-xl">Your network team</span>
 
         <h1 class="govuk-heading-l">
             @ViewBag.WhoDoYouWantToAdd
         </h1>
+
+        <a href="@Url.Action(nextAction, "Contributors")" role="button" draggable="false" class="govuk-button" data-module="govuk-button">
+            Add a person
+        </a>
 
         @if (Model.Count == 0)
         {
@@ -35,7 +40,7 @@
         }
         else
         {
-            <h2 class="govuk-heading-m" style="margin-top: 2rem;">Current @ViewBag.WhoDoYouWantToAdd.ToLower()</h2>
+            <h2 class="govuk-heading-m">Current @ViewBag.WhoDoYouWantToAdd.ToLower()</h2>
             <table class="govuk-table">
                 <thead class="govuk-table__head">
                     <tr class="govuk-table__row">
@@ -52,7 +57,7 @@
                             <td class="govuk-table__cell">@user.Name</td>
                             <td class="govuk-table__cell">@user.HeatNetwork</td>
                             <td class="govuk-table__cell">@user.Role</td>
-                            <td class="govuk-table__cell">                                    
+                            <td class="govuk-table__cell">
                                 <span class="govuk-tag @user.Status.CssClass">@user.Status.Text</span>
                             </td>
                         </tr>
@@ -61,8 +66,7 @@
             </table>
         }
 
-        <a href="@Url.Action(nextAction, "Contributors")" class="govuk-button">
-            Add a person
-        </a>
+
     </div>
-</div>
+       
+    </div>

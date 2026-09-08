@@ -17,10 +17,9 @@
             new Question
             {
                 QId = elementId,
-                QText = "Network type",
-                QDescText = @"
-                <p class='govuk-body'>Register each communal and district heat network separately. Only register heat networks your organisation owns.</p>
-                <h2 class='govuk-heading govuk-heading-m'>What type of network do you want to register</h2>",
+                QText = "What type of network do you want to register?",
+                HeadingLevel = QuestionHeadingLevel.H2,
+                QDescText = null,
                 QHintText = null,
                 Options = new List<Option>
                 {
@@ -37,6 +36,10 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <span class="govuk-caption-l">Add a heat network</span>
+            <h1 class="govuk-heading-l">
+                Network type
+            </h1>
+            <p class="govuk-body">Register each communal and district heat network separately. Only register heat networks your organisation owns.</p>
             @await Html.PartialAsync("_QuestionWithRadiobuttons", pageData)
         </div>
     </div>

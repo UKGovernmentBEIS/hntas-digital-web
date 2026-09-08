@@ -31,9 +31,9 @@ namespace HNTAS.Api.Client.Model
     public enum NullableOfUserRole
     {
         /// <summary>
-        /// Enum ResponsiblePerson for value: ResponsiblePerson
+        /// Enum ResponsibleParty for value: ResponsibleParty
         /// </summary>
-        ResponsiblePerson = 1,
+        ResponsibleParty = 1,
 
         /// <summary>
         /// Enum NetworkManager for value: NetworkManager
@@ -73,8 +73,8 @@ namespace HNTAS.Api.Client.Model
         /// <returns></returns>
         public static NullableOfUserRole FromString(string value)
         {
-            if (value.Equals("ResponsiblePerson"))
-                return NullableOfUserRole.ResponsiblePerson;
+            if (value.Equals("ResponsibleParty"))
+                return NullableOfUserRole.ResponsibleParty;
 
             if (value.Equals("NetworkManager"))
                 return NullableOfUserRole.NetworkManager;
@@ -101,8 +101,8 @@ namespace HNTAS.Api.Client.Model
         /// <returns></returns>
         public static NullableOfUserRole? FromStringOrDefault(string value)
         {
-            if (value.Equals("ResponsiblePerson"))
-                return NullableOfUserRole.ResponsiblePerson;
+            if (value.Equals("ResponsibleParty"))
+                return NullableOfUserRole.ResponsibleParty;
 
             if (value.Equals("NetworkManager"))
                 return NullableOfUserRole.NetworkManager;
@@ -130,8 +130,8 @@ namespace HNTAS.Api.Client.Model
         /// <exception cref="NotImplementedException"></exception>
         public static string ToJsonValue(NullableOfUserRole value)
         {
-            if (value == NullableOfUserRole.ResponsiblePerson)
-                return "ResponsiblePerson";
+            if (value == NullableOfUserRole.ResponsibleParty)
+                return "ResponsibleParty";
 
             if (value == NullableOfUserRole.NetworkManager)
                 return "NetworkManager";

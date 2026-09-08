@@ -18,15 +18,15 @@ namespace HNTAS.Web.UI.Authorization
 
                 options.AddPolicy(SecurityConstants.Policies.CanAddContributingOrganisation, p => p.Requirements.Add(new RolesRequirement(UserRole.NetworkManager, UserRole.DesignatedDutyHolder, UserRole.Contributor)));
 
-                options.AddPolicy(SecurityConstants.Policies.CanAddHeatNetwork, p => p.Requirements.Add(new RolesRequirement(UserRole.ResponsiblePerson, UserRole.NetworkManager)));
+                options.AddPolicy(SecurityConstants.Policies.CanAddHeatNetwork, p => p.Requirements.Add(new RolesRequirement(UserRole.ResponsibleParty, UserRole.NetworkManager)));
 
-                options.AddPolicy(SecurityConstants.Policies.CanAddDDHAndContributor, p => p.Requirements.Add(new RolesRequirement(UserRole.ResponsiblePerson, UserRole.NetworkManager, UserRole.DesignatedDutyHolder)));
+                options.AddPolicy(SecurityConstants.Policies.CanAddDDHAndContributor, p => p.Requirements.Add(new RolesRequirement(UserRole.ResponsibleParty, UserRole.NetworkManager, UserRole.DesignatedDutyHolder)));
 
-                options.AddPolicy(SecurityConstants.Policies.CanAddHeatNetworkDetail, p => p.Requirements.Add(new RolesRequirement(UserRole.ResponsiblePerson, UserRole.NetworkManager, UserRole.DesignatedDutyHolder, UserRole.Contributor)));
+                options.AddPolicy(SecurityConstants.Policies.CanAddHeatNetworkDetail, p => p.Requirements.Add(new RolesRequirement(UserRole.ResponsibleParty, UserRole.NetworkManager, UserRole.DesignatedDutyHolder, UserRole.Contributor)));
 
-                options.AddPolicy(SecurityConstants.Policies.CanUpdatePersonalDetail, p => p.Requirements.Add(new RolesRequirement(UserRole.ResponsiblePerson, UserRole.NetworkManager, UserRole.DesignatedDutyHolder, UserRole.Contributor)));
+                options.AddPolicy(SecurityConstants.Policies.CanUpdatePersonalDetail, p => p.Requirements.Add(new RolesRequirement(UserRole.ResponsibleParty, UserRole.NetworkManager, UserRole.DesignatedDutyHolder, UserRole.Contributor)));
 
-                options.AddPolicy(SecurityConstants.Policies.CanAssignAssessor, p => p.Requirements.Add(new RolesRequirement(UserRole.ResponsiblePerson, UserRole.NetworkManager)));
+                options.AddPolicy(SecurityConstants.Policies.CanAssignAssessor, p => p.Requirements.Add(new RolesRequirement(UserRole.ResponsibleParty, UserRole.NetworkManager)));
             });
 
             return services;

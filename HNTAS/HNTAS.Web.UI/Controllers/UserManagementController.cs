@@ -178,56 +178,96 @@ namespace HNTAS.Web.UI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> HeatNetworksAsync()
+        public async Task<IActionResult> HeatNetworksAsync(
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 6,
+            [FromQuery] string sortBy = "Name",
+            [FromQuery] string sortDirection = "asc")
         {
             ClearNetworkDetailsSession();
 
-            this.ShowBackButton("UserAccount", "Dashboard");
             var userId = _sessionHelper.GetFromSession<string>(HttpContext, SessionKeys.UserModel_Id_SessionKey);
-            var user = await _userService.GetUserDetails(userId);
-            var userWithHnRoles = await _userService.GetUserById(userId);
-            var hnRoleMappings = userWithHnRoles.HnRoleMappings;
 
-            ViewBag.UserRole = user?.Roles[0].ToString();
-            ViewBag.HasDeclaredImpartiality = _sessionHelper.GetFromSession<DeclationOfImpartialityModel>(HttpContext, SessionKeys.DeclarationOfImpartialityModelKey)?.HasDeclaredImpartiality;
-
-            if (user == null)
+            if (string.IsNullOrEmpty(userId))
             {
-                _logger.LogError("User not found in session or API.");
+                _logger.LogError("User ID not found in session.");
                 TempData["ErrorMessage"] = "Unable to retrieve user information. Please try again later.";
                 return View(new HeatNetworksViewModel());
             }
 
-            var heatNetworks = new List<HeatNetworkModel>();
-            var networks = await _heatNetworkService.GetHeatNetworkByUserId(userId, RegistrationSource2.HNTAS);
+            // 1. Fetch user, contributor roles, and paginated networks concurrently
+            var userTask = _userService.GetUserById(userId);
+            var rolesTask = _userService.GetContributorRolesAsync();
+            var paginatedResponseTask = _heatNetworkService.GetHeatNetworkByUserIdPaginatedAsync(
+                userId: userId,
+                registrationSource: RegistrationSource2.HNTAS,
+                pageNumber: pageNumber,
+                pageSize: pageSize,
+                sortBy: sortBy,
+                sortDirection: sortDirection);
 
-            heatNetworks = (await Task.WhenAll(networks.Select(async network =>
+            await Task.WhenAll(userTask, rolesTask, paginatedResponseTask);
+
+            var user = await userTask;
+            var contributorRoles = await rolesTask ?? new List<EnumItemResponse>();
+            var paginatedResponse = await paginatedResponseTask;
+
+            if (user == null)
             {
-                var org = await _organisationService.GetOrganisationById(network.OrgId);
+                _logger.LogError("User not found for ID: {UserId}", userId);
+                TempData["ErrorMessage"] = "Unable to retrieve user information. Please try again later.";
+                return View(new HeatNetworksViewModel());
+            }
+
+            var hnRoleMappings = user.HnRoleMappings ?? new List<HnRoleMapping>();
+
+            ViewBag.UserRole = user.Roles?.FirstOrDefault().ToString();
+            ViewBag.HasDeclaredImpartiality = _sessionHelper.GetFromSession<DeclationOfImpartialityModel>(
+                HttpContext, SessionKeys.DeclarationOfImpartialityModelKey)?.HasDeclaredImpartiality;
+
+            // 2. Pre-index contributor roles into a Dictionary for O(1) lookup
+            var rolesDictionary = contributorRoles
+                .Where(r => !string.IsNullOrEmpty(r.Name))
+                .ToDictionary(r => r.Name, r => r.Description, StringComparer.OrdinalIgnoreCase);
+
+            // 3. Clean synchronous mapping
+            var heatNetworks = paginatedResponse?.Items?.Select(network =>
+            {
+                var matchingRoleEnum = hnRoleMappings
+                    .FirstOrDefault(x => x.HnId == network.HnId)?.Role.ToString();
+
+                var roleDescription = !string.IsNullOrEmpty(matchingRoleEnum) && rolesDictionary.TryGetValue(matchingRoleEnum, out var desc)
+                    ? desc
+                    : "Not specified";
 
                 return new HeatNetworkModel
                 {
                     HnId = network.HnId,
                     Name = network.Name,
-                    OrganisationName = org?.Name,
+                    OrganisationName = network.OrganisationName,
                     HnDescription = network.AdditionalDescription,
-                    Role = hnRoleMappings
-                        .FirstOrDefault(x => x.HnId == network.HnId)?.Role.ToString() ?? "Not specified"
+                    Role = roleDescription
                 };
-            }))).ToList();
-
-
+            }).ToList() ?? new List<HeatNetworkModel>();
 
             var model = new HeatNetworksViewModel
             {
                 HeatNetworks = heatNetworks,
-                IsResponsiblePerson = user.Roles?.Contains(UserRole.ResponsiblePerson) ?? false,
+                IsResponsiblePerson = user.Roles?.Contains(UserRole.ResponsibleParty) ?? false,
                 IsHntasCoordinator = user.Roles?.Contains(UserRole.NetworkManager) ?? false,
+
+                // Pagination metadata for Razor View
+                PageNumber = paginatedResponse?.PageNumber ?? pageNumber,
+                PageSize = paginatedResponse?.PageSize ?? pageSize,
+                TotalCount = paginatedResponse?.TotalCount ?? 0,
+                TotalPages = paginatedResponse?.TotalPages ?? 0,
+                SortBy = sortBy,
+                SortDirection = sortDirection
             };
 
             var isRegistrationEnabledString = Environment.GetEnvironmentVariable("IS_REGISTRATION_ENABLED");
             ViewBag.IsRegistrationEnabled = !string.IsNullOrEmpty(isRegistrationEnabledString) &&
-                                             isRegistrationEnabledString.ToLower() == "true";
+                                             isRegistrationEnabledString.Equals("true", StringComparison.OrdinalIgnoreCase);
 
             return View(model);
         }
