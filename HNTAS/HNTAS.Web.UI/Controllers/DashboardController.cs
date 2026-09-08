@@ -43,7 +43,7 @@ namespace HNTAS.Web.UI.Controllers
                 {
                     throw new Exception("Unable to retrieve user information. Please try again later.");
                 }
-                if (user.Roles != null && user.Roles.Contains(UserRole.ResponsiblePerson) && user.Organisation == null)
+                if (user.Roles != null && user.Roles.Contains(UserRole.ResponsibleParty) && user.Organisation == null)
                 {
                     throw new Exception("Your account is not associated with any organisation. Please contact support.");
                 }
@@ -97,7 +97,7 @@ namespace HNTAS.Web.UI.Controllers
             {
                 OrganisationName = user?.Organisation?.Name,
                 UserRole = user.Roles[0].ToString(),
-                IsResponsiblePerson = user.Roles?.Contains(UserRole.ResponsiblePerson) ?? false,
+                IsResponsiblePerson = user.Roles?.Contains(UserRole.ResponsibleParty) ?? false,
                 HasHeatNetworks = user.HeatNetworks != null && user.HeatNetworks.Any(),
                 HasOfgemNetworks = networks.Count != 0
             };
@@ -117,7 +117,7 @@ namespace HNTAS.Web.UI.Controllers
         [HttpGet]
         public async Task<IActionResult> OrganisationDetails()
         {
-            this.ShowBackButton("UserAccount");
+ 
             ViewBag.OrganisationName = _sessionHelper.GetFromSession<string>(HttpContext, SessionKeys.OrganisationName);
             UserDetailsResponse user;
             bool isUserAnRP;
@@ -160,7 +160,6 @@ namespace HNTAS.Web.UI.Controllers
         [HttpGet]
         public async Task<IActionResult> YourDetails()
         {
-            this.ShowBackButton("UserAccount", "Dashboard");
             var userId = _sessionHelper.GetFromSession<string>(HttpContext, SessionKeys.UserModel_Id_SessionKey);
             var user = await _userService.GetUserDetails(userId);
 
@@ -208,7 +207,7 @@ namespace HNTAS.Web.UI.Controllers
             };
             var userModel = new UserModel
             {
-                IsRegulatoryContact = user.Roles.Contains(UserRole.ResponsiblePerson),
+                IsRegulatoryContact = user.Roles.Contains(UserRole.ResponsibleParty),
                 OrganisationName = user.Organisation?.Name,
                 ContactDetails = model
             };

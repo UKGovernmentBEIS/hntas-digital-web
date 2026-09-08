@@ -359,7 +359,7 @@ namespace HNTAS.Web.UI.Services.Core
             {
                 return null;
             }
-            var errorMessage = $"Unable to determine Responsible Person status. API call failed with status code: {users.StatusCode}.";
+            var errorMessage = $"Unable to determine Responsible Party status. API call failed with status code: {users.StatusCode}.";
             _logger.LogError(errorMessage);
             throw new Exception(errorMessage);
         }
@@ -376,7 +376,7 @@ namespace HNTAS.Web.UI.Services.Core
             {
                 return null;
             }
-            var errorMessage = $"Unable to determine Responsible Person status. API call failed with status code: {users.StatusCode}.";
+            var errorMessage = $"Unable to determine Responsible Party status. API call failed with status code: {users.StatusCode}.";
             _logger.LogError(errorMessage);
             throw new Exception(errorMessage);
         }

@@ -65,24 +65,59 @@ namespace HNTAS.Web.UI.Tests.Controllers
         }
 
         [Fact]
-        public async Task ManageContributors_Get_ReturnsViewResult()
+        public async Task ManageContributors_Get_ReturnsViewResultWithContributorsList()
         {
             // Arrange
+            var userId = "UserModelId";
+
             _sessionHelperMock
                 .Setup(x => x.GetFromSession<string>(
                     It.IsAny<HttpContext>(), SessionKeys.UserModel_Id_SessionKey))
-                .Returns("UserModelId");
+                .Returns(userId);
 
-            _userServiceMock.Setup(u => u.GetManagedUsers(It.IsAny<string>(), It.IsAny<bool>()))
-                .ReturnsAsync(new List<ManagedUserResponse> { new ManagedUserResponse
+            _sessionHelperMock
+                .Setup(x => x.GetFromSession<string>(
+                    It.IsAny<HttpContext>(), SessionKeys.WhoDoYouWantToAddSessionKey))
+                .Returns("Duty holders and contributors");
+
+            _userServiceMock
+                .Setup(u => u.GetManagedUsers(userId, false)) // Adjust boolean parameter if required by interface
+                .ReturnsAsync(new List<ManagedUserResponse>
                 {
-                    Id = "1", Name = "Test User", Roles = new List<string> { "Contributor" }, Status = "Active", HeatNetworks = new List<HeatNetworkInfo> { new HeatNetworkInfo { HnId = "HN1", Name = "Heat Network 1" } }
+            new ManagedUserResponse
+            {
+                Id = "1",
+                Name = "Test User",
+                Roles = new List<string> { "Contributor" },
+                Status = "Active",
+                HeatNetworks = new List<HeatNetworkInfo>
+                    {
+                        new HeatNetworkInfo { HnId = "HN1", Name = "Heat Network 1" }
+                    }
                 }
             });
 
+            _userServiceMock
+                .Setup(u => u.GetUserRolesAsync())
+                .ReturnsAsync(new List<EnumItemResponse> // Replace 'RoleResponse' with your actual Role DTO/class type
+                {
+                    new EnumItemResponse { Name = "Contributor", Description = "Contributor Description" }
+                });
+
             // Act
             var result = await _controller.ManageContributors();
-            Assert.IsType<ViewResult>(result);
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<List<DDHAndContributorsListModel>>(viewResult.Model);
+
+            Assert.Single(model);
+            Assert.Equal("Test User", model[0].Name);
+            Assert.Equal("HN1", model[0].HeatNetwork);
+            Assert.Equal("Contributor Description", model[0].Role);
+            Assert.Equal("govuk-tag--green", model[0].Status.CssClass);
+
+            _sessionHelperMock.Verify(x => x.ClearAllContributoFlowRelatedSessionData(It.IsAny<HttpContext>()), Times.Once);
         }
 
         [Fact]

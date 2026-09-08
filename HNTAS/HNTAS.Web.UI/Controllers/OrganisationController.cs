@@ -544,7 +544,7 @@ namespace HNTAS.Web.UI.Controllers
                     lastName: userModel?.ContactDetails?.LastName,
                     preferredContactType: preferredContactType,
                     jobTitle: userModel?.ContactDetails?.JobTitle,
-                    role: UserRole.ResponsiblePerson,
+                    role: UserRole.ResponsibleParty,
                     organisation: new OrganisationRequest
                     (
                         name: company?.Title,

@@ -134,6 +134,39 @@ namespace HNTAS.Api.Client.Api
         /// 
         /// </remarks>
         /// <exception cref="ApiException">Thrown when fails to make API call</exception>
+        /// <param name="userId"> (optional)</param>
+        /// <param name="registrationSource"> (optional)</param>
+        /// <param name="pageNumber"> (optional, default to 1)</param>
+        /// <param name="pageSize"> (optional, default to 10)</param>
+        /// <param name="sortBy"> (optional, default to &quot;Name&quot;)</param>
+        /// <param name="sortDirection"> (optional, default to &quot;asc&quot;)</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns><see cref="Task"/>&lt;<see cref="IApiHeatNetworksHeatNetworkByUserIdPaginatedGetApiResponse"/>&gt;</returns>
+        Task<IApiHeatNetworksHeatNetworkByUserIdPaginatedGetApiResponse> ApiHeatNetworksHeatNetworkByUserIdPaginatedGetAsync(Option<string> userId = default, Option<RegistrationSource2> registrationSource = default, Option<int> pageNumber = default, Option<int> pageSize = default, Option<string> sortBy = default, Option<string> sortDirection = default, System.Threading.CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <param name="userId"> (optional)</param>
+        /// <param name="registrationSource"> (optional)</param>
+        /// <param name="pageNumber"> (optional, default to 1)</param>
+        /// <param name="pageSize"> (optional, default to 10)</param>
+        /// <param name="sortBy"> (optional, default to &quot;Name&quot;)</param>
+        /// <param name="sortDirection"> (optional, default to &quot;asc&quot;)</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns><see cref="Task"/>&lt;<see cref="IApiHeatNetworksHeatNetworkByUserIdPaginatedGetApiResponse"/>?&gt;</returns>
+        Task<IApiHeatNetworksHeatNetworkByUserIdPaginatedGetApiResponse?> ApiHeatNetworksHeatNetworkByUserIdPaginatedGetOrDefaultAsync(Option<string> userId = default, Option<RegistrationSource2> registrationSource = default, Option<int> pageNumber = default, Option<int> pageSize = default, Option<string> sortBy = default, Option<string> sortDirection = default, System.Threading.CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="ApiException">Thrown when fails to make API call</exception>
         /// <param name="hnId"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns><see cref="Task"/>&lt;<see cref="IApiHeatNetworksHnIdGetApiResponse"/>&gt;</returns>
@@ -367,6 +400,36 @@ namespace HNTAS.Api.Client.Api
     /// The <see cref="IApiHeatNetworksHeatNetworkByUserIdGetApiResponse"/>
     /// </summary>
     public interface IApiHeatNetworksHeatNetworkByUserIdGetApiResponse : HNTAS.Api.Client.Client.IApiResponse, IOk<List<HeatNetworkResponse>?>, IBadRequest<HNTAS.Api.Client.Model.ProblemDetails?>, INotFound<HNTAS.Api.Client.Model.ProblemDetails?>
+    {
+        /// <summary>
+        /// Returns true if the response is 200 Ok
+        /// </summary>
+        /// <returns></returns>
+        bool IsOk { get; }
+
+        /// <summary>
+        /// Returns true if the response is 400 BadRequest
+        /// </summary>
+        /// <returns></returns>
+        bool IsBadRequest { get; }
+
+        /// <summary>
+        /// Returns true if the response is 404 NotFound
+        /// </summary>
+        /// <returns></returns>
+        bool IsNotFound { get; }
+
+        /// <summary>
+        /// Returns true if the response is 500 InternalServerError
+        /// </summary>
+        /// <returns></returns>
+        bool IsInternalServerError { get; }
+    }
+
+    /// <summary>
+    /// The <see cref="IApiHeatNetworksHeatNetworkByUserIdPaginatedGetApiResponse"/>
+    /// </summary>
+    public interface IApiHeatNetworksHeatNetworkByUserIdPaginatedGetApiResponse : HNTAS.Api.Client.Client.IApiResponse, IOk<HNTAS.Api.Client.Model.PagedResultOfUserNetworkDetailsResponse?>, IBadRequest<HNTAS.Api.Client.Model.ProblemDetails?>, INotFound<HNTAS.Api.Client.Model.ProblemDetails?>
     {
         /// <summary>
         /// Returns true if the response is 200 Ok
@@ -638,6 +701,26 @@ namespace HNTAS.Api.Client.Api
         internal void ExecuteOnErrorApiHeatNetworksHeatNetworkByUserIdGet(Exception exception)
         {
             OnErrorApiHeatNetworksHeatNetworkByUserIdGet?.Invoke(this, new ExceptionEventArgs(exception));
+        }
+
+        /// <summary>
+        /// The event raised after the server response
+        /// </summary>
+        public event EventHandler<ApiResponseEventArgs>? OnApiHeatNetworksHeatNetworkByUserIdPaginatedGet;
+
+        /// <summary>
+        /// The event raised after an error querying the server
+        /// </summary>
+        public event EventHandler<ExceptionEventArgs>? OnErrorApiHeatNetworksHeatNetworkByUserIdPaginatedGet;
+
+        internal void ExecuteOnApiHeatNetworksHeatNetworkByUserIdPaginatedGet(HeatNetworksApi.ApiHeatNetworksHeatNetworkByUserIdPaginatedGetApiResponse apiResponse)
+        {
+            OnApiHeatNetworksHeatNetworkByUserIdPaginatedGet?.Invoke(this, new ApiResponseEventArgs(apiResponse));
+        }
+
+        internal void ExecuteOnErrorApiHeatNetworksHeatNetworkByUserIdPaginatedGet(Exception exception)
+        {
+            OnErrorApiHeatNetworksHeatNetworkByUserIdPaginatedGet?.Invoke(this, new ExceptionEventArgs(exception));
         }
 
         /// <summary>
@@ -1833,6 +1916,369 @@ namespace HNTAS.Api.Client.Api
             /// <param name="result"></param>
             /// <returns></returns>
             public bool TryOk([NotNullWhen(true)]out List<HeatNetworkResponse>? result)
+            {
+                result = null;
+
+                try
+                {
+                    result = Ok();
+                } catch (Exception e)
+                {
+                    OnDeserializationErrorDefaultImplementation(e, (HttpStatusCode)200);
+                }
+
+                return result != null;
+            }
+
+            /// <summary>
+            /// Returns true if the response is 400 BadRequest
+            /// </summary>
+            /// <returns></returns>
+            public bool IsBadRequest => 400 == (int)StatusCode;
+
+            /// <summary>
+            /// Deserializes the response if the response is 400 BadRequest
+            /// </summary>
+            /// <returns></returns>
+            public HNTAS.Api.Client.Model.ProblemDetails? BadRequest()
+            {
+                // This logic may be modified with the AsModel.mustache template
+                return IsBadRequest
+                    ? System.Text.Json.JsonSerializer.Deserialize<HNTAS.Api.Client.Model.ProblemDetails>(RawContent, _jsonSerializerOptions)
+                    : null;
+            }
+
+            /// <summary>
+            /// Returns true if the response is 400 BadRequest and the deserialized response is not null
+            /// </summary>
+            /// <param name="result"></param>
+            /// <returns></returns>
+            public bool TryBadRequest([NotNullWhen(true)]out HNTAS.Api.Client.Model.ProblemDetails? result)
+            {
+                result = null;
+
+                try
+                {
+                    result = BadRequest();
+                } catch (Exception e)
+                {
+                    OnDeserializationErrorDefaultImplementation(e, (HttpStatusCode)400);
+                }
+
+                return result != null;
+            }
+
+            /// <summary>
+            /// Returns true if the response is 404 NotFound
+            /// </summary>
+            /// <returns></returns>
+            public bool IsNotFound => 404 == (int)StatusCode;
+
+            /// <summary>
+            /// Deserializes the response if the response is 404 NotFound
+            /// </summary>
+            /// <returns></returns>
+            public HNTAS.Api.Client.Model.ProblemDetails? NotFound()
+            {
+                // This logic may be modified with the AsModel.mustache template
+                return IsNotFound
+                    ? System.Text.Json.JsonSerializer.Deserialize<HNTAS.Api.Client.Model.ProblemDetails>(RawContent, _jsonSerializerOptions)
+                    : null;
+            }
+
+            /// <summary>
+            /// Returns true if the response is 404 NotFound and the deserialized response is not null
+            /// </summary>
+            /// <param name="result"></param>
+            /// <returns></returns>
+            public bool TryNotFound([NotNullWhen(true)]out HNTAS.Api.Client.Model.ProblemDetails? result)
+            {
+                result = null;
+
+                try
+                {
+                    result = NotFound();
+                } catch (Exception e)
+                {
+                    OnDeserializationErrorDefaultImplementation(e, (HttpStatusCode)404);
+                }
+
+                return result != null;
+            }
+
+            /// <summary>
+            /// Returns true if the response is 500 InternalServerError
+            /// </summary>
+            /// <returns></returns>
+            public bool IsInternalServerError => 500 == (int)StatusCode;
+
+            private void OnDeserializationErrorDefaultImplementation(Exception exception, HttpStatusCode httpStatusCode)
+            {
+                bool suppressDefaultLog = false;
+                OnDeserializationError(ref suppressDefaultLog, exception, httpStatusCode);
+                if (!suppressDefaultLog)
+                    Logger.LogError(exception, "An error occurred while deserializing the {code} response.", httpStatusCode);
+            }
+
+            partial void OnDeserializationError(ref bool suppressDefaultLog, Exception exception, HttpStatusCode httpStatusCode);
+        }
+
+        partial void FormatApiHeatNetworksHeatNetworkByUserIdPaginatedGet(ref Option<string> userId, ref Option<RegistrationSource2> registrationSource, ref Option<int> pageNumber, ref Option<int> pageSize, ref Option<string> sortBy, ref Option<string> sortDirection);
+
+        /// <summary>
+        /// Validates the request parameters
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="sortBy"></param>
+        /// <param name="sortDirection"></param>
+        /// <returns></returns>
+        private void ValidateApiHeatNetworksHeatNetworkByUserIdPaginatedGet(Option<string> userId, Option<string> sortBy, Option<string> sortDirection)
+        {
+            if (userId.IsSet && userId.Value == null)
+                throw new ArgumentNullException(nameof(userId));
+
+            if (sortBy.IsSet && sortBy.Value == null)
+                throw new ArgumentNullException(nameof(sortBy));
+
+            if (sortDirection.IsSet && sortDirection.Value == null)
+                throw new ArgumentNullException(nameof(sortDirection));
+        }
+
+        /// <summary>
+        /// Processes the server response
+        /// </summary>
+        /// <param name="apiResponseLocalVar"></param>
+        /// <param name="userId"></param>
+        /// <param name="registrationSource"></param>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="sortBy"></param>
+        /// <param name="sortDirection"></param>
+        private void AfterApiHeatNetworksHeatNetworkByUserIdPaginatedGetDefaultImplementation(IApiHeatNetworksHeatNetworkByUserIdPaginatedGetApiResponse apiResponseLocalVar, Option<string> userId, Option<RegistrationSource2> registrationSource, Option<int> pageNumber, Option<int> pageSize, Option<string> sortBy, Option<string> sortDirection)
+        {
+            bool suppressDefaultLog = false;
+            AfterApiHeatNetworksHeatNetworkByUserIdPaginatedGet(ref suppressDefaultLog, apiResponseLocalVar, userId, registrationSource, pageNumber, pageSize, sortBy, sortDirection);
+            if (!suppressDefaultLog)
+                Logger.LogInformation("{0,-9} | {1} | {3}", (apiResponseLocalVar.DownloadedAt - apiResponseLocalVar.RequestedAt).TotalSeconds, apiResponseLocalVar.StatusCode, apiResponseLocalVar.Path);
+        }
+
+        /// <summary>
+        /// Processes the server response
+        /// </summary>
+        /// <param name="suppressDefaultLog"></param>
+        /// <param name="apiResponseLocalVar"></param>
+        /// <param name="userId"></param>
+        /// <param name="registrationSource"></param>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="sortBy"></param>
+        /// <param name="sortDirection"></param>
+        partial void AfterApiHeatNetworksHeatNetworkByUserIdPaginatedGet(ref bool suppressDefaultLog, IApiHeatNetworksHeatNetworkByUserIdPaginatedGetApiResponse apiResponseLocalVar, Option<string> userId, Option<RegistrationSource2> registrationSource, Option<int> pageNumber, Option<int> pageSize, Option<string> sortBy, Option<string> sortDirection);
+
+        /// <summary>
+        /// Logs exceptions that occur while retrieving the server response
+        /// </summary>
+        /// <param name="exceptionLocalVar"></param>
+        /// <param name="pathFormatLocalVar"></param>
+        /// <param name="pathLocalVar"></param>
+        /// <param name="userId"></param>
+        /// <param name="registrationSource"></param>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="sortBy"></param>
+        /// <param name="sortDirection"></param>
+        private void OnErrorApiHeatNetworksHeatNetworkByUserIdPaginatedGetDefaultImplementation(Exception exceptionLocalVar, string pathFormatLocalVar, string pathLocalVar, Option<string> userId, Option<RegistrationSource2> registrationSource, Option<int> pageNumber, Option<int> pageSize, Option<string> sortBy, Option<string> sortDirection)
+        {
+            bool suppressDefaultLogLocalVar = false;
+            OnErrorApiHeatNetworksHeatNetworkByUserIdPaginatedGet(ref suppressDefaultLogLocalVar, exceptionLocalVar, pathFormatLocalVar, pathLocalVar, userId, registrationSource, pageNumber, pageSize, sortBy, sortDirection);
+            if (!suppressDefaultLogLocalVar)
+                Logger.LogError(exceptionLocalVar, "An error occurred while sending the request to the server.");
+        }
+
+        /// <summary>
+        /// A partial method that gives developers a way to provide customized exception handling
+        /// </summary>
+        /// <param name="suppressDefaultLogLocalVar"></param>
+        /// <param name="exceptionLocalVar"></param>
+        /// <param name="pathFormatLocalVar"></param>
+        /// <param name="pathLocalVar"></param>
+        /// <param name="userId"></param>
+        /// <param name="registrationSource"></param>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="sortBy"></param>
+        /// <param name="sortDirection"></param>
+        partial void OnErrorApiHeatNetworksHeatNetworkByUserIdPaginatedGet(ref bool suppressDefaultLogLocalVar, Exception exceptionLocalVar, string pathFormatLocalVar, string pathLocalVar, Option<string> userId, Option<RegistrationSource2> registrationSource, Option<int> pageNumber, Option<int> pageSize, Option<string> sortBy, Option<string> sortDirection);
+
+        /// <summary>
+        ///  
+        /// </summary>
+        /// <param name="userId"> (optional)</param>
+        /// <param name="registrationSource"> (optional)</param>
+        /// <param name="pageNumber"> (optional, default to 1)</param>
+        /// <param name="pageSize"> (optional, default to 10)</param>
+        /// <param name="sortBy"> (optional, default to &quot;Name&quot;)</param>
+        /// <param name="sortDirection"> (optional, default to &quot;asc&quot;)</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns><see cref="Task"/>&lt;<see cref="IApiHeatNetworksHeatNetworkByUserIdPaginatedGetApiResponse"/>&gt;</returns>
+        public async Task<IApiHeatNetworksHeatNetworkByUserIdPaginatedGetApiResponse?> ApiHeatNetworksHeatNetworkByUserIdPaginatedGetOrDefaultAsync(Option<string> userId = default, Option<RegistrationSource2> registrationSource = default, Option<int> pageNumber = default, Option<int> pageSize = default, Option<string> sortBy = default, Option<string> sortDirection = default, System.Threading.CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                return await ApiHeatNetworksHeatNetworkByUserIdPaginatedGetAsync(userId, registrationSource, pageNumber, pageSize, sortBy, sortDirection, cancellationToken).ConfigureAwait(false);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        ///  
+        /// </summary>
+        /// <exception cref="ApiException">Thrown when fails to make API call</exception>
+        /// <param name="userId"> (optional)</param>
+        /// <param name="registrationSource"> (optional)</param>
+        /// <param name="pageNumber"> (optional, default to 1)</param>
+        /// <param name="pageSize"> (optional, default to 10)</param>
+        /// <param name="sortBy"> (optional, default to &quot;Name&quot;)</param>
+        /// <param name="sortDirection"> (optional, default to &quot;asc&quot;)</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns><see cref="Task"/>&lt;<see cref="IApiHeatNetworksHeatNetworkByUserIdPaginatedGetApiResponse"/>&gt;</returns>
+        public async Task<IApiHeatNetworksHeatNetworkByUserIdPaginatedGetApiResponse> ApiHeatNetworksHeatNetworkByUserIdPaginatedGetAsync(Option<string> userId = default, Option<RegistrationSource2> registrationSource = default, Option<int> pageNumber = default, Option<int> pageSize = default, Option<string> sortBy = default, Option<string> sortDirection = default, System.Threading.CancellationToken cancellationToken = default)
+        {
+            UriBuilder uriBuilderLocalVar = new UriBuilder();
+
+            try
+            {
+                ValidateApiHeatNetworksHeatNetworkByUserIdPaginatedGet(userId, sortBy, sortDirection);
+
+                FormatApiHeatNetworksHeatNetworkByUserIdPaginatedGet(ref userId, ref registrationSource, ref pageNumber, ref pageSize, ref sortBy, ref sortDirection);
+
+                using (HttpRequestMessage httpRequestMessageLocalVar = new HttpRequestMessage())
+                {
+                    uriBuilderLocalVar.Host = HttpClient.BaseAddress!.Host;
+                    uriBuilderLocalVar.Port = HttpClient.BaseAddress.Port;
+                    uriBuilderLocalVar.Scheme = HttpClient.BaseAddress.Scheme;
+                    uriBuilderLocalVar.Path = HttpClient.BaseAddress.AbsolutePath == "/"
+                        ? "/api/HeatNetworks/heat-network-by-userId-paginated"
+                        : string.Concat(HttpClient.BaseAddress.AbsolutePath, "/api/HeatNetworks/heat-network-by-userId-paginated");
+
+                    System.Collections.Specialized.NameValueCollection parseQueryStringLocalVar = System.Web.HttpUtility.ParseQueryString(string.Empty);
+
+                    if (userId.IsSet)
+                        parseQueryStringLocalVar["userId"] = ClientUtils.ParameterToString(userId.Value);
+
+                    if (registrationSource.IsSet)
+                        parseQueryStringLocalVar["registrationSource"] = ClientUtils.ParameterToString(registrationSource.Value);
+
+                    if (pageNumber.IsSet)
+                        parseQueryStringLocalVar["pageNumber"] = ClientUtils.ParameterToString(pageNumber.Value);
+
+                    if (pageSize.IsSet)
+                        parseQueryStringLocalVar["pageSize"] = ClientUtils.ParameterToString(pageSize.Value);
+
+                    if (sortBy.IsSet)
+                        parseQueryStringLocalVar["sortBy"] = ClientUtils.ParameterToString(sortBy.Value);
+
+                    if (sortDirection.IsSet)
+                        parseQueryStringLocalVar["sortDirection"] = ClientUtils.ParameterToString(sortDirection.Value);
+
+                    uriBuilderLocalVar.Query = parseQueryStringLocalVar.ToString();
+
+                    httpRequestMessageLocalVar.RequestUri = uriBuilderLocalVar.Uri;
+
+                    string[] acceptLocalVars = new string[] {
+                        "text/plain",
+                        "application/json",
+                        "text/json"
+                    };
+
+                    string? acceptLocalVar = ClientUtils.SelectHeaderAccept(acceptLocalVars);
+
+                    if (acceptLocalVar != null)
+                        httpRequestMessageLocalVar.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(acceptLocalVar));
+
+                    httpRequestMessageLocalVar.Method = HttpMethod.Get;
+
+                    DateTime requestedAtLocalVar = DateTime.UtcNow;
+
+                    using (HttpResponseMessage httpResponseMessageLocalVar = await HttpClient.SendAsync(httpRequestMessageLocalVar, cancellationToken).ConfigureAwait(false))
+                    {
+                        string responseContentLocalVar = await httpResponseMessageLocalVar.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+
+                        ILogger<ApiHeatNetworksHeatNetworkByUserIdPaginatedGetApiResponse> apiResponseLoggerLocalVar = LoggerFactory.CreateLogger<ApiHeatNetworksHeatNetworkByUserIdPaginatedGetApiResponse>();
+
+                        ApiHeatNetworksHeatNetworkByUserIdPaginatedGetApiResponse apiResponseLocalVar = new(apiResponseLoggerLocalVar, httpRequestMessageLocalVar, httpResponseMessageLocalVar, responseContentLocalVar, "/api/HeatNetworks/heat-network-by-userId-paginated", requestedAtLocalVar, _jsonSerializerOptions);
+
+                        AfterApiHeatNetworksHeatNetworkByUserIdPaginatedGetDefaultImplementation(apiResponseLocalVar, userId, registrationSource, pageNumber, pageSize, sortBy, sortDirection);
+
+                        Events.ExecuteOnApiHeatNetworksHeatNetworkByUserIdPaginatedGet(apiResponseLocalVar);
+
+                        return apiResponseLocalVar;
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                OnErrorApiHeatNetworksHeatNetworkByUserIdPaginatedGetDefaultImplementation(e, "/api/HeatNetworks/heat-network-by-userId-paginated", uriBuilderLocalVar.Path, userId, registrationSource, pageNumber, pageSize, sortBy, sortDirection);
+                Events.ExecuteOnErrorApiHeatNetworksHeatNetworkByUserIdPaginatedGet(e);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// The <see cref="ApiHeatNetworksHeatNetworkByUserIdPaginatedGetApiResponse"/>
+        /// </summary>
+        public partial class ApiHeatNetworksHeatNetworkByUserIdPaginatedGetApiResponse : HNTAS.Api.Client.Client.ApiResponse, IApiHeatNetworksHeatNetworkByUserIdPaginatedGetApiResponse
+        {
+            /// <summary>
+            /// The logger
+            /// </summary>
+            public ILogger<ApiHeatNetworksHeatNetworkByUserIdPaginatedGetApiResponse> Logger { get; }
+
+            /// <summary>
+            /// The <see cref="ApiHeatNetworksHeatNetworkByUserIdPaginatedGetApiResponse"/>
+            /// </summary>
+            /// <param name="logger"></param>
+            /// <param name="httpRequestMessage"></param>
+            /// <param name="httpResponseMessage"></param>
+            /// <param name="rawContent"></param>
+            /// <param name="path"></param>
+            /// <param name="requestedAt"></param>
+            /// <param name="jsonSerializerOptions"></param>
+            public ApiHeatNetworksHeatNetworkByUserIdPaginatedGetApiResponse(ILogger<ApiHeatNetworksHeatNetworkByUserIdPaginatedGetApiResponse> logger, System.Net.Http.HttpRequestMessage httpRequestMessage, System.Net.Http.HttpResponseMessage httpResponseMessage, string rawContent, string path, DateTime requestedAt, System.Text.Json.JsonSerializerOptions jsonSerializerOptions) : base(httpRequestMessage, httpResponseMessage, rawContent, path, requestedAt, jsonSerializerOptions)
+            {
+                Logger = logger;
+                OnCreated(httpRequestMessage, httpResponseMessage);
+            }
+
+            partial void OnCreated(global::System.Net.Http.HttpRequestMessage httpRequestMessage, System.Net.Http.HttpResponseMessage httpResponseMessage);
+
+            /// <summary>
+            /// Returns true if the response is 200 Ok
+            /// </summary>
+            /// <returns></returns>
+            public bool IsOk => 200 == (int)StatusCode;
+
+            /// <summary>
+            /// Deserializes the response if the response is 200 Ok
+            /// </summary>
+            /// <returns></returns>
+            public HNTAS.Api.Client.Model.PagedResultOfUserNetworkDetailsResponse? Ok()
+            {
+                // This logic may be modified with the AsModel.mustache template
+                return IsOk
+                    ? System.Text.Json.JsonSerializer.Deserialize<HNTAS.Api.Client.Model.PagedResultOfUserNetworkDetailsResponse>(RawContent, _jsonSerializerOptions)
+                    : null;
+            }
+
+            /// <summary>
+            /// Returns true if the response is 200 Ok and the deserialized response is not null
+            /// </summary>
+            /// <param name="result"></param>
+            /// <returns></returns>
+            public bool TryOk([NotNullWhen(true)]out HNTAS.Api.Client.Model.PagedResultOfUserNetworkDetailsResponse? result)
             {
                 result = null;
 

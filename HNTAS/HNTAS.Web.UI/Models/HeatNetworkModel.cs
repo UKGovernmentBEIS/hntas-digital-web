@@ -14,12 +14,18 @@ namespace HNTAS.Web.UI.Models
 
     public class HeatNetworkNameModel
     {
+        private string _heatNetworkName;
+
         [Required(ErrorMessage = "Please enter the heat network name.")]
         [StringLength(100, ErrorMessage = "The heat network name cannot exceed 100 characters.")]
         [RegularExpression(@"^[A-Za-z0-9 :;\-]+$", ErrorMessage = "The heat network name contains invalid characters.")]
         [Display(Name = "HeatNetwork Name")]
-        public string HeatNetworkName { get; set; }
-       
+        public string HeatNetworkName
+        {
+            get => _heatNetworkName;
+            set => _heatNetworkName = value?.Trim();
+        }
+
         [RegularExpression(@"^[^<>]*$", ErrorMessage = "Additional description must not include < or >")]
         public string? AdditionalDescription
         {
@@ -37,14 +43,14 @@ namespace HNTAS.Web.UI.Models
 
     public class ECDetailsModel
     {
-        [Required(ErrorMessage = "Please enter the latitude and longitude.")]
+        [Required(ErrorMessage = "Enter the latitude and longitude")]
         public string LatitudeLongitude { get; set; }
         public AddressByLatLongModel ECAddressByLatLong { get; set; } = new AddressByLatLongModel();
     }
 
     public class HeatNetworkPhaseModel
     {
-        [Required(ErrorMessage = "Please select the heat network phase.")]
+        [Required(ErrorMessage = "Select the phase your heat network is in")]
         public string HeatNetworkPhase { get; set; }
     }   
 

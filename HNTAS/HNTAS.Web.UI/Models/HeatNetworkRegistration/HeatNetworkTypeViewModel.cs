@@ -4,25 +4,25 @@ namespace HNTAS.Web.UI.Models.HeatNetworkRegistration
 {
     public class IsHnTypeCommunalViewModel
     {
-        [Required(ErrorMessage = "Please select a heat network type")]
+        [Required(ErrorMessage = "Select the type of network you are registering")]
         public bool? IsHnTypeCommunal { get; set; }
     }
 
     public class DoesCommunalHnHaveOwnEcViewModel
     {
-        [Required(ErrorMessage = "Please select whether the communal heat network has its own energy centre")]
+        [Required(ErrorMessage = "Select if this heat network has its own energy centre")]
         public bool? HasOwnEc { get; set; }
     }
 
     public class DoesDistrictHnHaveOwnEcViewModel
     {
-        [Required(ErrorMessage = "Please select whether the district heat network has its own energy centre")]
+        [Required(ErrorMessage = "Select if this heat network has its own main energy centre")]
         public bool? HasOwnEc { get; set; }
     }
 
     public class DoesCommunalEcSupplyOneBlockViewModel
     {
-        [Required(ErrorMessage = "Please select whether the communal energy centre supplies only one block or more than one block")]
+        [Required(ErrorMessage = "Select if the energy centre only supply this one communal building")]
         public bool? SuppliesOneBlock { get; set; }
     }
 

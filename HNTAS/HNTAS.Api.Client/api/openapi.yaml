@@ -969,6 +969,98 @@ paths:
           description: Internal Server Error
       tags:
       - HeatNetworks
+  /api/HeatNetworks/heat-network-by-userId-paginated:
+    get:
+      parameters:
+      - explode: true
+        in: query
+        name: userId
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: registrationSource
+        required: false
+        schema:
+          $ref: "#/components/schemas/RegistrationSource2"
+        style: form
+      - explode: true
+        in: query
+        name: pageNumber
+        required: false
+        schema:
+          default: 1
+          format: int32
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: pageSize
+        required: false
+        schema:
+          default: 10
+          format: int32
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: sortBy
+        required: false
+        schema:
+          default: Name
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: sortDirection
+        required: false
+        schema:
+          default: asc
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/PagedResultOfUserNetworkDetailsResponse"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PagedResultOfUserNetworkDetailsResponse"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/PagedResultOfUserNetworkDetailsResponse"
+          description: OK
+        "400":
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Bad Request
+        "404":
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      tags:
+      - HeatNetworks
   /api/HeatNetworks/existing-network-by-userId:
     get:
       requestBody:
@@ -3879,7 +3971,7 @@ components:
       - Assessor
       - Certifier
       - NetworkManager
-      - ResponsiblePerson
+      - ResponsibleParty
       type: string
     CountryAndTerritory:
       example:
@@ -8572,7 +8664,7 @@ components:
       type: string
     NullableOfUserRole:
       enum:
-      - ResponsiblePerson
+      - ResponsibleParty
       - NetworkManager
       - DesignatedDutyHolder
       - Contributor
@@ -8749,6 +8841,47 @@ components:
           type: string
         orgAddress:
           $ref: "#/components/schemas/Address"
+      type: object
+    PagedResultOfUserNetworkDetailsResponse:
+      example:
+        pageNumber: 0
+        hasNextPage: true
+        totalPages: 5
+        pageSize: 6
+        hasPreviousPage: true
+        totalCount: 1
+        items:
+        - hnId: hnId
+          organisationName: organisationName
+          additionalDescription: additionalDescription
+          name: name
+          orgId: orgId
+        - hnId: hnId
+          organisationName: organisationName
+          additionalDescription: additionalDescription
+          name: name
+          orgId: orgId
+      properties:
+        items:
+          items:
+            $ref: "#/components/schemas/UserNetworkDetailsResponse"
+          type: array
+        pageNumber:
+          format: int32
+          type: integer
+        pageSize:
+          format: int32
+          type: integer
+        totalCount:
+          format: int32
+          type: integer
+        totalPages:
+          format: int32
+          type: integer
+        hasPreviousPage:
+          type: boolean
+        hasNextPage:
+          type: boolean
       type: object
     ProblemDetails:
       example:
@@ -9391,7 +9524,7 @@ components:
       example:
         firstName: firstName
         lastName: lastName
-        role: ResponsiblePerson
+        role: ResponsibleParty
         preferredContactType: Landline
         mobileNumber: mobileNumber
         jobTitle: jobTitle
@@ -9426,7 +9559,7 @@ components:
       example:
         firstName: firstName
         lastName: lastName
-        role: ResponsiblePerson
+        role: ResponsibleParty
         preferredContactType: Landline
         mobileNumber: mobileNumber
         jobTitle: jobTitle
@@ -9618,8 +9751,8 @@ components:
         mobileNumber: mobileNumber
         jobTitle: jobTitle
         roles:
-        - ResponsiblePerson
-        - ResponsiblePerson
+        - ResponsibleParty
+        - ResponsibleParty
         oneLoginId: oneLoginId
         emailId: emailId
         landlineNumber: landlineNumber
@@ -9689,8 +9822,8 @@ components:
         mobileNumber: mobileNumber
         jobTitle: jobTitle
         roles:
-        - ResponsiblePerson
-        - ResponsiblePerson
+        - ResponsibleParty
+        - ResponsibleParty
         oneLoginId: oneLoginId
         fullName: fullName
         organisation:
@@ -9789,6 +9922,26 @@ components:
           nullable: true
           type: array
       type: object
+    UserNetworkDetailsResponse:
+      example:
+        hnId: hnId
+        organisationName: organisationName
+        additionalDescription: additionalDescription
+        name: name
+        orgId: orgId
+      properties:
+        hnId:
+          type: string
+        name:
+          type: string
+        additionalDescription:
+          nullable: true
+          type: string
+        organisationName:
+          type: string
+        orgId:
+          type: string
+      type: object
     UserResponse:
       example:
         lastName: lastName
@@ -9801,8 +9954,8 @@ components:
         mobileNumber: mobileNumber
         jobTitle: jobTitle
         roles:
-        - ResponsiblePerson
-        - ResponsiblePerson
+        - ResponsibleParty
+        - ResponsibleParty
         oneLoginId: oneLoginId
         fullName: fullName
         emailId: emailId
@@ -9868,7 +10021,7 @@ components:
       type: object
     UserRole:
       enum:
-      - ResponsiblePerson
+      - ResponsibleParty
       - NetworkManager
       - DesignatedDutyHolder
       - Contributor
