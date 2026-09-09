@@ -3,18 +3,18 @@
 @model HeatNetworkConnectionsViewModel
 
 @{
-    ViewData["Title"] = "Heat network summary";
+    ViewData["Title"] = "Heat network summary";    
+    string controllerName = Convert.ToString(ViewBag.ControllerName) ?? string.Empty;
 }
+
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <span class="govuk-caption-l">Add a heat network - @ViewBag.HnId</span>
+        <span class="govuk-caption-l">Add a heat network</span>
         <h1 class="govuk-heading-l">
             Heat network summary
         </h1>
-
-        <p class="govuk-body">You're registering a&nbsp;district heat network supplied by a separate upstream network</p>
-        <p class="govuk-body">The main energy centre should be registered as a separate district network by that organisation.</p>
-        <p class="govuk-body">Connected communal networks must be registered separately</p>
+        <p class="govuk-body">You're registering a district heat network with its own main energy centre.</p>
+        <p class="govuk-body">Any communal networks conneted to this district network must be registerd separately.</p>
 
         <h2 class="govuk-heading-m">Connections</h2>
 
@@ -25,10 +25,10 @@
                 {
                     <li>@c</li>
                 }
-            }                
+            }
         </ul>
 
-        <button class="govuk-button" onclick="location.href='@Url.Action("HeatNetworkName", "ExistingHeatNetworkRegistration")'">
+        <button class="govuk-button" onclick="location.href='@Url.Action("HeatNetworkName", controllerName)'">
             Continue
         </button>
     </div>

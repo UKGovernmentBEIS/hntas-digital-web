@@ -4,12 +4,13 @@
 @model DoesCommunalEcSupplyOneBlockViewModel
 
 @{
+    string controllerName = Convert.ToString(ViewBag.ControllerName) ?? string.Empty;
     ViewData["Title"] = "Is the heat network a single communal block – Certify your heat networks with the Heat Network Technical Assurance Scheme (HNTAS)";
     var fieldOrder = new[] { nameof(Model.SuppliesOneBlock) };
     var elementId = Html.GenerateIdFromName(nameof(Model.SuppliesOneBlock)).ToLowerInvariant();
     var pageData = new QuestionWithRadiobuttonsModel
     {
-        Controller = "ExistingHeatNetworkRegistration",
+        Controller = controllerName,
         Action = "HeatNetworkCommunalOneBlock",
         FieldOrder = fieldOrder,
         Questions = new List<Question>
@@ -34,7 +35,7 @@
 <div class="govuk-width-container">
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            <span class="govuk-caption-l">Add a heat network - @ViewBag.HnId</span>
+            <span class="govuk-caption-l">Add a heat network</span>
             @await Html.PartialAsync("_QuestionWithRadiobuttons", pageData)
         </div>
     </div>

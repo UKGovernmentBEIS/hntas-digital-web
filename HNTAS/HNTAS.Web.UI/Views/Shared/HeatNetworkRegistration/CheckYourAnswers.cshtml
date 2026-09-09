@@ -6,6 +6,7 @@
 
 @{
     ViewData["Title"] = "Check your answers";
+    string controllerName = Convert.ToString(ViewBag.ControllerName) ?? string.Empty;
 
     var viewModel = new ReviewSummaryModel
     {
@@ -20,63 +21,56 @@
                     {
                         Key = "Number of dwellings more than 6",
                         Value = Model.DoesHnHaveMoreThan6Dwellings,
-                        ChangeLink = Url.Action("HeatNetworkDwellingsCheck", "HeatNetworkRegistration"),
+                        ChangeLink = Url.Action("HeatNetworkDwellingsCheck", controllerName, new { hnid = ViewBag.HnId }),
                         ChangeLinkText = "Change"
-                    },
-                    new ReviewItem
-                    {
-                        Key = "Organisation ID",
-                        Value = Model.OrgId,
-                        ChangeLink = null,
-                        ChangeLinkText = "Change"
-                    },
+                    },                    
                     new ReviewItem
                     {
                         Key = "Network Type",
                         Value = Model.HeatNetworkType,
-                        ChangeLink = Url.Action("HeatNetworkType", "HeatNetworkRegistration"),
+                        ChangeLink = Url.Action("HeatNetworkType", controllerName),
                         ChangeLinkText = "Change"
                     },
                     new ReviewItem
                     {
                         Key = "Has own energy centre",
                         Value = Model.HasOwnEnergyCenter,
-                        ChangeLink = ViewBag.RegistrationSource == RegistrationSource.OFGEM ? null :  Url.Action(Model.HeatNetworkType == "Communal" ? "HeatNetworkEcCommunal" : "HeatNetworkEcDistrict", "HeatNetworkRegistration"),
+                        ChangeLink = ViewBag.RegistrationSource == RegistrationSource.OFGEM ? null :  Url.Action(Model.HeatNetworkType == "Communal" ? "HeatNetworkEcCommunal" : "HeatNetworkEcDistrict", controllerName),
                         ChangeLinkText = "Change"
                     },
                     new ReviewItem
                     {
                         Key = "Coordinates",
                         Value = Model.ECDetailsModel.LatitudeLongitude,
-                        ChangeLink = ViewBag.RegistrationSource == RegistrationSource.OFGEM ? null : Url.Action("ECCoordinates", "HeatNetworkRegistration"),
+                        ChangeLink = ViewBag.RegistrationSource == RegistrationSource.OFGEM ? null : Url.Action("ECCoordinates", controllerName),
                         ChangeLinkText = "Change"
                     },
                     new ReviewItem
                     {
                         Key = "Heat Network Name",
                         Value = Model.HeatNetworkNameModel.HeatNetworkName,
-                        ChangeLink = ViewBag.RegistrationSource == RegistrationSource.OFGEM ? null : Url.Action("HeatNetworkName", "HeatNetworkRegistration"),
+                        ChangeLink = ViewBag.RegistrationSource == RegistrationSource.OFGEM ? null : Url.Action("HeatNetworkName", controllerName), 
                         ChangeLinkText = "Change"
                     },
                     new ReviewItem
                     {
                         Key = "Additional description",
                         Value = !string.IsNullOrEmpty(Model.HeatNetworkNameModel.AdditionalDescription) ? Model.HeatNetworkNameModel.AdditionalDescription : "Not provided",
-                        ChangeLink = Url.Action("HeatNetworkName", "HeatNetworkRegistration"),
+                        ChangeLink = Url.Action("HeatNetworkName", controllerName),
                         ChangeLinkText = "Change"
                     },
                     new ReviewItem
                     {
                         Key = "Main energy centre address and postcode",
                         Value = Model.HeatNetworkAddressModel?.Fulladdress ?? "Not provided",
-                        ChangeLink = ViewBag.RegistrationSource == RegistrationSource.OFGEM ? null : Url.Action("DoesHNHaveAPostcode", "HeatNetworkRegistration"),
+                        ChangeLink = ViewBag.RegistrationSource == RegistrationSource.OFGEM ? null : Url.Action("DoesHNHaveAPostcode", controllerName),
                         ChangeLinkText = "Change"
                     },
                     new ReviewItem
                     {
                         Key = "Phase",
                         Value = Model.HeatNetworkPhaseModel.HeatNetworkPhase,
-                        ChangeLink = ViewBag.RegistrationSource == RegistrationSource.OFGEM ? null : Url.Action("HeatNetworkPhase", "HeatNetworkRegistration"),
+                        ChangeLink = ViewBag.RegistrationSource == RegistrationSource.OFGEM ? null : Url.Action("HeatNetworkPhase", controllerName),
                         ChangeLinkText = "Change"
                     }
 
@@ -90,7 +84,7 @@
                 {
                     Key = "Connections",
                     Value = string.Join(", ", Model.HeatNetworkConnectionsModel.ConnectionsToDisplay),
-                    ChangeLink = Url.Action("HeatNetworkConnections", "HeatNetworkRegistration"),
+                    ChangeLink = Url.Action("HeatNetworkConnections", controllerName),
                     ChangeLinkText = "Change"
                 });
     }
@@ -112,7 +106,7 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <h1 class="govuk-heading-l">Check your answers</h1>
-            <form asp-controller="HeatNetworkRegistration" asp-action="SubmitAnswers" method="post" novalidate>
+            <form asp-controller="@ViewBag.ControllerName" asp-action="SubmitAnswers" method="post" novalidate>
                 @Html.AntiForgeryToken()
                 @await Html.PartialAsync("Components/_CheckYourAnswersPartial", viewModel)
 

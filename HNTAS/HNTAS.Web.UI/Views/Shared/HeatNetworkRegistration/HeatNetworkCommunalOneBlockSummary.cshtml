@@ -1,9 +1,10 @@
 ﻿@{
     ViewData["Title"] = "Heat network summary";
+    string controllerName = Convert.ToString(ViewBag.ControllerName) ?? string.Empty;
 }
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <span class="govuk-caption-l">Add a heat network - @ViewBag.HnId</span>
+        <span class="govuk-caption-l">Add a heat network</span>
         <h1 class="govuk-heading-l">
             Heat network summary
         </h1>
@@ -22,7 +23,7 @@
         <p class="govuk-body">
             Register the energy centre as a part of a separate district network.
         </p>
-        <button class="govuk-button" onclick="location.href='@Url.Action("HeatNetworkName", "ExistingHeatNetworkRegistration")'">
+        <button class="govuk-button" onclick="location.href='@Url.Action("HeatNetworkName", controllerName)'">
             Continue
         </button>
     </div>

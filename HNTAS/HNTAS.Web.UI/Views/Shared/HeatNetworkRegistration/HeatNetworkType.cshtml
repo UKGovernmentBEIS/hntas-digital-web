@@ -7,9 +7,10 @@
     ViewData["Title"] = "Network Type – Certify your heat networks with the Heat Network Technical Assurance Scheme (HNTAS)";
     var fieldOrder = new[] { nameof(Model.IsHnTypeCommunal) };
     var elementId = Html.GenerateIdFromName(nameof(Model.IsHnTypeCommunal)).ToLowerInvariant();
+    string controllerName = Convert.ToString(ViewBag.ControllerName) ?? string.Empty;
     var pageData = new QuestionWithRadiobuttonsModel
     {
-        Controller = "HeatNetworkRegistration",
+        Controller = controllerName,
         Action = "HeatNetworkType",
         FieldOrder = fieldOrder,
         Questions = new List<Question>

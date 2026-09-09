@@ -1,5 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Communal and district networks - Certify your heat networks with the Heat Network Technical Assurance Scheme (HNTAS)";
+    string controllerName = Convert.ToString(ViewBag.ControllerName) ?? string.Empty;
 }
 
 <div class="govuk-grid-row">
@@ -25,7 +26,7 @@
         </div>
 
         <div class="govuk-!-margin-top-6"></div>
-        <form asp-controller="HeatNetworkRegistration" asp-action="HeatNetworkType" method="GET">
+        <form asp-controller="@controllerName" asp-action="HeatNetworkType" method="GET">
             <button type="submit" class="govuk-button govuk-button--start-green">
                 Continue
             </button>

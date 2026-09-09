@@ -1,5 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Confirmation";
+    string controllerName = Convert.ToString(ViewBag.ControllerName) ?? string.Empty;
 }
 
 
@@ -23,7 +24,7 @@
             </ul>
             <p class="govuk-body">You can now provide technical information on your heat network and add team members to help you.</p>
 
-            <a class="govuk-button" role="button" draggable="false" asp-controller="HeatNetworkRegistration" asp-action="HeatNetworkSuccessRedirection">
+            <a class="govuk-button" role="button" draggable="false" asp-controller="@controllerName" asp-action="HeatNetworkSuccessRedirection">
                 Continue
             </a>
         </div>        

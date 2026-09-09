@@ -6,13 +6,14 @@
     ViewData["Title"] = "Next Steps";
     var fieldOrder = new[] { nameof(Model.NextAction) };
     var elementId = Html.GenerateIdFromName(nameof(Model.NextAction)).ToLowerInvariant();
+    string controllerName = Convert.ToString(ViewBag.ControllerName) ?? string.Empty;
 
     QuestionWithRadiobuttonsModel pageData;
     if (ViewBag.RegistrationSource == RegistrationSource.OFGEM)
     {
         pageData = new QuestionWithRadiobuttonsModel
         {
-            Controller = "HeatNetworkRegistration",
+            Controller = controllerName,
             Action = "HeatNetworkSuccessRedirection",
             FieldOrder = fieldOrder,
             Questions = new List<Question>

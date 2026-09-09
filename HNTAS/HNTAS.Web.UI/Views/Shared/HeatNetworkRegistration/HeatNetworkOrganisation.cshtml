@@ -3,6 +3,7 @@
 
 @{
     ViewData["Title"] = "Select organisation";
+    string controllerName = Convert.ToString(ViewBag.ControllerName) ?? string.Empty;
 }
 
 <div class="govuk-width-container">
@@ -10,7 +11,7 @@
         <div class="govuk-grid-column-two-thirds">
             <span class="govuk-caption-xl">Add a heat network</span>
             <h1 class="govuk-heading-l">Which organisation is this for?</h1>
-            <form method="post" asp-controller="HeatNetworkRegistration" asp-action="HeatNetworkOrganisation">
+            <form method="post" asp-controller="@controllerName" asp-action="HeatNetworkOrganisation">
                 @Html.AntiForgeryToken()
                 <div class="govuk-form-group">
                     <span class="govuk-error-message" asp-validation-for="SelectedOrganisation"></span>

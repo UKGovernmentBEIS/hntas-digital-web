@@ -4,6 +4,7 @@
 @{
     ViewData["Title"] = "Search Results";
     var hasAddresses = Model?.Addresses != null && Model.Addresses.Length != 0;
+    string controllerName = Convert.ToString(ViewBag.ControllerName) ?? string.Empty;
 }
 
 <div class="govuk-width-container">
@@ -26,7 +27,7 @@
             }
             <br />
             <h2 class="govuk-heading-m">Other ways to search</h2>
-            <a href="@Url.Action("AddressManualEntry", "HeatNetworkRegistration")" class="govuk-link govuk-body">Search by street and town</a>
+            <a href="@Url.Action("AddressManualEntry", controllerName)" class="govuk-link govuk-body">Search by street and town</a>
         </div>
     </div>
 </div>
