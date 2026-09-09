@@ -9,7 +9,7 @@ The HNTAS Digital Service is a unified platform designed to manage, submit, and 
 
 | Layer | Technology |
 | :--- | :--- |
-| **Runtime** | .NET 9, C# |
+| **Runtime** | .NET 10, C# |
 | **Web Framework** | ASP.NET Core MVC |
 | **UI Rendering** | Razor Pages / Razor Views |
 
@@ -37,7 +37,7 @@ The service supports:
 ## Running Locally
 
 ### Prerequisites
-- .NET 9 SDK
+- .NET 10 SDK
 - Backend API running
 
 

@@ -48,7 +48,7 @@ namespace HNTAS.Web.UI.Controllers
         public IActionResult HeatNetworkDwellingsCheck(HowManyDwellingsIncludedModel model)
         {
             ViewBag.ControllerName = nameof(HeatNetworkRegistrationController).Replace("Controller", string.Empty);
-            this.ShowBackButton("HeatNetworksAsync", "UserManagement");
+            this.ShowBackButton("UserAccount", "Dashboard");
             if (!ModelState.IsValid)
             {
                 return View("HeatNetworkRegistration/HeatNetworkDwellingsCheck", model);
