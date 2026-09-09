@@ -1,0 +1,32 @@
+﻿@{
+    ViewData["Title"] = "Confirmation";
+    string controllerName = Convert.ToString(ViewBag.ControllerName) ?? string.Empty;
+}
+
+
+<div class="govuk-width-container">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <div class="govuk-panel govuk-panel--confirmation">
+                <h1 class="govuk-panel__title">
+                    Your heat network has been registered
+                </h1>
+
+                <div class="govuk-panel__body">
+                    Unique heat network ID <br> <strong>@ViewBag.HNId</strong>
+                </div>
+
+            </div>
+            <p class="govuk-body">We have:</p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>registered @ViewBag.HNNameWithDescription</li>
+                <li>sent a confirmation email with the unique heat network ID (UHNID)</li>
+            </ul>
+            <p class="govuk-body">You can now provide technical information on your heat network and add team members to help you.</p>
+
+            <a class="govuk-button" role="button" draggable="false" asp-controller="@controllerName" asp-action="HeatNetworkSuccessRedirection">
+                Continue
+            </a>
+        </div>        
+    </div>
+</div>

@@ -1,0 +1,46 @@
+﻿@model HNTAS.Web.UI.Models.ECDetailsModel
+
+@{
+    ViewData["Title"] = "Primary Energy Centre Coordinates";
+    var question = !!ViewBag.WithEc ? ViewBag.QuestionForWithEC : ViewBag.QuestionForWithoutEC;
+}
+
+<div class="govuk-width-container">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <span class="govuk-caption-l">Add a heat network</span>
+            <h1 class="govuk-heading-l">@question</h1>
+
+            <p class="govuk-body">
+                To find the coordinates of this @(ViewBag.WithEc ? "energy centre" : "connection point"), go to
+                <a class="govuk-link" href="https://www.google.com/maps" target="_blank" rel="noopener">Google maps (opens in a new tab)</a>
+                 and right click the location of your energy centre. The coordinates will be the first option in the list. Click the coordinates to copy.
+            </p>
+
+            <form asp-controller="@ViewBag.ControllerName" asp-action="ECCoordinates" method="post" novalidate>
+                @Html.AntiForgeryToken()
+
+                <div class="govuk-form-group @(ViewData.ModelState[nameof(Model.LatitudeLongitude)]?.Errors?.Count > 0 ? "govuk-form-group--error" : "")">
+                    <label class="govuk-label govuk-label--m govuk-!-margin-bottom-2" asp-for="LatitudeLongitude"> Enter the latitude and longitude coordinates </label>
+                    <span class="govuk-hint">For example, 52.93430970409369, -1.2522174890632065</span>
+
+                    <input asp-for="LatitudeLongitude" class="govuk-input govuk-input govuk-input--width-30 govuk-!-margin-top-3" />
+
+                    @if (ViewData.ModelState[nameof(Model.LatitudeLongitude)]?.Errors?.Count > 0)
+                    {
+                        <span class="govuk-error-message" role="alert">
+                            <span class="govuk-visually-hidden">Error:</span>
+                            @ViewData.ModelState[nameof(Model.LatitudeLongitude)].Errors.FirstOrDefault()?.ErrorMessage
+                        </span>
+                    }
+                    else
+                    {
+                        <span asp-validation-for="LatitudeLongitude" class="govuk-error-message" />
+                    }
+                </div>
+
+                <button type="submit" class="govuk-button" data-module="govuk-button">Continue</button>
+            </form>            
+        </div>
+    </div>
+</div>

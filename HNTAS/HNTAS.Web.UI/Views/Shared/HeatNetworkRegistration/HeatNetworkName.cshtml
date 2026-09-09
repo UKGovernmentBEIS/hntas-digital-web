@@ -1,0 +1,60 @@
+@model HNTAS.Web.UI.Models.HeatNetworkNameModel
+@using HNTAS.Api.Client.Model
+@{
+    ViewData["Title"] = "Heat network name";
+    var heatNetworkNameId = Html.LowercaseIdFor(m => m.HeatNetworkName);
+    var additionalDescriptionId = Html.LowercaseIdFor(m => m.AdditionalDescription);
+    string controllerName = Convert.ToString(ViewBag.ControllerName) ?? string.Empty;
+}
+
+<div class="govuk-width-container">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <form asp-controller="@controllerName" asp-action="HeatNetworkName" method="post" novalidate>
+                <div class="govuk-form-group">
+                    <span class="govuk-caption-l">Add a heat network</span>
+                    <label class="govuk-label" for="@heatNetworkNameId">
+                        <h1 class="govuk-heading-l">Heat network name</h1>
+                    </label>
+                    <p class="govuk-body">
+                        Use the name your organisation currently uses for this heat network.
+                    </p>
+                    <div aria-hidden="@(ViewBag.RegistrationSource == RegistrationSource.OFGEM ? "true" : "false")" class="govuk-form-group @(ViewData.ModelState["HeatNetworkName"]?.Errors.Count > 0 ? "govuk-form-group--error" : "")">
+                        <label class="govuk-label govuk-label--m" for="@heatNetworkNameId">
+                            What is the heat network name?
+                        </label>
+                        @if (ViewData.ModelState["HeatNetworkName"]?.Errors.Count > 0)
+                        {
+                            <span asp-validation-for="HeatNetworkName" class="govuk-error-message"></span>
+                        }
+                        <input disabled="@(ViewBag.RegistrationSource == RegistrationSource.OFGEM)" class="govuk-input govuk-!-width-two-thirds" id="@heatNetworkNameId" name="@heatNetworkNameId" asp-for="HeatNetworkName" autocomplete="off" />
+                        @if (ViewBag.RegistrationSource == RegistrationSource.OFGEM)
+                        {
+                            <input type="hidden" asp-for="HeatNetworkName" />
+                        }
+                    </div>
+
+                    <div class="govuk-form-group @(ViewData.ModelState["AdditionalDescription"]?.Errors.Count > 0 ? "govuk-form-group--error" : "")">
+                        <h3 class="govuk-heading-s">Additional description (optional)</h3>
+                        <p class="govuk-body">Use this to help distinguish networks with similar names or networks next to each other. For example, a location, reference number or building name.</p>
+                        <div style="margin-bottom: 30px;">
+                            <label class="govuk-label govuk-visually-hidden" for="@additionalDescriptionId">
+                                Additional description (optional)
+                            </label>
+                            @if (ViewData.ModelState["AdditionalDescription"]?.Errors.Count > 0)
+                            {
+                                <span asp-validation-for="AdditionalDescription" class="govuk-error-message"></span>
+                            }
+                            <input class="govuk-input govuk-!-width-two-thirds" id="@additionalDescriptionId" name="@additionalDescriptionId" asp-for="AdditionalDescription" autocomplete="off" />
+                        </div>
+                    </div>
+                  
+                    <p class="govuk-body">You can change the heat network name later.</p>
+                </div>
+                <button type="submit" class="govuk-button" data-module="govuk-button">
+                    Continue
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
