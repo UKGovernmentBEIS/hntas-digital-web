@@ -55,7 +55,7 @@ namespace HNTAS.Web.UI.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult HeatNetworkDwellingsCheck(HowManyDwellingsIncludedModel model)
         {
-            this.ShowBackButton("HeatNetworksAsync", "UserManagement");
+            this.ShowBackButton("UserAccount", "Dashboard");
             if (!ModelState.IsValid)
             {
                 return View(model);
