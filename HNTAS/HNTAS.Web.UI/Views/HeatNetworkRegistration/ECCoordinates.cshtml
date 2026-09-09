@@ -21,7 +21,7 @@
                 @Html.AntiForgeryToken()
 
                 <div class="govuk-form-group @(ViewData.ModelState[nameof(Model.LatitudeLongitude)]?.Errors?.Count > 0 ? "govuk-form-group--error" : "")">
-                    <label class="govuk-label govuk-!-margin-bottom-2" asp-for="LatitudeLongitude">Latitude and longitude</label>
+                    <label class="govuk-label govuk-label--m govuk-!-margin-bottom-2" asp-for="LatitudeLongitude"> Enter the latitude and longitude coordinates </label>
                     <span class="govuk-hint">For example, 52.93430970409369, -1.2522174890632065</span>
 
                     <input asp-for="LatitudeLongitude" class="govuk-input govuk-input govuk-input--width-30 govuk-!-margin-top-3" />
