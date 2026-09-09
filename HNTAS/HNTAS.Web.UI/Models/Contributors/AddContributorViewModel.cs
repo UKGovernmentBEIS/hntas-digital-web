@@ -4,7 +4,7 @@ namespace HNTAS.Web.UI.Models.Contributors
 {
     public class AddContributorViewModel
     {
-        [Required(ErrorMessage = "Select one option")]
+        [Required(ErrorMessage = "Select how you want to add an eligible contributor")]
         public bool? InviteNewContributor { get; set; }
     }
 }

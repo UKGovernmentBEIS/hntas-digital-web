@@ -4,7 +4,7 @@ namespace HNTAS.Web.UI.Models.Contributors
 {
     public class NewContributorRoleViewModel
     {
-        [Required(ErrorMessage = "Select the user role")]
+        [Required(ErrorMessage = "Select who do you want to add")]
         public bool? IsDDH { get; set; }
     }
 }
