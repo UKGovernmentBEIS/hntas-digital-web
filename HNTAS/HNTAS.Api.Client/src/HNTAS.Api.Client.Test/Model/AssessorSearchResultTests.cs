@@ -54,12 +54,12 @@ namespace HNTAS.Api.Client.Test.Model
         }
 
         /// <summary>
-        /// Test the property 'Id'
+        /// Test the property 'InviterUserId'
         /// </summary>
         [Fact]
-        public void IdTest()
+        public void InviterUserIdTest()
         {
-            // TODO unit test for the property 'Id'
+            // TODO unit test for the property 'InviterUserId'
         }
 
         /// <summary>
@@ -90,6 +90,7 @@ namespace HNTAS.Api.Client.Test.Model
         }
 
         /// <summary>
+<<<<<<<< HEAD:HNTAS/HNTAS.Api.Client/src/HNTAS.Api.Client.Test/Model/AssessorSearchResultTests.cs
         /// Test the property 'Email'
         /// </summary>
         [Fact]
@@ -100,11 +101,117 @@ namespace HNTAS.Api.Client.Test.Model
 
         /// <summary>
         /// Test the property 'FullNameWithEmail'
+========
+        /// Test the property 'InvitedEmail'
+>>>>>>>> 9244e95e4734cf4c95266618eabc5a65b36ffa22:HNTAS/HNTAS.Api.Client/src/HNTAS.Api.Client.Test/Model/InvitationTests.cs
         /// </summary>
         [Fact]
         public void FullNameWithEmailTest()
         {
+<<<<<<<< HEAD:HNTAS/HNTAS.Api.Client/src/HNTAS.Api.Client.Test/Model/AssessorSearchResultTests.cs
             // TODO unit test for the property 'FullNameWithEmail'
+========
+            // TODO unit test for the property 'InvitedEmail'
+        }
+
+        /// <summary>
+        /// Test the property 'InvitedRoles'
+        /// </summary>
+        [Fact]
+        public void InvitedRolesTest()
+        {
+            // TODO unit test for the property 'InvitedRoles'
+        }
+
+        /// <summary>
+        /// Test the property 'InvitedAt'
+        /// </summary>
+        [Fact]
+        public void InvitedAtTest()
+        {
+            // TODO unit test for the property 'InvitedAt'
+        }
+
+        /// <summary>
+        /// Test the property 'Status'
+        /// </summary>
+        [Fact]
+        public void StatusTest()
+        {
+            // TODO unit test for the property 'Status'
+>>>>>>>> 9244e95e4734cf4c95266618eabc5a65b36ffa22:HNTAS/HNTAS.Api.Client/src/HNTAS.Api.Client.Test/Model/InvitationTests.cs
+        }
+
+        /// <summary>
+        /// Test the property 'Id'
+        /// </summary>
+        [Fact]
+        public void IdTest()
+        {
+            // TODO unit test for the property 'Id'
+        }
+
+        /// <summary>
+        /// Test the property 'Permissions'
+        /// </summary>
+        [Fact]
+        public void PermissionsTest()
+        {
+            // TODO unit test for the property 'Permissions'
+        }
+
+        /// <summary>
+        /// Test the property 'InvitedHnId'
+        /// </summary>
+        [Fact]
+        public void InvitedHnIdTest()
+        {
+            // TODO unit test for the property 'InvitedHnId'
+        }
+
+        /// <summary>
+        /// Test the property 'InvitedOrgId'
+        /// </summary>
+        [Fact]
+        public void InvitedOrgIdTest()
+        {
+            // TODO unit test for the property 'InvitedOrgId'
+        }
+
+        /// <summary>
+        /// Test the property 'AcceptedAt'
+        /// </summary>
+        [Fact]
+        public void AcceptedAtTest()
+        {
+            // TODO unit test for the property 'AcceptedAt'
+        }
+
+        /// <summary>
+        /// Test the property 'RejectedAt'
+        /// </summary>
+        [Fact]
+        public void RejectedAtTest()
+        {
+            // TODO unit test for the property 'RejectedAt'
+        }
+
+        /// <summary>
+        /// Test the property 'ReplacedUserId'
+        /// </summary>
+        [Fact]
+        public void ReplacedUserIdTest()
+        {
+            // TODO unit test for the property 'ReplacedUserId'
+        }
+
+        /// <summary>
+        /// Test the property 'RolesToReplace'
+        /// </summary>
+        [Fact]
+        public void RolesToReplaceTest()
+        {
+            // TODO unit test for the property 'RolesToReplace'
         }
     }
 }

@@ -1,0 +1,84 @@
+﻿@using HNTAS.Web.UI.Models.Address
+@model AddressByStreetOrTownModel
+
+@{
+    ViewData["Title"] = "What is the address of your Heat Network?";
+
+    bool HasError(string key) => ViewData.ModelState.TryGetValue(key, out var entry) && entry.Errors.Count > 0;
+    var StreetAddressId = Html.GenerateIdFromName(nameof(Model.StreetAddress)).ToLowerInvariant();
+    var TownOrCityId = Html.GenerateIdFromName(nameof(Model.TownOrCity)).ToLowerInvariant();
+    var PostalcodeId = Html.GenerateIdFromName(nameof(Model.Postalcode)).ToLowerInvariant();
+    var CountryId = Html.GenerateIdFromName(nameof(Model.Country)).ToLowerInvariant();
+
+}
+
+<div class="govuk-width-container">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            @* The form for manual address entry, targeting the ManualAddressEntry action in the AddressController *@
+            <form asp-controller="HeatNetwork" asp-action="AddressManualEntry" method="post" novalidate>
+                @Html.AntiForgeryToken()
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                        <h1 class="govuk-fieldset__heading">
+                            What is the address of your @ViewBag.addressFor?
+                        </h1>
+                    </legend>                   
+
+                    @* Street Address Field *@
+                    <div class="govuk-form-group @(HasError(nameof(Model.StreetAddress)) ? "govuk-form-group--error" : "")">
+                        <label class="govuk-label" for="@StreetAddressId">Street address</label>
+                        @if (HasError(nameof(Model.StreetAddress)))
+                        {
+                            <span asp-validation-for="StreetAddress" class="govuk-error-message"></span>
+                        }
+                        <input class="govuk-input"
+                               asp-for="StreetAddress" type="text" autocomplete="streetaddress" id="@StreetAddressId"
+                               name="@StreetAddressId"
+                               value="@Model.StreetAddress">
+                    </div>
+
+                    @* Town or City Field *@
+                    <div class="govuk-form-group @(HasError(nameof(Model.TownOrCity)) ? "govuk-form-group--error" : "")">
+                        <label class="govuk-label" for="@TownOrCityId">Town Or City</label>
+                        @if (HasError(nameof(Model.TownOrCity)))
+                        {
+                            <span asp-validation-for="TownOrCity" class="govuk-error-message"></span>
+                        }
+                        <input class="govuk-input"
+                               asp-for="TownOrCity" type="text" autocomplete="townorcity" id="@TownOrCityId"
+                               name="@TownOrCityId"
+                               value="@Model.TownOrCity">
+                    </div>
+                    
+                    @* Postal Code or Zip code Field *@
+                    <div class="govuk-form-group @(HasError(nameof(Model.Postalcode)) ? "govuk-form-group--error" : "")">
+                        <label class="govuk-label" for="@PostalcodeId">Postal Code or Zip code</label>
+                        @if (HasError(nameof(Model.Postalcode)))
+                        {
+                            <span asp-validation-for="Postalcode" class="govuk-error-message"></span>
+                        }
+                        <input class="govuk-input"
+                               asp-for="Postalcode" type="text" autocomplete="postalcode" id="@PostalcodeId"
+                               name="@PostalcodeId"
+                               value="@Model.Postalcode">
+                    </div>
+
+                    @* Country *@
+                    <div class="govuk-form-group">
+                        <label class="govuk-label" for="@CountryId">Country</label>                        
+                        <input class="govuk-input"
+                               asp-for="Country" type="text" autocomplete="country" id="@CountryId"
+                               name="@CountryId"
+                               value="@Model.Country"
+                               readonly>
+                    </div>
+                </fieldset><br />
+                <button type="submit" class="govuk-button" data-module="govuk-button">
+                    Continue
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

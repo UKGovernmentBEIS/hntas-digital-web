@@ -1,0 +1,104 @@
+﻿@using HNTAS.Web.UI.Models
+@using HNTAS.Api.Client.Model
+@model HeatNetworkSuccessRedirection
+
+@{
+    ViewData["Title"] = "Next Steps";
+    var fieldOrder = new[] { nameof(Model.NextAction) };
+    var elementId = Html.GenerateIdFromName(nameof(Model.NextAction)).ToLowerInvariant();
+    string controllerName = Convert.ToString(ViewBag.ControllerName) ?? string.Empty;
+
+    QuestionWithRadiobuttonsModel pageData;
+    if (ViewBag.RegistrationSource == RegistrationSource.OFGEM)
+    {
+        pageData = new QuestionWithRadiobuttonsModel
+        {
+            Controller = controllerName,
+            Action = "HeatNetworkSuccessRedirection",
+            FieldOrder = fieldOrder,
+            Questions = new List<Question>
+        {
+            new Question
+            {
+                QId = elementId,
+                QText = "Next steps",
+                QDescText = @"
+                <p class='govuk-body'>
+                  You've successfully registered this heat network.
+                </p>
+
+                <p class='govuk-body'>
+                  You can now:
+                </p>
+
+                <ul class='govuk-list govuk-list--bullet'>
+                    <li>add details about it's connections and elements</li>
+                    <li>go to your dashboard to manage your heat networks and include others to support you</li>                    
+                </ul>
+
+                <h2 class='govuk-heading-m'>What you can do now</h2>
+                ",
+                QHintText = null,
+                Options = new List<Option>
+                {
+                    new Option { OptId = $"{elementId}", OptValue = "HNDetails", OptText = "Resume with this heat network", OptHintText = null },                    
+                    new Option { OptId = $"{elementId}-3", OptValue = "Dashboard", OptText = "Go to your dashboard", OptHintText = null }
+                },
+                SeletedOption = Model.NextAction
+            },
+        }
+        };
+    }
+    else
+    {
+        pageData = new QuestionWithRadiobuttonsModel
+        {
+            Controller = "HeatNetworkRegistration",
+            Action = "HeatNetworkSuccessRedirection",
+            FieldOrder = fieldOrder,
+            Questions = new List<Question>
+        {
+            new Question
+            {
+                QId = elementId,
+                QText = "Next steps",
+                QDescText = @"
+                <p class='govuk-body'>
+                  You've successfully registered your heat network. We now need
+                  information about its connections and elements.
+                </p>
+
+                <p class='govuk-body'>
+                  You can choose to register other new networks and add details later on.
+                </p>
+
+                <p class='govuk-body'>
+                  The dashboard gives you access to all your heat networks and options
+                  to add and enable a supporting team.
+                </p>
+
+                <h2 class='govuk-heading-m'>What you can do now</h2>
+                ",
+                QHintText = null,
+                Options = new List<Option>
+                {
+                    new Option { OptId = $"{elementId}", OptValue = "HNDetails", OptText = "Resume with this heat network", OptHintText = null },
+                    new Option { OptId = $"{elementId}-2", OptValue = "AddHN", OptText = "Add another heat network", OptHintText = null },
+                    new Option { OptId = $"{elementId}-3", OptValue = "Dashboard", OptText = "Go to your dashboard", OptHintText = null }
+                },
+                SeletedOption = Model.NextAction
+            },
+        }
+        };
+    }
+    
+}
+
+<div class="govuk-width-container">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <span class="govuk-caption-l">@ViewBag.HNId @ViewBag.HNName</span>
+            @await Html.PartialAsync("_QuestionWithRadiobuttons", pageData)
+        </div>
+    </div>
+</div>

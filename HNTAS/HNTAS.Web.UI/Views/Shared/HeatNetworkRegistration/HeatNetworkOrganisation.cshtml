@@ -1,0 +1,28 @@
+﻿@using HNTAS.Web.UI.Models
+@model HeatNetworkOrganisationModel
+
+@{
+    ViewData["Title"] = "Select organisation";
+    string controllerName = Convert.ToString(ViewBag.ControllerName) ?? string.Empty;
+}
+
+<div class="govuk-width-container">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <span class="govuk-caption-xl">Add a heat network</span>
+            <h1 class="govuk-heading-l">Which organisation is this for?</h1>
+            <form method="post" asp-controller="@controllerName" asp-action="HeatNetworkOrganisation">
+                @Html.AntiForgeryToken()
+                <div class="govuk-form-group">
+                    <span class="govuk-error-message" asp-validation-for="SelectedOrganisation"></span>
+                    <select class="govuk-select" asp-for="SelectedOrganisation" asp-items="Model.OrganisationList.Select(x => new SelectListItem { Value = x.Value, Text = x.Text })">
+                        <option value="">-- Select --</option>
+                    </select>
+                </div>
+                <button class="govuk-button" type="submit">
+                    Continue
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
