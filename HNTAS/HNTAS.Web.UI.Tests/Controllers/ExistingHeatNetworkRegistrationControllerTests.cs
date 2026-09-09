@@ -625,7 +625,7 @@ namespace HNTAS.Web.UI.Tests.Controllers
             // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
 
-            Assert.Equal("HeatNetworkEcDistrict", viewResult.ViewName);
+            Assert.Equal("HeatNetworkRegistration/HeatNetworkEcDistrict", viewResult.ViewName);
             Assert.Equal(model, viewResult.Model);
             Assert.Equal(hnId, _controller.ViewBag.HnId);
         }
@@ -1135,7 +1135,7 @@ namespace HNTAS.Web.UI.Tests.Controllers
             // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
 
-            Assert.Equal("CheckYourAnswers", viewResult.ViewName);
+            Assert.Equal("HeatNetworkRegistration/CheckYourAnswers", viewResult.ViewName);
             Assert.Equal(viewModel, viewResult.Model);
             Assert.False(_controller.ModelState.IsValid);
         }
@@ -1169,7 +1169,7 @@ namespace HNTAS.Web.UI.Tests.Controllers
 
             // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
-            Assert.Equal("CheckYourAnswers", viewResult.ViewName);
+            Assert.Equal("HeatNetworkRegistration/CheckYourAnswers", viewResult.ViewName);
             Assert.Equal(viewModel, viewResult.Model);
         }
 

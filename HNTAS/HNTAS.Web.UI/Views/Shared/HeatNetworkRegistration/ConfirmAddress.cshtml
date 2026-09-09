@@ -5,6 +5,7 @@
 {Model.StreetAddress},
 {Model.TownOrCity},
 {Model.Postalcode}";
+    string controllerName = Convert.ToString(ViewBag.ControllerName) ?? string.Empty;
 }
 
 
@@ -20,10 +21,10 @@
             </pre>
         </div>  
         <p class="govuk-body">
-            <a href="@Url.Action("DoesHNHaveAPostcode", "HeatNetworkRegistration")" class="govuk-link govuk-link--no-visited-state">Change</a>
+            <a href="@Url.Action("DoesHNHaveAPostcode", controllerName)" class="govuk-link govuk-link--no-visited-state">Change</a>
         </p>
 
-        <form asp-controller="HeatNetworkRegistration" asp-action="ConfirmAddress" method="post" novalidate>
+        <form asp-controller="@controllerName" asp-action="ConfirmAddress" method="post" novalidate>
             @Html.AntiForgeryToken()
             <button type="submit" class="govuk-button" data-module="govuk-button">
                 Confirm and continue

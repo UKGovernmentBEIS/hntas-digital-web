@@ -4,12 +4,13 @@
     ViewData["Title"] = "Heat network name";
     var heatNetworkNameId = Html.LowercaseIdFor(m => m.HeatNetworkName);
     var additionalDescriptionId = Html.LowercaseIdFor(m => m.AdditionalDescription);
+    string controllerName = Convert.ToString(ViewBag.ControllerName) ?? string.Empty;
 }
 
 <div class="govuk-width-container">
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            <form asp-controller="HeatNetwork" asp-action="EnterHNName" method="post" novalidate>
+            <form asp-controller="@controllerName" asp-action="HeatNetworkName" method="post" novalidate>
                 <div class="govuk-form-group">
                     <span class="govuk-caption-l">Add a heat network</span>
                     <label class="govuk-label" for="@heatNetworkNameId">
