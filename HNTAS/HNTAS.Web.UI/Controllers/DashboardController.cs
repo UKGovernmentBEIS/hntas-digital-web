@@ -59,58 +59,75 @@ namespace HNTAS.Web.UI.Controllers
         [HttpGet]
         public async Task<IActionResult> UserAccount()
         {
-            _ = bool.TryParse(_configuration?.GetSection("ExistingNetworks:EnableFeature")?.Value, out bool isExistingNetworksFeatureEnabled);
+            var isExistingNetworksFeatureEnabled = bool.TryParse( _configuration["ExistingNetworks:EnableFeature"], out var featureEnabled) && featureEnabled;
+
             ViewBag.IsExistingNetworksFeatureEnabled = isExistingNetworksFeatureEnabled;
+
             UserDetailsResponse user;
+
             try
             {
-                user = await RetrieveUserDetails(_sessionHelper.GetFromSession<string>(HttpContext, SessionKeys.UserModel_Id_SessionKey));
+                var userId = _sessionHelper.GetFromSession<string>(
+                    HttpContext,
+                    SessionKeys.UserModel_Id_SessionKey);
+
+                user = await RetrieveUserDetails(userId);
             }
             catch (Exception ex)
             {
                 TempData["ErrorMessage"] = ex.Message;
                 return View(new DashboardModel());
-            }            
-            var isAssessorOrCertifier = "false";
-            if (user.Roles[0].ToString() == HNTAS.Api.Client.Model.UserRole.Assessor.ToString() || user.Roles[0].ToString() == HNTAS.Api.Client.Model.UserRole.Certifier.ToString())
-            {
-                isAssessorOrCertifier = "true";
-            }
-            _sessionHelper.SaveToSession(HttpContext, SessionKeys.IsAssessorOrCertifier, isAssessorOrCertifier);
-            if(user.Roles[0].ToString() == HNTAS.Api.Client.Model.UserRole.DesignatedDutyHolder.ToString())
-            {
-                _sessionHelper.SaveToSession<string>(HttpContext, SessionKeys.WhoDoYouWantToAddSessionKey, "Contributors");
-            }
-            else
-            {
-                _sessionHelper.SaveToSession<string>(HttpContext, SessionKeys.WhoDoYouWantToAddSessionKey, null);
-            }
-            if (user.Organisation?.Name != null)
-            {
-                _sessionHelper.SaveToSession(HttpContext, SessionKeys.OrganisationName, user.Organisation.Name);
-                _sessionHelper.SaveToSession(HttpContext, SessionKeys.OrganisationId, user.Organisation.OrgId);
             }
 
-            var networks = await _heatNetworkService.GetHeatNetworkByUserId(user.Id!, RegistrationSource2.OFGEM);
+            var isAssessorOrCertifier =
+                user.Roles.Contains(UserRole.Assessor) ||
+                user.Roles.Contains(UserRole.Certifier);
+
+            _sessionHelper.SaveToSession(
+                HttpContext,
+                SessionKeys.IsAssessorOrCertifier,
+                isAssessorOrCertifier.ToString().ToLowerInvariant());
+
+            _sessionHelper.SaveToSession<string>(
+                HttpContext,
+                SessionKeys.WhoDoYouWantToAddSessionKey,
+                user.Roles.Contains(UserRole.DesignatedDutyHolder)
+                    ? "Contributors"
+                    : null);
+
+            if (user.Organisation?.Name is not null)
+            {
+                _sessionHelper.SaveToSession(
+                    HttpContext,
+                    SessionKeys.OrganisationName,
+                    user.Organisation.Name);
+
+                _sessionHelper.SaveToSession(
+                    HttpContext,
+                    SessionKeys.OrganisationId,
+                    user.Organisation.OrgId);
+            }
+
+            var ofgemNetworks = await _heatNetworkService.GetHeatNetworkByUserIdPaginatedAsync(
+                user.Id!,
+                RegistrationSource2.OFGEM, 1, 1);
+
+
+            var hntasNetworks = await _heatNetworkService.GetHeatNetworkByUserIdPaginatedAsync(
+                user.Id!,
+                RegistrationSource2.HNTAS, 1, 1);
 
             var dashboardModel = new DashboardModel
             {
-                OrganisationName = user?.Organisation?.Name,
-                UserRole = user.Roles[0].ToString(),
-                IsResponsiblePerson = user.Roles?.Contains(UserRole.ResponsibleParty) ?? false,
-                HasHeatNetworks = user.HeatNetworks != null && user.HeatNetworks.Any(),
-                HasOfgemNetworks = networks.Count != 0
+                OrganisationName = user.Organisation?.Name,
+                UserRoles = user.Roles,
+                IsResponsiblePerson = user.Roles.Contains(UserRole.ResponsibleParty),
+                HasHntasNetworks = hntasNetworks.TotalCount > 0,
+                HasOfgemNetworks = ofgemNetworks.TotalCount > 0
             };
-            var managedUsers = await _userService.GetManagedUsers(user.Id);
-            if(dashboardModel.IsResponsiblePerson && managedUsers.Count <= 1 && !dashboardModel.HasHeatNetworks)
-            {
-                ViewBag.RPLoggedInForFirstTime = true;
-            }
-            else
-            {
-                ViewBag.RPLoggedInForFirstTime = false;
-            }
+
             ViewBag.UserId = user.Id;
+
             return View(dashboardModel);
         }
 

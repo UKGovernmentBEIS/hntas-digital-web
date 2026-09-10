@@ -36,33 +36,6 @@ namespace HNTAS.Web.UI.Services.Core
             throw new Exception($"Failed to fetch heat network '{hnId}' — status code: {response.StatusCode}");
         }
 
-        public async Task<List<HeatNetworkResponse>> GetHeatNetworkByUserId(string userId, RegistrationSource2 registrationSource = RegistrationSource2.HNTAS)
-        {
-            try
-            {
-                var response = await _heatNetworksApi.ApiHeatNetworksHeatNetworkByUserIdGetAsync(userId, registrationSource);
-
-                if (response.IsOk)
-                {
-                    var networks = response.Ok();
-                    _logger.LogInformation("Retrieved {Count} heat networks for user ID: {UserId}.", networks.Count, userId);
-                    return networks;
-                }
-                else
-                {
-                    return new List<HeatNetworkResponse>();
-                }
-
-                throw new InvalidOperationException($"Failed to retrieve heat networks for user ID: {userId}. Status code: {response.StatusCode}");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error retrieving heat networks for user ID: {UserId}.", userId);
-                throw;
-            }
-        }
-
-
         public async Task<PagedResultOfUserNetworkDetailsResponse> GetHeatNetworkByUserIdPaginatedAsync(
             string userId,
             RegistrationSource2 registrationSource = RegistrationSource2.HNTAS,
