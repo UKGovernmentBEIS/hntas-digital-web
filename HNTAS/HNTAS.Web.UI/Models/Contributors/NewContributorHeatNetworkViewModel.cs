@@ -5,7 +5,7 @@ namespace HNTAS.Web.UI.Models.Contributors
 {
     public class NewContributorHeatNetworkViewModel
     {
-        [Required(ErrorMessage = "Select the heat network.")]
+        [Required(ErrorMessage = "Select a heat network.")]
         public string SelectedHeatNetwork { get; set; } = null!;
         public List<SelectItemOption> HeatNetworks { get; set; } = new();
     }

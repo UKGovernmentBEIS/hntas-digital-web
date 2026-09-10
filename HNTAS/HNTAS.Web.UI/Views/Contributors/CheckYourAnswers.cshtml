@@ -59,7 +59,7 @@
                     },
                     new ReviewItem
                     {
-                        Key = "Phases(s)",
+                        Key = "Phase(s)",
                         Value = String.Join(", ", Model.SelectedPhases!.Select(p => !String.IsNullOrEmpty(p) ? Char.ToUpper(p[0]) + p.Substring(1) : p)),
                         ChangeLink = (RegistrationSource)ViewBag.RegistrationSource == RegistrationSource.OFGEM ? null : Url.Action("HeatNetworkPhase", "Contributors"),
                         ChangeLinkText = "Change"

@@ -7,7 +7,7 @@ namespace HNTAS.Web.UI.Models.Contributors
     {
         public List<SelectItemOption> Phases { get; set; } = new List<SelectItemOption>();
 
-        [MustHaveOneItem(ErrorMessage = "Select the phases this user is responsible for.")]
+        [MustHaveOneItem(ErrorMessage = "Select at least one phase")]
         public List<string>? SelectedPhases { get; set; } = new List<string>();
     }
 }
