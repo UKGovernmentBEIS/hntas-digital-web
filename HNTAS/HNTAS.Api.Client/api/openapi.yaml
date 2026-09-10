@@ -905,70 +905,6 @@ paths:
           description: Internal Server Error
       tags:
       - HeatNetworks
-  /api/HeatNetworks/heat-network-by-userId:
-    get:
-      parameters:
-      - explode: true
-        in: query
-        name: userId
-        required: false
-        schema:
-          type: string
-        style: form
-      - explode: true
-        in: query
-        name: registrationSource
-        required: false
-        schema:
-          $ref: "#/components/schemas/RegistrationSource2"
-        style: form
-      responses:
-        "200":
-          content:
-            text/plain:
-              schema:
-                items:
-                  $ref: "#/components/schemas/HeatNetworkResponse"
-                type: array
-            application/json:
-              schema:
-                items:
-                  $ref: "#/components/schemas/HeatNetworkResponse"
-                type: array
-            text/json:
-              schema:
-                items:
-                  $ref: "#/components/schemas/HeatNetworkResponse"
-                type: array
-          description: OK
-        "400":
-          content:
-            text/plain:
-              schema:
-                $ref: "#/components/schemas/ProblemDetails"
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ProblemDetails"
-            text/json:
-              schema:
-                $ref: "#/components/schemas/ProblemDetails"
-          description: Bad Request
-        "404":
-          content:
-            text/plain:
-              schema:
-                $ref: "#/components/schemas/ProblemDetails"
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ProblemDetails"
-            text/json:
-              schema:
-                $ref: "#/components/schemas/ProblemDetails"
-          description: Not Found
-        "500":
-          description: Internal Server Error
-      tags:
-      - HeatNetworks
   /api/HeatNetworks/heat-network-by-userId-paginated:
     get:
       parameters:
@@ -9938,8 +9874,10 @@ components:
           nullable: true
           type: string
         organisationName:
+          nullable: true
           type: string
         orgId:
+          nullable: true
           type: string
       type: object
     UserResponse:

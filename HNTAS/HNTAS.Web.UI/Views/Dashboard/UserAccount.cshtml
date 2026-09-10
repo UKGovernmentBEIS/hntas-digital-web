@@ -5,19 +5,19 @@
 
 @{
     ViewData["Title"] = "User Account";
-    var disabled = Model.HasHeatNetworks ? "" : "dashboard-card--disabled";
-    var userIsRP = Model.UserRole == UserRole.ResponsibleParty.ToString();
-    var userIsActingRP = Model.UserRole == UserRole.NetworkManager.ToString();
-    var userIsAssessor = Model.UserRole == HNTAS.Api.Client.Model.UserRole.Assessor.ToString();
-    var userIsCertifier = Model.UserRole == HNTAS.Api.Client.Model.UserRole.Certifier.ToString();
-    var userIsContributor = Model.UserRole == HNTAS.Api.Client.Model.UserRole.Contributor.ToString();
-    var userIsDesignatedDutyHolder = Model.UserRole == HNTAS.Api.Client.Model.UserRole.DesignatedDutyHolder.ToString();
+    var disabled = Model.HasHntasNetworks ? "" : "dashboard-card--disabled";
+    var userIsRP = Model.UserRoles.Contains(UserRole.ResponsibleParty);
+    var userIsActingRP = Model.UserRoles.Contains(UserRole.NetworkManager);
+    var userIsAssessor = Model.UserRoles.Contains(HNTAS.Api.Client.Model.UserRole.Assessor);
+    var userIsCertifier = Model.UserRoles.Contains(HNTAS.Api.Client.Model.UserRole.Certifier);
+    var userIsContributor = Model.UserRoles.Contains(HNTAS.Api.Client.Model.UserRole.Contributor);
+    var userIsDesignatedDutyHolder = Model.UserRoles.Contains(HNTAS.Api.Client.Model.UserRole.DesignatedDutyHolder);
     var newNetworksLabel = @ViewBag.IsExistingNetworksFeatureEnabled ? "Your heat networks (New build)" : "Your heat networks";
 }
 
 <div class="govuk-width-container">
 
-    @if (Model.UserRole == UserRole.ResponsibleParty.ToString() || Model.UserRole == UserRole.NetworkManager.ToString())
+    @if (Model.UserRoles.Contains(UserRole.ResponsibleParty) || Model.UserRoles.Contains(UserRole.NetworkManager))
     {
         <span class="govuk-caption-l">Dashboard</span>
         <h1 class="govuk-heading-l">@Model.OrganisationName</h1>
@@ -43,7 +43,7 @@
     <div class="dashboard-grid">
 
         <!-- Your heat networks (new)-->
-        @if (Model.HasHeatNetworks)
+        @if (Model.HasHntasNetworks)
         {
             <div class="dashboard-grid__item">
                 <div class="dashboard-card">
@@ -55,7 +55,7 @@
             </div>
         }
 
-        @if (Model.HasHeatNetworks)
+        @if (Model.HasHntasNetworks)
         {
             <div class="dashboard-grid__item">
                 <div class="dashboard-card">
@@ -70,7 +70,7 @@
         @if (userIsRP)
         {
             <!-- Network Managers -->
-            @if (Model.HasHeatNetworks)
+            @if (Model.HasHntasNetworks)
             {
                 <div class="dashboard-grid__item">
                     <div class="dashboard-card">
@@ -86,7 +86,7 @@
             }
         }
 
-        @if ((userIsRP || userIsActingRP) && Model.HasHeatNetworks)
+        @if ((userIsRP || userIsActingRP) && Model.HasHntasNetworks)
         {
             <div class="dashboard-grid__item">
                 <div class="dashboard-card">
@@ -169,7 +169,7 @@
                 </div>
             }            
 
-            @if (Model.HasHeatNetworks)
+            @if (Model.HasHntasNetworks)
             {
                 <div class="dashboard-grid__item">
                     <div class="dashboard-card">
@@ -216,7 +216,7 @@
         }
         else if (userIsAssessor)
         {
-            @if (Model.HasHeatNetworks)
+            @if (Model.HasHntasNetworks)
             {
                 <div class="dashboard-grid__item">
                     <div class="dashboard-card ">
@@ -229,7 +229,7 @@
             }
             
 
-            @if (Model.HasHeatNetworks)
+            @if (Model.HasHntasNetworks)
             {
                 <div class="dashboard-grid__item">
                     <div class="dashboard-card">
@@ -244,7 +244,7 @@
         }
         else if (userIsCertifier)
         {
-            @if (Model.HasHeatNetworks)
+            @if (Model.HasHntasNetworks)
             {
                 <div class="dashboard-grid__item">
                     <div class="dashboard-card">
@@ -257,7 +257,7 @@
             }
             
 
-            @if (Model.HasHeatNetworks)
+            @if (Model.HasHntasNetworks)
             {
                 <div class="dashboard-grid__item">
                     <div class="dashboard-card">
@@ -272,7 +272,7 @@
         }
         else if(userIsContributor || userIsDesignatedDutyHolder)
         {
-            @if (Model.HasHeatNetworks)
+            @if (Model.HasHntasNetworks)
             {
                 <div class="dashboard-grid__item">
                     <div class="dashboard-card">
@@ -286,7 +286,7 @@
             
             @if (userIsDesignatedDutyHolder)
             {
-                @if (Model.HasHeatNetworks)
+                @if (Model.HasHntasNetworks)
                 {
                     <div class="dashboard-grid__item">
                         <div class="dashboard-card">

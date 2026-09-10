@@ -197,10 +197,10 @@ namespace HNTAS.Api.Client.Model
                             additionalDescription = new Option<string?>(utf8JsonReader.GetString());
                             break;
                         case "organisationName":
-                            organisationName = new Option<string?>(utf8JsonReader.GetString()!);
+                            organisationName = new Option<string?>(utf8JsonReader.GetString());
                             break;
                         case "orgId":
-                            orgId = new Option<string?>(utf8JsonReader.GetString()!);
+                            orgId = new Option<string?>(utf8JsonReader.GetString());
                             break;
                         default:
                             break;
@@ -213,12 +213,6 @@ namespace HNTAS.Api.Client.Model
 
             if (name.IsSet && name.Value == null)
                 throw new ArgumentNullException(nameof(name), "Property is not nullable for class UserNetworkDetailsResponse.");
-
-            if (organisationName.IsSet && organisationName.Value == null)
-                throw new ArgumentNullException(nameof(organisationName), "Property is not nullable for class UserNetworkDetailsResponse.");
-
-            if (orgId.IsSet && orgId.Value == null)
-                throw new ArgumentNullException(nameof(orgId), "Property is not nullable for class UserNetworkDetailsResponse.");
 
             return new UserNetworkDetailsResponse(hnId, name, additionalDescription, organisationName, orgId);
         }
@@ -253,12 +247,6 @@ namespace HNTAS.Api.Client.Model
             if (userNetworkDetailsResponse.NameOption.IsSet && userNetworkDetailsResponse.Name == null)
                 throw new ArgumentNullException(nameof(userNetworkDetailsResponse.Name), "Property is required for class UserNetworkDetailsResponse.");
 
-            if (userNetworkDetailsResponse.OrganisationNameOption.IsSet && userNetworkDetailsResponse.OrganisationName == null)
-                throw new ArgumentNullException(nameof(userNetworkDetailsResponse.OrganisationName), "Property is required for class UserNetworkDetailsResponse.");
-
-            if (userNetworkDetailsResponse.OrgIdOption.IsSet && userNetworkDetailsResponse.OrgId == null)
-                throw new ArgumentNullException(nameof(userNetworkDetailsResponse.OrgId), "Property is required for class UserNetworkDetailsResponse.");
-
             if (userNetworkDetailsResponse.HnIdOption.IsSet)
                 writer.WriteString("hnId", userNetworkDetailsResponse.HnId);
 
@@ -272,10 +260,16 @@ namespace HNTAS.Api.Client.Model
                     writer.WriteNull("additionalDescription");
 
             if (userNetworkDetailsResponse.OrganisationNameOption.IsSet)
-                writer.WriteString("organisationName", userNetworkDetailsResponse.OrganisationName);
+                if (userNetworkDetailsResponse.OrganisationNameOption.Value != null)
+                    writer.WriteString("organisationName", userNetworkDetailsResponse.OrganisationName);
+                else
+                    writer.WriteNull("organisationName");
 
             if (userNetworkDetailsResponse.OrgIdOption.IsSet)
-                writer.WriteString("orgId", userNetworkDetailsResponse.OrgId);
+                if (userNetworkDetailsResponse.OrgIdOption.Value != null)
+                    writer.WriteString("orgId", userNetworkDetailsResponse.OrgId);
+                else
+                    writer.WriteNull("orgId");
         }
     }
 }
